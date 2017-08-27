@@ -29,4 +29,7 @@ dependencies {
 
     //square.github.io/picasso
     compile 'com.squareup.picasso:picasso:2.5.2'
+
+    //RecyclerView
+    compile 'com.android.support:recyclerview-v7:25.3.1'
 }
