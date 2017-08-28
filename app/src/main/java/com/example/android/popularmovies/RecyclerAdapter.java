@@ -41,7 +41,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ImageV
      */
     @Override
     public ImageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();a
+        Context context = parent.getContext();
         int layoutForMovieItem = R.layout.movie_list;
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean attachParent = false;
