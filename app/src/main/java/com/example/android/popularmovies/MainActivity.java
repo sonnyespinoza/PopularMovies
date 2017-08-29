@@ -64,23 +64,27 @@ public class MainActivity extends AppCompatActivity {
         new MovieQueryTask().execute(movieSearchUrl);
     }
 
-    public class MovieQueryTask  extends AsyncTask<URL, Void, String> {
+    public class MovieQueryTask  extends AsyncTask<URL, Void, String[]> {
 
         // perform the query. Return the results.
         @Override
-        protected String doInBackground(URL... urls) {
+        protected String[] doInBackground(URL... urls) {
             URL searchUrl = urls[0];
             String movieSearchResults = null;
             try {
                 movieSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
+
+            //TODO add call to jsonutil
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return movieSearchResults;
+            return null; //movieSearchResults;
         }
 
+        //TODO
         @Override
-        protected void onPostExecute(String s) {
+        protected void onPostExecute(String[] s) {
             //Log.i("onPostExecute: ", s );
             if(s != null && !s.equals("")){
                 //mSearchResultsTextView.setText(s);
