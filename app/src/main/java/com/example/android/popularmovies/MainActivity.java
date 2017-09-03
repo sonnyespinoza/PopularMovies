@@ -8,13 +8,23 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 
+import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ProgressBar mLoadingIndicator;
 
     private final String byMostPopular = "popularity.desc";
     private final String byTopRated = "vote_average.desc";
@@ -27,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //progress bar indicator for loading movie images.
+        mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
         //reference to recyclerview for displaying movie grid
         mMovieImage = (RecyclerView) findViewById(R.id.rv_movies);
@@ -55,9 +68,9 @@ public class MainActivity extends AppCompatActivity {
     private void makeTmdbSearchQuery(String sortby, String page) {
         String sortBy = sortby;
         String Page = page;
-        //mSearchBoxEditText.getText().toString();
+        //mSearchBoxEditText.getText().toString(); //TODO Remove
         URL movieSearchUrl = NetworkUtils.buildUrl(sortBy, Page);
-        //mUrlDisplayTextView.setText(githubSearchUrl.toString());
+        //mUrlDisplayTextView.setText(githubSearchUrl.toString()); //TODO Remove
         Log.i("makeTmdbSearchQuery", movieSearchUrl.toString());
 
         //Passing in the url to query
@@ -65,6 +78,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class MovieQueryTask  extends AsyncTask<URL, Void, String[]> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mLoadingIndicator.setVisibility(View.VISIBLE);
+        }
 
         // perform the query. Return the results.
         @Override
@@ -74,9 +93,13 @@ public class MainActivity extends AppCompatActivity {
             try {
                 movieSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
 
-            //TODO add call to jsonutil
+                Log.d("doInBackGround: ", movieSearchResults); // TODO remove before submission
 
-            } catch (IOException e) {
+            //TODO add call to jsonutil
+                ArrayList<HashMap<String, String>> movieParsedData = JsonUtils.getMovieDataFromJson(movieSearchResults);
+
+
+            } catch (IOException|JSONException e) {
                 e.printStackTrace();
             }
             return null; //movieSearchResults;
@@ -85,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
         //TODO
         @Override
         protected void onPostExecute(String[] s) {
+            mLoadingIndicator.setVisibility(View.INVISIBLE);
+
             //Log.i("onPostExecute: ", s );
             if(s != null && !s.equals("")){
                 //mSearchResultsTextView.setText(s);

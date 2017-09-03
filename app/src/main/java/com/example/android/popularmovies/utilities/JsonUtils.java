@@ -23,117 +23,110 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
- * Utility functions to handle OpenWeatherMap JSON data.
+ * Utility functions to handle tmDB NMovie data JSON data.
  */
 public final class JsonUtils {
 
+
     /**
      * This method parses JSON from a web response and returns an array of Strings
-     * describing the weather over various days from the forecast.
-     * <p/>
-     * Later on, we'll be parsing the JSON into structured data within the
-     * getFullWeatherDataFromJson function, leveraging the data we have stored in the JSON. For
-     * now, we just convert the JSON into human-readable strings.
+     * describing the each movie returned in the query.
      *
-     * @param forecastJsonStr JSON response from server
-     *
+     * @param movieJsonStr JSON response from server
      * @return Array of Strings describing weather data
-     *
      * @throws JSONException If JSON data cannot be properly parsed
      */
-    public static String[] getSimpleWeatherStringsFromJson(Context context, String forecastJsonStr)
+    public static ArrayList<HashMap<String, String>> getMovieDataFromJson(String movieJsonStr)
             throws JSONException {
 
-        /* Weather information. Each day's forecast info is an element of the "list" array */
-        final String OWM_LIST = "list";
+        /* The "list" array of movie results*/
+        final String RESULTS = "results";
 
-        /* All temperatures are children of the "temp" object */
-        final String OWM_TEMPERATURE = "temp";
+        /* Name of the image file */
+        final String IMAGE_NAME = "backdrop_path";
 
-        /* Max temperature for the day */
-        final String OWM_MAX = "max";
-        final String OWM_MIN = "min";
+        /* Date the movei was released */
+        final String RELEASE_DATE = "release_date";
 
-        final String OWM_WEATHER = "weather";
-        final String OWM_DESCRIPTION = "main";
+        //Movie title and overview
+        final String MOVIE_DESCRIPTION = "overview";
+        final String MOVIE_TITLE = "title";
 
-        final String OWM_MESSAGE_CODE = "cod";
+        //return status code
+        final String MOVIE_STATUS_CODE = "status_code";
 
-        /* String array to hold each day's weather String */
-        String[] parsedWeatherData = null;
+        //Array List to load Movie JSON Data
+        ArrayList<HashMap<String, String>> movieData;
+        movieData = new ArrayList<>();
 
-        JSONObject forecastJson = new JSONObject(forecastJsonStr);
 
-        /* Is there an error? */
-        if (forecastJson.has(OWM_MESSAGE_CODE)) {
-            int errorCode = forecastJson.getInt(OWM_MESSAGE_CODE);
+        if (movieJsonStr != null) {
 
-            switch (errorCode) {
-                case HttpURLConnection.HTTP_OK:
-                    break;
-                case HttpURLConnection.HTTP_NOT_FOUND:
+            try {
+
+                JSONObject movieJson = new JSONObject(movieJsonStr);
+
+                //JSON Array node
+                JSONArray movieJSONArray = movieJson.getJSONArray(RESULTS);
+
+
+
+                /* Is there an error? */
+                if (movieJson.has(MOVIE_STATUS_CODE)) {
+                    int errorCode = movieJson.getInt(MOVIE_STATUS_CODE);
+
+                    //TODO update with actual code from https://www.themoviedb.org/documentation/api/status-codes
+                    //TODO add code description as a log in the case statements
+                    switch (errorCode) {
+                        case HttpURLConnection.HTTP_OK:
+                            break;
+                        case HttpURLConnection.HTTP_NOT_FOUND:
                     /* Location invalid */
-                    return null;
-                default:
+                            return null;
+                        default:
                     /* Server probably down */
-                    return null;
+                            return null;
+                    }
+                } else {
+
+                    //Load movies into movie data array
+
+                    for (int i = 0; i < movieJSONArray.length(); i++) {
+
+                        JSONObject movieInfo = movieJSONArray.getJSONObject(i);
+
+                        String image = movieInfo.getString(IMAGE_NAME);
+                        String title = movieInfo.getString(MOVIE_TITLE);
+                        String description = movieInfo.getString(MOVIE_DESCRIPTION);
+                        String releaseDate = movieInfo.getString(RELEASE_DATE);
+
+                        //hash map for pre load of movie info
+                        HashMap<String, String> mInfo = new HashMap<>();
+
+                        //Load movie info into hash map
+                        mInfo.put(IMAGE_NAME, image);
+                        mInfo.put(MOVIE_TITLE, title);
+                        mInfo.put(MOVIE_DESCRIPTION, description);
+                        mInfo.put(RELEASE_DATE, releaseDate);
+
+
+                        //add movie info to movie data array
+                        movieData.add(mInfo);
+
+                    }
+
+                }
+            } catch (final JSONException e) {
+                //TODO add log
             }
         }
 
-        JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
-
-        parsedWeatherData = new String[weatherArray.length()];
-
-        long localDate = System.currentTimeMillis();
-        //long utcDate = SunshineDateUtils.getUTCDateFromLocal(localDate);
-        //long startDay = SunshineDateUtils.normalizeDate(utcDate);
-
-        for (int i = 0; i < weatherArray.length(); i++) {
-            String date;
-            String highAndLow;
-
-            /* These are the values that will be collected */
-            long dateTimeMillis;
-            double high;
-            double low;
-            String description;
-
-            /* Get the JSON object representing the day */
-            JSONObject dayForecast = weatherArray.getJSONObject(i);
-
-            /*
-             * We ignore all the datetime values embedded in the JSON and assume that
-             * the values are returned in-order by day (which is not guaranteed to be correct).
-             */
-            //dateTimeMillis = startDay + SunshineDateUtils.DAY_IN_MILLIS * i;
-            //date = SunshineDateUtils.getFriendlyDateString(context, dateTimeMillis, false);
-
-            /*
-             * Description is in a child array called "weather", which is 1 element long.
-             * That element also contains a weather code.
-             */
-            JSONObject weatherObject =
-                    dayForecast.getJSONArray(OWM_WEATHER).getJSONObject(0);
-            description = weatherObject.getString(OWM_DESCRIPTION);
-
-            /*
-             * Temperatures are sent by Open Weather Map in a child object called "temp".
-             *
-             * Editor's Note: Try not to name variables "temp" when working with temperature.
-             * It confuses everybody. Temp could easily mean any number of things, including
-             * temperature, temporary and is just a bad variable name.
-             */
-            JSONObject temperatureObject = dayForecast.getJSONObject(OWM_TEMPERATURE);
-            high = temperatureObject.getDouble(OWM_MAX);
-            low = temperatureObject.getDouble(OWM_MIN);
-            //highAndLow = SunshineWeatherUtils.formatHighLows(context, high, low);
-
-            //parsedWeatherData[i] = date + " - " + description + " - " + highAndLow;
-        }
-
-        return parsedWeatherData;
+        //return movie array data
+        return movieData;
     }
 
     /**
@@ -141,11 +134,10 @@ public final class JsonUtils {
      *
      * @param context         An application context, such as a service or activity context.
      * @param forecastJsonStr The JSON to parse into ContentValues.
-     *
      * @return An array of ContentValues parsed from the JSON.
      */
     public static ContentValues[] getFullWeatherDataFromJson(Context context, String forecastJsonStr) {
-        /** This will be implemented in a future lesson **/
+        //TODO  need to use parsable here
         return null;
     }
 }

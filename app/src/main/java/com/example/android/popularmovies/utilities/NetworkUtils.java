@@ -46,7 +46,7 @@ public class NetworkUtils {
 
 
     /**
-     * Builds the URL used to query GitHub.
+     * Builds the URL
      *
      * @param sortBy The sort criteria that will be queried for.
      * @param page the page to return.
