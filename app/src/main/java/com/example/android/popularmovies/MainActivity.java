@@ -1,9 +1,10 @@
 package com.example.android.popularmovies;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -13,7 +14,6 @@ import android.widget.ProgressBar;
 
 import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,9 +30,10 @@ public class MainActivity extends AppCompatActivity {
     private final String byMostPopular = "popularity.desc";
     private final String byTopRated = "vote_average.desc";
 
-    RecyclerAdapter mAdapter;
+    private RecyclerAdapter mAdapter;
 
     RecyclerView mMovieImage;
+    GridLayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,41 +43,53 @@ public class MainActivity extends AppCompatActivity {
         //progress bar indicator for loading movie images.
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
-        //reference to recyclerview for displaying movie grid
+        //reference to recyclerview for displaying movie in a grid
         mMovieImage = (RecyclerView) findViewById(R.id.rv_movies);
-
-        LinearLayoutManager layoutManager;
-
-        mMovieImage.setLayoutManager(new LinearLayoutManager(this));
-
         mMovieImage.setHasFixedSize(true);
 
-        mAdapter = new RecyclerAdapter(4);
+        layoutManager = new GridLayoutManager(this, 2);
+        mMovieImage.setLayoutManager(layoutManager);
 
+        URL mSearchUrl = createSearchURL(byMostPopular, "1");
+
+        /**
+         *Pass url to query and fires off an AsyncTask
+         *to perform the GET request using
+         * {@link MovieQueryTask}
+         */
+        new MovieQueryTask().execute(mSearchUrl);
+
+        // Set Adapter
+        mAdapter = new RecyclerAdapter(this, new ArrayList());
         mMovieImage.setAdapter(mAdapter);
+
+
+
+
 
 
     }
 
     /**
-     * This method retrieves the movie search by sort criteria, constructs the URL
+     * This method creates the movie search URL
      * (using {@link NetworkUtils}) for the tmDB  movie repository
-     * and fires off an AsyncTask to perform the GET request using
-     * {@link MovieQueryTask}
      */
-    private void makeTmdbSearchQuery(String sortby, String page) {
+    private URL createSearchURL(String sortby, String page) {
         String sortBy = sortby;
         String Page = page;
-        //mSearchBoxEditText.getText().toString(); //TODO Remove
-        URL movieSearchUrl = NetworkUtils.buildUrl(sortBy, Page);
-        //mUrlDisplayTextView.setText(githubSearchUrl.toString()); //TODO Remove
-        Log.i("makeTmdbSearchQuery", movieSearchUrl.toString());
 
-        //Passing in the url to query
-        new MovieQueryTask().execute(movieSearchUrl);
+        //Create url
+        URL movieSearchUrl = NetworkUtils.buildUrl(sortBy, Page);
+        Log.i("createSearchQuery", movieSearchUrl.toString());
+
+        return movieSearchUrl;
     }
 
-    public class MovieQueryTask extends AsyncTask<URL, Void, String[]> {
+    public class MovieQueryTask extends AsyncTask<URL, Void, ArrayList> {
+
+        ArrayList<HashMap<String, String>> mParsedData; //Array to hold parsed data from tmdb
+
+        private Context context;
 
         @Override
         protected void onPreExecute() {
@@ -84,35 +97,40 @@ public class MainActivity extends AppCompatActivity {
             mLoadingIndicator.setVisibility(View.VISIBLE);
         }
 
+
         // perform the query. Return the results.
         @Override
-        protected String[] doInBackground(URL... urls) {
+        protected ArrayList doInBackground(URL... urls) {
             URL searchUrl = urls[0];
             String mSearchResults = null;
             try {
+                //get search results
                 mSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
-                Log.d("doInBkGnd:mSearchRlts ", mSearchResults); // TODO remove before submission
+                Log.d("doInBkGnd:mSearchRlts ", mSearchResults); //REMOVE before submission
 
-                //TODO add call to jsonutil
-                ArrayList<HashMap<String, String>> movieParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
-                Log.d("doInBkGnd:pParsedData ", movieParsedData.get(0).get("backdrop_path").toString()); // TODO remove before submission
+                //parse json
+                mParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
+                Log.d("doInBkGnd:pParsedData ", mParsedData.get(0).get("backdrop_path").toString()); //REMOVE before submission
 
-                //Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").into(imageView);
 
 
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
-            return null; //movieSearchResults;
+            return mParsedData;
         }
 
-        //TODO
+
         @Override
-        protected void onPostExecute(String[] s) {
+        protected void onPostExecute(ArrayList m_parsed_data) {
             mLoadingIndicator.setVisibility(View.INVISIBLE);
 
-            //Log.i("onPostExecute: ", s );
-            if (s != null && !s.equals("")) {
+            Log.d("onPostExecute: arySize", String.valueOf(m_parsed_data.size()) ) ;
+            if (m_parsed_data != null && !m_parsed_data.equals("")) {
+
+                //mAdapter.setMovieList(MainActivity.this , m_parsed_data); REMOVE
+                mAdapter.setMovieList( m_parsed_data);
+                mAdapter.notifyDataSetChanged();
                 //mSearchResultsTextView.setText(s);
 
             }
@@ -130,10 +148,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int menuItemClicked = item.getItemId();
         if (menuItemClicked == R.id.action_sortby_popular) {
-            makeTmdbSearchQuery(byMostPopular, "1");
+            createSearchURL(byMostPopular, "1");
             return true;
         } else if (menuItemClicked == R.id.action_sortby_rating) {
-            makeTmdbSearchQuery(byTopRated, "1");
+            createSearchURL(byTopRated, "1");
             return true;
         }
 

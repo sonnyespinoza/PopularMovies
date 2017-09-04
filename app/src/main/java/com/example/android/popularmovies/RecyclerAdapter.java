@@ -1,6 +1,7 @@
 package com.example.android.popularmovies;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,29 +10,37 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecyclerAdapterViewHolder> {
 
     //Logging variable for class name
     private static final String TAG = RecyclerAdapter.class.getSimpleName();
 
-    //Number of movies returned to display
-    private int mNumberMovies;
+    private ArrayList<HashMap<String, String>> movieList;
+    private Context context;
 
-    public RecyclerAdapter(int mNumberMovies) {
-        this.mNumberMovies = mNumberMovies;
+
+    public RecyclerAdapter(Context context, ArrayList movielist) {
+        this.context = context;
+        this.movieList = movielist;
+
+    }
+
+    public void setMovieList ( ArrayList movielist) {
+        this.movieList = movielist;
+
     }
 
 
-    /**
-     * Called when RecyclerView needs a new ViewHolder of the given type to represent
-     * an item.
-     *
-     * @param parent   The ViewGroup into which the new View will be added after it is bound to
-     *                 an adapter position.
-     * @param viewType The view type of the new View.
-     * @return A new ViewHolder that holds a View of the given view type.
-     */
+
     @Override
     public RecyclerAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
@@ -40,56 +49,59 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         boolean attachParent = false;
 
         View view = inflater.inflate(layoutForMovieItem, parent, attachParent);
-        RecyclerAdapterViewHolder viewHolder = new RecyclerAdapterViewHolder(view);
-
-        return viewHolder;
+        return new RecyclerAdapterViewHolder(view);
     }
 
-    /**
-     * OnBindViewHolder is called by the RecyclerView to display the data at the specified
-     * position. In this method, we update the contents of the ViewHolder to display the correct
-     * indices in the list for this particular position, using the "position" argument that is conveniently
-     * passed into us.
-     *
-     * @param holder   The ViewHolder which should be updated to represent the contents of the
-     *                 item at the given position in the data set.
-     * @param position The position of the item within the adapter's data set.
-     */
     @Override
-    public void onBindViewHolder(RecyclerAdapterViewHolder holder, int position) {
-        Log.d(TAG, "#" + position);
-        holder.bind(position);
+    public void onBindViewHolder(final RecyclerAdapterViewHolder holder, int position) {
+
+        Log.d(TAG + ": Image", "#" + position + ": " + " https://image.tmdb.org/t/p/w185/" + movieList.get(position).get("backdrop_path").toString() ); //REMOVE
+        String imageURL= "https://image.tmdb.org/t/p/w185/" + movieList.get(position).get("backdrop_path");
+
+/*        //Picasso.with(context).load(imageURL).into(holder.movie_image);
+        Picasso.with(context).load(imageURL).into(holder.movie_image, new Callback() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onError() {
+                Log.e("Picasso","Image load failed");
+
+            }
+
+
+        });*/
+
+        Picasso.Builder builder = new Picasso.Builder(context);
+        builder.listener(new Picasso.Listener()
+        {
+            @Override
+            public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception)
+            {
+                exception.printStackTrace();
+            }
+        });
+        builder.build().load(imageURL).into(holder.movie_image);
     }
 
-    /**
-     * Returns the total number of items in the data set held by the adapter.
-     *
-     * @return The total number of items in this adapter.
-     */
     @Override
     public int getItemCount() {
-        return 0;
+        return movieList.size();
     }
 
     public class RecyclerAdapterViewHolder extends RecyclerView.ViewHolder  {
 
-        public final GridView MovieGridView;
+        ImageView movie_image;
+
+
 
         public RecyclerAdapterViewHolder(View itemView) {
             super(itemView);
-            MovieGridView = (GridView) itemView.findViewById(R.id.gv_movie_image);
+            movie_image = (ImageView) itemView.findViewById(R.id.iv_movies);
+
             //itemView.setOnClickListener(this);
-        }
-
-        /**
-         * this method will take an integer as input and
-         * use that integer to display the appropriate image in the grid.
-         *
-         * @param listIndex Position of the item in the list
-         */
-        void bind(int listIndex) {
-
-            //listItemNumberView.setText(String.valueOf(listIndex));
         }
     }
 }

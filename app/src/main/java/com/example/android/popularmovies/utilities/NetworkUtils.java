@@ -31,7 +31,7 @@ public class NetworkUtils {
 
 
     final static String API_VAR = "api_key";
-    final static String API_KEY = "27870a6246d2191e0a996bb1e04e2cea"; // TODO: Remove before posting to gethub
+    final static String API_KEY = "27870a6246d2191e0a996bb1e04e2cea"; // REMOVE: Remove before posting to github
 
     final static String BASE_URL = "https://api.themoviedb.org/3/discover/movie";
 

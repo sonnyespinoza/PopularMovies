@@ -117,11 +117,15 @@ public final class JsonUtils {
                         //add movie info to movie data array
                         movieData.add(mInfo);
 
+                        //destory hashmap tmp object
+                        mInfo=null;
+
+
                     }
 
                 }
             } catch (final JSONException e) {
-                //TODO add log
+                e.printStackTrace();
             }
         }
 
