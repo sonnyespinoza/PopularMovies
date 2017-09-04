@@ -17,6 +17,7 @@ package com.example.android.popularmovies.utilities;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,6 +49,7 @@ public final class JsonUtils {
 
         /* Name of the image file */
         final String IMAGE_NAME = "backdrop_path";
+        final String IMAGE_POSTER= "poster_path";
 
         /* Date the movei was released */
         final String RELEASE_DATE = "release_date";
@@ -100,6 +102,9 @@ public final class JsonUtils {
                         JSONObject movieInfo = movieJSONArray.getJSONObject(i);
 
                         String image = movieInfo.getString(IMAGE_NAME);
+                        Log.d("JSON: getStringBckDrp", movieInfo.getString(IMAGE_NAME)); //REMOVE
+                        String image_poster = movieInfo.getString(IMAGE_POSTER);
+                        Log.d("JSON: getStringPoster", movieInfo.getString(IMAGE_POSTER)); //REMOVE
                         String title = movieInfo.getString(MOVIE_TITLE);
                         String description = movieInfo.getString(MOVIE_DESCRIPTION);
                         String releaseDate = movieInfo.getString(RELEASE_DATE);
@@ -109,6 +114,7 @@ public final class JsonUtils {
 
                         //Load movie info into hash map
                         mInfo.put(IMAGE_NAME, image);
+                        mInfo.put(IMAGE_POSTER, image_poster);
                         mInfo.put(MOVIE_TITLE, title);
                         mInfo.put(MOVIE_DESCRIPTION, description);
                         mInfo.put(RELEASE_DATE, releaseDate);
@@ -131,17 +137,5 @@ public final class JsonUtils {
 
         //return movie array data
         return movieData;
-    }
-
-    /**
-     * Parse the JSON and convert it into ContentValues that can be inserted into our database.
-     *
-     * @param context         An application context, such as a service or activity context.
-     * @param forecastJsonStr The JSON to parse into ContentValues.
-     * @return An array of ContentValues parsed from the JSON.
-     */
-    public static ContentValues[] getFullWeatherDataFromJson(Context context, String forecastJsonStr) {
-        //TODO  need to use parsable here
-        return null;
     }
 }

@@ -85,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
         return movieSearchUrl;
     }
 
+    //TODO need to create on click listener
+
     public class MovieQueryTask extends AsyncTask<URL, Void, ArrayList> {
 
         ArrayList<HashMap<String, String>> mParsedData; //Array to hold parsed data from tmdb
@@ -106,13 +108,9 @@ public class MainActivity extends AppCompatActivity {
             try {
                 //get search results
                 mSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
-                Log.d("doInBkGnd:mSearchRlts ", mSearchResults); //REMOVE before submission
 
                 //parse json
                 mParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
-                Log.d("doInBkGnd:pParsedData ", mParsedData.get(0).get("backdrop_path").toString()); //REMOVE before submission
-
-
 
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
@@ -125,14 +123,11 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(ArrayList m_parsed_data) {
             mLoadingIndicator.setVisibility(View.INVISIBLE);
 
-            Log.d("onPostExecute: arySize", String.valueOf(m_parsed_data.size()) ) ;
+            Log.d("onPostExecute: arySize", String.valueOf(m_parsed_data.size()) ) ; //REMOVE
             if (m_parsed_data != null && !m_parsed_data.equals("")) {
 
-                //mAdapter.setMovieList(MainActivity.this , m_parsed_data); REMOVE
                 mAdapter.setMovieList( m_parsed_data);
                 mAdapter.notifyDataSetChanged();
-                //mSearchResultsTextView.setText(s);
-
             }
         }
     }
@@ -149,9 +144,27 @@ public class MainActivity extends AppCompatActivity {
         int menuItemClicked = item.getItemId();
         if (menuItemClicked == R.id.action_sortby_popular) {
             createSearchURL(byMostPopular, "1");
+
+            URL mSearchUrl = createSearchURL(byMostPopular, "1");
+
+            /**
+             *Pass url to query and fires off an AsyncTask
+             *to perform the GET request using
+             * {@link MovieQueryTask}
+             */
+            new MovieQueryTask().execute(mSearchUrl);
             return true;
         } else if (menuItemClicked == R.id.action_sortby_rating) {
-            createSearchURL(byTopRated, "1");
+
+            //TODO need to understand why I have missing images
+            URL mSearchUrl = createSearchURL(byTopRated, "1");
+
+            /**
+             *Pass url to query and fires off an AsyncTask
+             *to perform the GET request using
+             * {@link MovieQueryTask}
+             */
+            new MovieQueryTask().execute(mSearchUrl);
             return true;
         }
 

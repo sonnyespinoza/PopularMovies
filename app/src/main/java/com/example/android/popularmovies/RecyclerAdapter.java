@@ -55,25 +55,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     @Override
     public void onBindViewHolder(final RecyclerAdapterViewHolder holder, int position) {
 
-        Log.d(TAG + ": Image", "#" + position + ": " + " https://image.tmdb.org/t/p/w185/" + movieList.get(position).get("backdrop_path").toString() ); //REMOVE
-        String imageURL= "https://image.tmdb.org/t/p/w185/" + movieList.get(position).get("backdrop_path");
-
-/*        //Picasso.with(context).load(imageURL).into(holder.movie_image);
-        Picasso.with(context).load(imageURL).into(holder.movie_image, new Callback() {
-            @Override
-            public void onSuccess() {
-
-            }
-
-            @Override
-            public void onError() {
-                Log.e("Picasso","Image load failed");
-
-            }
+        //String imageURL= "https://image.tmdb.org/t/p/w185/" + movieList.get(position).get("backdrop_path");
+        String imageURL= "https://image.tmdb.org/t/p/w185/" + movieList.get(position).get("poster_path");
 
 
-        });*/
+        String tTitle = movieList.get(position).get("title");
+        Log.i("onBind:URL ", imageURL  );
+        Log.i("onBind:TITLE ", tTitle );
 
+
+        //Picasso:Listen for loading errors
         Picasso.Builder builder = new Picasso.Builder(context);
         builder.listener(new Picasso.Listener()
         {
@@ -83,6 +74,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
                 exception.printStackTrace();
             }
         });
+        //Load images to image view
         builder.build().load(imageURL).into(holder.movie_image);
     }
 
