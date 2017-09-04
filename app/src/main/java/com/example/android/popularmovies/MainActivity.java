@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 
 import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
         mMovieImage.setAdapter(mAdapter);
 
 
-
-
     }
 
     /**
@@ -77,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         new MovieQueryTask().execute(movieSearchUrl);
     }
 
-    public class MovieQueryTask  extends AsyncTask<URL, Void, String[]> {
+    public class MovieQueryTask extends AsyncTask<URL, Void, String[]> {
 
         @Override
         protected void onPreExecute() {
@@ -89,17 +88,19 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String[] doInBackground(URL... urls) {
             URL searchUrl = urls[0];
-            String movieSearchResults = null;
+            String mSearchResults = null;
             try {
-                movieSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
+                mSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
+                Log.d("doInBkGnd:mSearchRlts ", mSearchResults); // TODO remove before submission
 
-                Log.d("doInBackGround: ", movieSearchResults); // TODO remove before submission
+                //TODO add call to jsonutil
+                ArrayList<HashMap<String, String>> movieParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
+                Log.d("doInBkGnd:pParsedData ", movieParsedData.get(0).get("backdrop_path").toString()); // TODO remove before submission
 
-            //TODO add call to jsonutil
-                ArrayList<HashMap<String, String>> movieParsedData = JsonUtils.getMovieDataFromJson(movieSearchResults);
+                //Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").into(imageView);
 
 
-            } catch (IOException|JSONException e) {
+            } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
             return null; //movieSearchResults;
@@ -111,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             mLoadingIndicator.setVisibility(View.INVISIBLE);
 
             //Log.i("onPostExecute: ", s );
-            if(s != null && !s.equals("")){
+            if (s != null && !s.equals("")) {
                 //mSearchResultsTextView.setText(s);
 
             }
@@ -127,11 +128,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int itemThatWasClickedId = item.getItemId();
-        if (itemThatWasClickedId == R.id.action_sortby_popular) {
+        int menuItemClicked = item.getItemId();
+        if (menuItemClicked == R.id.action_sortby_popular) {
             makeTmdbSearchQuery(byMostPopular, "1");
             return true;
-        } else if (itemThatWasClickedId == R.id.action_sortby_rating){
+        } else if (menuItemClicked == R.id.action_sortby_rating) {
             makeTmdbSearchQuery(byTopRated, "1");
             return true;
         }

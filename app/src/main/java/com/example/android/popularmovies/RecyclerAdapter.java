@@ -1,18 +1,16 @@
 package com.example.android.popularmovies;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.GridView;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ImageViewHolder> {
+import android.view.View.OnClickListener;
+
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecyclerAdapterViewHolder> {
 
     //Logging variable for class name
     private static final String TAG = RecyclerAdapter.class.getSimpleName();
@@ -20,15 +18,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ImageV
     //Number of movies returned to display
     private int mNumberMovies;
 
-    /**
-     * Constructor for RecyclerAdapter that accepts a number of items to display and the specification
-     * for the ListItemClickListener.
-     *
-     * @param numberOfMovies Number of items to display in the grid
-     */
-    public RecyclerAdapter(int numberOfMovies) {
-        mNumberMovies = numberOfMovies;
+    public RecyclerAdapter(int mNumberMovies) {
+        this.mNumberMovies = mNumberMovies;
     }
+
 
     /**
      * Called when RecyclerView needs a new ViewHolder of the given type to represent
@@ -40,14 +33,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ImageV
      * @return A new ViewHolder that holds a View of the given view type.
      */
     @Override
-    public ImageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         int layoutForMovieItem = R.layout.movie_list;
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean attachParent = false;
 
         View view = inflater.inflate(layoutForMovieItem, parent, attachParent);
-        ImageViewHolder viewHolder = new ImageViewHolder(view);
+        RecyclerAdapterViewHolder viewHolder = new RecyclerAdapterViewHolder(view);
 
         return viewHolder;
     }
@@ -63,7 +56,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ImageV
      * @param position The position of the item within the adapter's data set.
      */
     @Override
-    public void onBindViewHolder(ImageViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerAdapterViewHolder holder, int position) {
         Log.d(TAG, "#" + position);
         holder.bind(position);
     }
@@ -78,17 +71,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ImageV
         return 0;
     }
 
-    class ImageViewHolder extends RecyclerView.ViewHolder {
+    public class RecyclerAdapterViewHolder extends RecyclerView.ViewHolder  {
 
-        ImageView MovieItemView;
+        public final GridView MovieGridView;
 
-        public ImageViewHolder(View itemView) {
+        public RecyclerAdapterViewHolder(View itemView) {
             super(itemView);
-            MovieItemView = (ImageView) itemView.findViewById(R.id.iv_movie_image);
+            MovieGridView = (GridView) itemView.findViewById(R.id.gv_movie_image);
+            //itemView.setOnClickListener(this);
         }
 
         /**
-         * his method will take an integer as input and
+         * this method will take an integer as input and
          * use that integer to display the appropriate image in the grid.
          *
          * @param listIndex Position of the item in the list
