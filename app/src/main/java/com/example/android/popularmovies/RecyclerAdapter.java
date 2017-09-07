@@ -57,13 +57,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     @Override
     public void onBindViewHolder(final RecyclerAdapterViewHolder holder, int position) {
 
-        //String imageURL= "https://image.tmdb.org/t/p/w185/" + movieList.get(position).get("backdrop_path");
         String imageURL= "https://image.tmdb.org/t/p/w185/" + movieList.get(position).get("poster_path");
-
-
-        String tTitle = movieList.get(position).get("title");
-        Log.i("onBind:URL ", imageURL  );
-        Log.i("onBind:TITLE ", tTitle );
 
 
         //Picasso:Listen for loading errors
@@ -107,10 +101,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
             Toast.makeText(context, "Clicked on "+  movieList.get(adapterPosition).get("title"), Toast.LENGTH_LONG).show();
 
             Class destinationClass = DetailsActivity.class;
-            Intent intentToStartDetailActivity = new Intent(context, destinationClass);
-            // DONE (1) Pass the weather to the DetailActivity
-            //intentToStartDetailActivity.putExtra(EXTRA_MESSAGE, weatherForDay);
-            context.startActivity(intentToStartDetailActivity);
+            Intent intentDetailActivity = new Intent(context, destinationClass);
+
+            // Pass the movie details to the DetailsActivity
+            intentDetailActivity.putExtra("title", movieList.get(adapterPosition).get("title"));
+            context.startActivity(intentDetailActivity);
             //Intent intent = new Intent(context, )
 
         }
