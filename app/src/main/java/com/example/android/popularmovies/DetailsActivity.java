@@ -16,7 +16,11 @@ public class DetailsActivity extends AppCompatActivity {
 
         String msg = intent.getStringExtra("title");
 
-        TextView textView = (TextView) findViewById(R.id.tv_title);
-        textView.setText(msg);
+        this.setTitle(msg);
+
+        //TextView textView = (TextView) findViewById(R.id.tv_title);
+        //textView.setText(msg);
+        TextView tView = (TextView) findViewById(R.id.person_name);
+        tView.setText(msg);
     }
 }
