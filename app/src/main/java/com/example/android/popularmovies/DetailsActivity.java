@@ -20,7 +20,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         //TextView textView = (TextView) findViewById(R.id.tv_title);
         //textView.setText(msg);
-        TextView tView = (TextView) findViewById(R.id.person_name);
+        TextView tView = (TextView) findViewById(R.id.movie_title);
         tView.setText(msg);
     }
 }
