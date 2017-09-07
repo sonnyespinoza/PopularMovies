@@ -1,19 +1,18 @@
 package com.example.android.popularmovies;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -26,6 +25,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
 
     private ArrayList<HashMap<String, String>> movieList;
     private Context context;
+
+
+
 
 
     public RecyclerAdapter(Context context, ArrayList movielist) {
@@ -83,17 +85,34 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         return movieList.size();
     }
 
-    public class RecyclerAdapterViewHolder extends RecyclerView.ViewHolder  {
+    public class RecyclerAdapterViewHolder extends RecyclerView.ViewHolder  implements OnClickListener {
 
         ImageView movie_image;
-
-
 
         public RecyclerAdapterViewHolder(View itemView) {
             super(itemView);
             movie_image = (ImageView) itemView.findViewById(R.id.iv_movies);
 
-            //itemView.setOnClickListener(this);
+            itemView.setOnClickListener(this);
+        }
+
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param v The view that was clicked.
+         */
+        @Override
+        public void onClick(View v) {
+            int adapterPosition = getAdapterPosition();
+            Toast.makeText(context, "Clicked on "+  movieList.get(adapterPosition).get("title"), Toast.LENGTH_LONG).show();
+
+            Class destinationClass = DetailsActivity.class;
+            Intent intentToStartDetailActivity = new Intent(context, destinationClass);
+            // DONE (1) Pass the weather to the DetailActivity
+            //intentToStartDetailActivity.putExtra(EXTRA_MESSAGE, weatherForDay);
+            context.startActivity(intentToStartDetailActivity);
+            //Intent intent = new Intent(context, )
+
         }
     }
 }

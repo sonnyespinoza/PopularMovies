@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
     /**
      * This method creates the movie search URL
      * (using {@link NetworkUtils}) for the tmDB  movie repository
