@@ -3,4 +3,5 @@
     <string name="sortbypopular">Popularity</string>
     <string name="sortbyrating">Rating</string>
     <string name="detail_activity_title" >Movie Detail</string>
+    <string name="details_max_user_rating">"/10"</string>
 </resources>

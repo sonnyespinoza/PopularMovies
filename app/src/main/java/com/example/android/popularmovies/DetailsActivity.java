@@ -39,7 +39,8 @@ public class DetailsActivity extends AppCompatActivity {
 
         String user_rating = intent.getStringExtra(USER_RATING);
         TextView tv_user_rating = (TextView) findViewById(R.id.tv_user_rating);
-        tv_user_rating.setText(user_rating + "/10");
+        tv_user_rating.setText(user_rating + this.getString(R.string.details_max_user_rating));
+
 
 
 
