@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar mLoadingIndicator;
 
     private final String byMostPopular = "popularity.desc";
-    private final String byTopRated = "vote_average.desc";
+
 
     private RecyclerAdapter mAdapter;
 
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        if (isNetworkAvailable() != false){
+        if (isNetworkAvailable()){
 
             /**
              *Pass url to query and fires off an AsyncTask
@@ -155,14 +155,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        final String byTopRated = "vote_average.desc";
         int menuItemClicked = item.getItemId();
+
         if (menuItemClicked == R.id.action_sortby_popular) {
             createSearchURL(byMostPopular, "1");
 
             URL mSearchUrl = createSearchURL(byMostPopular, "1");
 
 
-            if (isNetworkAvailable() != false){
+            if (isNetworkAvailable()){
 
                 /**
                  *Pass url to query and fires off an AsyncTask
@@ -181,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
 
             URL mSearchUrl = createSearchURL(byTopRated, "1");
 
-            if (isNetworkAvailable() != false){
+            if (isNetworkAvailable()){
 
                 /**
                  *Pass url to query and fires off an AsyncTask
