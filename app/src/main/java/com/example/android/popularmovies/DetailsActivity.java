@@ -27,7 +27,7 @@ public class DetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         String title = intent.getStringExtra(MOVIE_TITLE);
-        this.setTitle(title);
+        //this.setTitle(title);
         TextView tv_title = (TextView) findViewById(R.id.tv_detail_movie_title);
         tv_title.setText(title);
 

@@ -18,6 +18,7 @@ package com.example.android.popularmovies.utilities;
 import android.content.ContentValues;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -79,6 +80,7 @@ public final class JsonUtils {
 
                 /* Is there an error? */
                 if (movieJson.has(MOVIE_STATUS_CODE)) {
+                    Log.d("JSON: Status code", "it here");
                     int errorCode = movieJson.getInt(MOVIE_STATUS_CODE);
 
                     //TODO update with actual code from https://www.themoviedb.org/documentation/api/status-codes
