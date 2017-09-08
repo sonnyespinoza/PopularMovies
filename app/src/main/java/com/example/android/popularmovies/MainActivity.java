@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ProgressBar mLoadingIndicator;
 
-    private final String byMostPopular = "popularity.desc";
+    private final String byMostPopular = "popular";
 
 
     private RecyclerAdapter mAdapter;
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        final String byTopRated = "vote_average.desc";
+        final String byTopRated = "top_rated";
         int menuItemClicked = item.getItemId();
 
         if (menuItemClicked == R.id.action_sortby_popular) {

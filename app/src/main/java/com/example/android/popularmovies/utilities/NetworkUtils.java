@@ -33,19 +33,12 @@ public class NetworkUtils {
 
 
     final static String API_VAR = "api_key";
-    final static String API_KEY = BuildConfig.API_KEY; //""; // TODO:  Add API KEY for tmdb before running
+    final static String API_KEY = BuildConfig.API_KEY;
 
-    final static String BASE_URL = "https://api.themoviedb.org/3/discover/movie";
-
-    final static String SORT_VAR = "sort_by";
+    final static String BASE_URL = "https://api.themoviedb.org/3/movie/";
     final static String LANGUAGE_VAR = "language";
     final static String LANGUAGE = "en-US";
-    final static String INCLUDE_ADULT_VAR = "include_adult";
-    final static String INCLUDE_ADULT = "false";
-    final static String INCLUDE_VIDEO_VAR = "include_video";
-    final static String INCLUDE_VIDEO = "false";
-
-
+    final static String PAGE = "page";
 
     /**
      * Builds the URL
@@ -55,12 +48,10 @@ public class NetworkUtils {
      * @return The URL to use to query the GitHub.
      */
     public static URL buildUrl(String sortBy, String page ) {
-        Uri builtUri = Uri.parse(BASE_URL).buildUpon()
+        Uri builtUri = Uri.parse(BASE_URL +  sortBy).buildUpon()
                 .appendQueryParameter(API_VAR, API_KEY)
                 .appendQueryParameter(LANGUAGE_VAR, LANGUAGE)
-                .appendQueryParameter(SORT_VAR, sortBy)
-                .appendQueryParameter(INCLUDE_ADULT_VAR, INCLUDE_ADULT )
-                .appendQueryParameter(INCLUDE_VIDEO_VAR, INCLUDE_VIDEO )
+                //.appendQueryParameter(PAGE, page)
                 .build();
 
         URL url = null;
