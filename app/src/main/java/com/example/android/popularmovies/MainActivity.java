@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerAdapter mAdapter;
 
-    RecyclerView mMovieImage;
-    GridLayoutManager layoutManager;
+    private RecyclerView mMovieImage;
+    private GridLayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +89,9 @@ public class MainActivity extends AppCompatActivity {
      * (using {@link NetworkUtils}) for the tmDB  movie repository
      */
     private URL createSearchURL(String sortby, String page) {
-        String sortBy = sortby;
-        String Page = page;
 
         //Create url
-        URL movieSearchUrl = NetworkUtils.buildUrl(sortBy, Page);
+        URL movieSearchUrl = NetworkUtils.buildUrl(sortby, page);
         Log.i("createSearchQuery", movieSearchUrl.toString());
 
         return movieSearchUrl;
@@ -104,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<HashMap<String, String>> mParsedData; //Array to hold parsed data from tmdb
 
-        private Context context;
+
 
         @Override
         protected void onPreExecute() {
@@ -205,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //check for network connection
-    public boolean isNetworkAvailable() {
+    private  boolean isNetworkAvailable() {
         boolean isConnected = false;
         try{
 

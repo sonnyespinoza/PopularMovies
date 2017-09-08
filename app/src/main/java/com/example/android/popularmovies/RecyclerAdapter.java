@@ -23,7 +23,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
 
 
     private ArrayList<HashMap<String, String>> movieList;
-    private Context context;
+    final private Context context;
 
     public RecyclerAdapter(Context context, ArrayList movielist) {
         this.context = context;
@@ -74,7 +74,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
 
     public class RecyclerAdapterViewHolder extends RecyclerView.ViewHolder  implements OnClickListener {
 
-        ImageView movie_image;
+        final ImageView movie_image;
 
         public RecyclerAdapterViewHolder(View itemView) {
             super(itemView);
