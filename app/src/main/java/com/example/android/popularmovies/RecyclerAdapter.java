@@ -20,6 +20,13 @@ import java.util.HashMap;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecyclerAdapterViewHolder> {
 
+    final String RELEASE_DATE = "release_date";
+    final String MOVIE_DESCRIPTION = "overview";
+    final String MOVIE_TITLE = "title";
+    //final String IMAGE_NAME = "backdrop_path";
+    final String IMAGE_POSTER= "poster_path";
+
+
     //Logging variable for class name
     private static final String TAG = RecyclerAdapter.class.getSimpleName();
 
@@ -57,7 +64,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     @Override
     public void onBindViewHolder(final RecyclerAdapterViewHolder holder, int position) {
 
-        String imageURL= "https://image.tmdb.org/t/p/w185/" + movieList.get(position).get("poster_path");
+        String imageURL= "https://image.tmdb.org/t/p/w185/"  + movieList.get(position).get("poster_path");
 
 
         //Picasso:Listen for loading errors
@@ -97,16 +104,21 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
          */
         @Override
         public void onClick(View v) {
+
+
             int adapterPosition = getAdapterPosition();
-            Toast.makeText(context, "Clicked on "+  movieList.get(adapterPosition).get("title"), Toast.LENGTH_LONG).show();
 
             Class destinationClass = DetailsActivity.class;
             Intent intentDetailActivity = new Intent(context, destinationClass);
 
+
             // Pass the movie details to the DetailsActivity
-            intentDetailActivity.putExtra("title", movieList.get(adapterPosition).get("title"));
+            intentDetailActivity.putExtra(MOVIE_TITLE, movieList.get(adapterPosition).get(MOVIE_TITLE));
+            intentDetailActivity.putExtra(IMAGE_POSTER, "https://image.tmdb.org/t/p/w185/"  + movieList.get(adapterPosition).get(IMAGE_POSTER));
+            //intentDetailActivity.putExtra(IMAGE_NAME, "https://image.tmdb.org/t/p/w185/"  + movieList.get(adapterPosition).get(IMAGE_NAME));
+            intentDetailActivity.putExtra(RELEASE_DATE, movieList.get(adapterPosition).get(RELEASE_DATE));
+            intentDetailActivity.putExtra(MOVIE_DESCRIPTION, movieList.get(adapterPosition).get(MOVIE_DESCRIPTION));
             context.startActivity(intentDetailActivity);
-            //Intent intent = new Intent(context, )
 
         }
     }
