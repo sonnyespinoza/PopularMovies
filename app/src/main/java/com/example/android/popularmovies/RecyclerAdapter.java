@@ -26,28 +26,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     //final String IMAGE_NAME = "backdrop_path";
     final String IMAGE_POSTER= "poster_path";
 
-
-    //Logging variable for class name
-    private static final String TAG = RecyclerAdapter.class.getSimpleName();
-
     private ArrayList<HashMap<String, String>> movieList;
     private Context context;
-
-
-
-
 
     public RecyclerAdapter(Context context, ArrayList movielist) {
         this.context = context;
         this.movieList = movielist;
-
     }
 
     public void setMovieList ( ArrayList movielist) {
         this.movieList = movielist;
 
     }
-
 
 
     @Override

@@ -1,6 +1,8 @@
 package com.example.android.popularmovies;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,13 +13,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 
 import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -52,12 +53,23 @@ public class MainActivity extends AppCompatActivity {
 
         URL mSearchUrl = createSearchURL(byMostPopular, "1");
 
-        /**
-         *Pass url to query and fires off an AsyncTask
-         *to perform the GET request using
-         * {@link MovieQueryTask}
-         */
-        new MovieQueryTask().execute(mSearchUrl);
+
+
+        if (isNetworkAvailable() != false){
+
+            /**
+             *Pass url to query and fires off an AsyncTask
+             *to perform the GET request using
+             * {@link MovieQueryTask}
+             */
+            new MovieQueryTask().execute(mSearchUrl);
+
+        } else {
+            Toast.makeText(this, "No Internet Connection",
+                    Toast.LENGTH_LONG).show();
+
+        }
+
 
         // Set Adapter
         mAdapter = new RecyclerAdapter(this, new ArrayList());
@@ -87,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
         return movieSearchUrl;
     }
 
-    //TODO need to create on click listener
 
     public class MovieQueryTask extends AsyncTask<URL, Void, ArrayList> {
 
@@ -107,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
         protected ArrayList doInBackground(URL... urls) {
             URL searchUrl = urls[0];
             String mSearchResults = null;
+
             try {
                 //get search results
                 mSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
@@ -125,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(ArrayList m_parsed_data) {
             mLoadingIndicator.setVisibility(View.INVISIBLE);
 
-            Log.d("onPostExecute: arySize", String.valueOf(m_parsed_data.size()) ) ; //REMOVE
+            Log.d("onPostExecute: arySize", String.valueOf(m_parsed_data.size()) );
             if (m_parsed_data != null && !m_parsed_data.equals("")) {
 
                 mAdapter.setMovieList( m_parsed_data);
@@ -149,27 +161,64 @@ public class MainActivity extends AppCompatActivity {
 
             URL mSearchUrl = createSearchURL(byMostPopular, "1");
 
-            /**
-             *Pass url to query and fires off an AsyncTask
-             *to perform the GET request using
-             * {@link MovieQueryTask}
-             */
-            new MovieQueryTask().execute(mSearchUrl);
+
+            if (isNetworkAvailable() != false){
+
+                /**
+                 *Pass url to query and fires off an AsyncTask
+                 *to perform the GET request using
+                 * {@link MovieQueryTask}
+                 */
+                new MovieQueryTask().execute(mSearchUrl);
+
+            } else {
+                Toast.makeText(this, "No Internet Connection",
+                        Toast.LENGTH_LONG).show();
+
+            }
             return true;
         } else if (menuItemClicked == R.id.action_sortby_rating) {
 
-            //TODO need to understand why I have missing images
             URL mSearchUrl = createSearchURL(byTopRated, "1");
 
-            /**
-             *Pass url to query and fires off an AsyncTask
-             *to perform the GET request using
-             * {@link MovieQueryTask}
-             */
-            new MovieQueryTask().execute(mSearchUrl);
+            if (isNetworkAvailable() != false){
+
+                /**
+                 *Pass url to query and fires off an AsyncTask
+                 *to perform the GET request using
+                 * {@link MovieQueryTask}
+                 */
+                new MovieQueryTask().execute(mSearchUrl);
+
+            } else {
+                Toast.makeText(this, "No Internet Connection",
+                        Toast.LENGTH_LONG).show();
+
+            }
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //check for network connection
+    public boolean isNetworkAvailable() {
+        boolean isConnected = false;
+        try{
+
+            ConnectivityManager cm =
+                    (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            isConnected = activeNetwork != null &&
+                    activeNetwork.isConnectedOrConnecting();
+
+
+        }catch(Exception e){
+            e.printStackTrace();
+
+        }
+        return isConnected;
+
     }
 }

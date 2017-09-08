@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Utility functions to handle tmDB NMovie data JSON data.
+ * Utility functions to handle tmDB Movie data JSON data.
  */
 public final class JsonUtils {
 
@@ -80,15 +80,15 @@ public final class JsonUtils {
 
                 /* Is there an error? */
                 if (movieJson.has(MOVIE_STATUS_CODE)) {
-                    Log.d("JSON: Status code", "it here");
+
                     int errorCode = movieJson.getInt(MOVIE_STATUS_CODE);
 
-                    //TODO update with actual code from https://www.themoviedb.org/documentation/api/status-codes
-                    //TODO add code description as a log in the case statements
+                    Log.e("JSONUtil:Status Code", String.valueOf(MOVIE_STATUS_CODE) );
+                    Log.e("JSONUtil:Message", movieJson.get("status_message").toString());
                     switch (errorCode) {
-                        case HttpURLConnection.HTTP_OK:
+                        case 1:
                             break;
-                        case HttpURLConnection.HTTP_NOT_FOUND:
+                        case 2:
                     /* Location invalid */
                             return null;
                         default:
@@ -104,9 +104,7 @@ public final class JsonUtils {
                         JSONObject movieInfo = movieJSONArray.getJSONObject(i);
 
                         String image = movieInfo.getString(IMAGE_NAME);
-                        Log.d("JSON: getStringBckDrp", movieInfo.getString(IMAGE_NAME)); //REMOVE
                         String image_poster = movieInfo.getString(IMAGE_POSTER);
-                        Log.d("JSON: getStringPoster", movieInfo.getString(IMAGE_POSTER)); //REMOVE
                         String title = movieInfo.getString(MOVIE_TITLE);
                         String description = movieInfo.getString(MOVIE_DESCRIPTION);
                         String releaseDate = movieInfo.getString(RELEASE_DATE);
@@ -125,7 +123,7 @@ public final class JsonUtils {
                         //add movie info to movie data array
                         movieData.add(mInfo);
 
-                        //destory hashmap tmp object
+                        //destory hashmap object
                         mInfo=null;
 
 
@@ -134,6 +132,7 @@ public final class JsonUtils {
                 }
             } catch (final JSONException e) {
                 e.printStackTrace();
+
             }
         }
 

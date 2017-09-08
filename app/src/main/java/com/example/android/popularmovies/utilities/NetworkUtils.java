@@ -16,6 +16,7 @@
 package com.example.android.popularmovies.utilities;
 
 import android.net.Uri;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -81,6 +82,7 @@ public class NetworkUtils {
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
+            Log.d("Im here", "");
             InputStream in = urlConnection.getInputStream();
 
             Scanner scanner = new Scanner(in);
@@ -88,8 +90,10 @@ public class NetworkUtils {
 
             boolean hasInput = scanner.hasNext();
             if (hasInput) {
+                Log.d("not null", "");
                 return scanner.next();
             } else {
+                Log.d("null", "");
                 return null;
             }
         } finally {
