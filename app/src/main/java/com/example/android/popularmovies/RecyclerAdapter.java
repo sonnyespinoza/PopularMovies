@@ -25,6 +25,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     final String MOVIE_TITLE = "title";
     //final String IMAGE_NAME = "backdrop_path";
     final String IMAGE_POSTER= "poster_path";
+    final String USER_RATING = "vote_average";
 
     private ArrayList<HashMap<String, String>> movieList;
     private Context context;
@@ -107,6 +108,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
             intentDetailActivity.putExtra(IMAGE_POSTER, "https://image.tmdb.org/t/p/w185/"  + movieList.get(adapterPosition).get(IMAGE_POSTER));
             //intentDetailActivity.putExtra(IMAGE_NAME, "https://image.tmdb.org/t/p/w185/"  + movieList.get(adapterPosition).get(IMAGE_NAME));
             intentDetailActivity.putExtra(RELEASE_DATE, movieList.get(adapterPosition).get(RELEASE_DATE));
+            intentDetailActivity.putExtra(USER_RATING, movieList.get(adapterPosition).get(USER_RATING));
             intentDetailActivity.putExtra(MOVIE_DESCRIPTION, movieList.get(adapterPosition).get(MOVIE_DESCRIPTION));
             context.startActivity(intentDetailActivity);
 

@@ -59,6 +59,9 @@ public final class JsonUtils {
         final String MOVIE_DESCRIPTION = "overview";
         final String MOVIE_TITLE = "title";
 
+        //User movie rating
+        final String USER_RATING = "vote_average";
+
         //return status code
         final String MOVIE_STATUS_CODE = "status_code";
 
@@ -108,6 +111,7 @@ public final class JsonUtils {
                         String title = movieInfo.getString(MOVIE_TITLE);
                         String description = movieInfo.getString(MOVIE_DESCRIPTION);
                         String releaseDate = movieInfo.getString(RELEASE_DATE);
+                        String userRating = movieInfo.getString(USER_RATING);
 
                         //hash map for pre load of movie info
                         HashMap<String, String> mInfo = new HashMap<>();
@@ -118,6 +122,7 @@ public final class JsonUtils {
                         mInfo.put(MOVIE_TITLE, title);
                         mInfo.put(MOVIE_DESCRIPTION, description);
                         mInfo.put(RELEASE_DATE, releaseDate);
+                        mInfo.put(USER_RATING, userRating);
 
 
                         //add movie info to movie data array

@@ -38,6 +38,16 @@
             android:layout_alignParentTop="true" />
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_user_rating"
+            android:layout_toRightOf="@+id/iv_details_poster"
+            android:layout_below="@+id/tv_release_date"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="16dp"
+            android:textSize="12sp"/>
+
+        <TextView
             android:id="@+id/tv_release_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,6 +55,8 @@
             android:layout_marginLeft="32dp"
             android:layout_toRightOf="@+id/iv_details_poster"
             android:textSize="16sp" />
+
+
 
         <TextView
             android:id="@+id/tv_detail_movie_description"

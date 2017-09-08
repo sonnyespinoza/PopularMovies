@@ -17,6 +17,7 @@ public class DetailsActivity extends AppCompatActivity {
     final String MOVIE_TITLE = "title";
     //final String IMAGE_NAME = "backdrop_path";
     final String IMAGE_POSTER= "poster_path";
+    final String USER_RATING = "vote_average";
     Context context;
 
     @Override
@@ -34,6 +35,12 @@ public class DetailsActivity extends AppCompatActivity {
         String release_date = intent.getStringExtra(RELEASE_DATE);
         TextView tv_release_date = (TextView) findViewById(R.id.tv_release_date);
         tv_release_date.setText(release_date);
+
+
+        String user_rating = intent.getStringExtra(USER_RATING);
+        TextView tv_user_rating = (TextView) findViewById(R.id.tv_user_rating);
+        tv_user_rating.setText(user_rating + "/10");
+
 
 
         //Picasso:Listen for loading errors
