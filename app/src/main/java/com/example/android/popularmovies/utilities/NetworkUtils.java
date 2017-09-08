@@ -16,6 +16,9 @@
 package com.example.android.popularmovies.utilities;
 
 import android.net.Uri;
+
+import com.example.android.popularmovies.BuildConfig;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -30,7 +33,7 @@ public class NetworkUtils {
 
 
     final static String API_VAR = "api_key";
-    final static String API_KEY = ""; // TODO:  Add API KEY for tmdb before running
+    final static String API_KEY = BuildConfig.API_KEY; //""; // TODO:  Add API KEY for tmdb before running
 
     final static String BASE_URL = "https://api.themoviedb.org/3/discover/movie";
 
