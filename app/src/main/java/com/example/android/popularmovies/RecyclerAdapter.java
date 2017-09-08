@@ -20,12 +20,7 @@ import java.util.HashMap;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecyclerAdapterViewHolder> {
 
-    final String RELEASE_DATE = "release_date";
-    final String MOVIE_DESCRIPTION = "overview";
-    final String MOVIE_TITLE = "title";
-    //final String IMAGE_NAME = "backdrop_path";
-    final String IMAGE_POSTER= "poster_path";
-    final String USER_RATING = "vote_average";
+
 
     private ArrayList<HashMap<String, String>> movieList;
     private Context context;
@@ -104,12 +99,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
 
 
             // Pass the movie details to the DetailsActivity
-            intentDetailActivity.putExtra(MOVIE_TITLE, movieList.get(adapterPosition).get(MOVIE_TITLE));
-            intentDetailActivity.putExtra(IMAGE_POSTER, "https://image.tmdb.org/t/p/w185/"  + movieList.get(adapterPosition).get(IMAGE_POSTER));
+            intentDetailActivity.putExtra(context.getString(R.string.title), movieList.get(adapterPosition).get(context.getString(R.string.title)));
+            intentDetailActivity.putExtra(context.getString(R.string.image_poster), "https://image.tmdb.org/t/p/w185/"  + movieList.get(adapterPosition).get(context.getString(R.string.image_poster)));
             //intentDetailActivity.putExtra(IMAGE_NAME, "https://image.tmdb.org/t/p/w185/"  + movieList.get(adapterPosition).get(IMAGE_NAME));
-            intentDetailActivity.putExtra(RELEASE_DATE, movieList.get(adapterPosition).get(RELEASE_DATE));
-            intentDetailActivity.putExtra(USER_RATING, movieList.get(adapterPosition).get(USER_RATING));
-            intentDetailActivity.putExtra(MOVIE_DESCRIPTION, movieList.get(adapterPosition).get(MOVIE_DESCRIPTION));
+            intentDetailActivity.putExtra(context.getString(R.string.release_date), movieList.get(adapterPosition).get(context.getString(R.string.release_date)));
+            intentDetailActivity.putExtra(context.getString(R.string.user_rating), movieList.get(adapterPosition).get(context.getString(R.string.user_rating)));
+            intentDetailActivity.putExtra(context.getString(R.string.overview), movieList.get(adapterPosition).get(context.getString(R.string.overview)));
             context.startActivity(intentDetailActivity);
 
         }

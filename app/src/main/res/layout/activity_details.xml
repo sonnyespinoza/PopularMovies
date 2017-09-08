@@ -33,6 +33,7 @@
 
         <ImageView
             android:id="@+id/iv_details_poster"
+            android:contentDescription="movie poster image used in details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true" />

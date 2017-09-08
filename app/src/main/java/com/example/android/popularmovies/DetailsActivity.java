@@ -12,12 +12,7 @@ import com.squareup.picasso.Picasso;
 
 public class DetailsActivity extends AppCompatActivity {
 
-    final String RELEASE_DATE = "release_date";
-    final String MOVIE_DESCRIPTION = "overview";
-    final String MOVIE_TITLE = "title";
-    //final String IMAGE_NAME = "backdrop_path";
-    final String IMAGE_POSTER= "poster_path";
-    final String USER_RATING = "vote_average";
+
     Context context;
 
     @Override
@@ -27,19 +22,21 @@ public class DetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        String title = intent.getStringExtra(MOVIE_TITLE);
+        String title = intent.getStringExtra(this.getString(R.string.title));
         //this.setTitle(title);
         TextView tv_title = (TextView) findViewById(R.id.tv_detail_movie_title);
         tv_title.setText(title);
 
-        String release_date = intent.getStringExtra(RELEASE_DATE);
+        String release_date = intent.getStringExtra(this.getString(R.string.release_date));
         TextView tv_release_date = (TextView) findViewById(R.id.tv_release_date);
         tv_release_date.setText(release_date);
 
 
-        String user_rating = intent.getStringExtra(USER_RATING);
+        String user_rating = intent.getStringExtra(this.getString(R.string.user_rating));
+        user_rating = user_rating + this.getString(R.string.details_max_user_rating);
+
         TextView tv_user_rating = (TextView) findViewById(R.id.tv_user_rating);
-        tv_user_rating.setText(user_rating + this.getString(R.string.details_max_user_rating));
+        tv_user_rating.setText(user_rating );
 
 
 
@@ -56,12 +53,13 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
         //Load images to image view
-        String movie_image = intent.getStringExtra(IMAGE_POSTER);
+        String movie_image = intent.getStringExtra(this.getString(R.string.image_poster));
         ImageView iv_img_backdrop = (ImageView) findViewById(R.id.iv_details_poster) ;
         builder.build().load(movie_image).into(iv_img_backdrop);
 
-        String movie_desc = intent.getStringExtra(MOVIE_DESCRIPTION);
+        String movie_desc = intent.getStringExtra(this.getString(R.string.overview));
         TextView tv_movie_desc = (TextView) findViewById(R.id.tv_detail_movie_description);
         tv_movie_desc.setText(movie_desc);
     }
 }
+
