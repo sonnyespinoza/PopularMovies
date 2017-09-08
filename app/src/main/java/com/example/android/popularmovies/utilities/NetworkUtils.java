@@ -16,8 +16,6 @@
 package com.example.android.popularmovies.utilities;
 
 import android.net.Uri;
-import android.util.Log;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;

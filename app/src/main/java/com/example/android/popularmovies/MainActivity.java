@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected ArrayList doInBackground(URL... urls) {
             URL searchUrl = urls[0];
-            String mSearchResults = null;
+            String mSearchResults;
 
             try {
                 //get search results

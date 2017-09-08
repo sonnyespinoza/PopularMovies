@@ -4,17 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.Toast;
-
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -41,9 +36,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         Context context = parent.getContext();
         int layoutForMovieItem = R.layout.movie_list;
         LayoutInflater inflater = LayoutInflater.from(context);
-        boolean attachParent = false;
+        //boolean attachParent = false;
 
-        View view = inflater.inflate(layoutForMovieItem, parent, attachParent);
+        View view = inflater.inflate(layoutForMovieItem, parent, false);
         return new RecyclerAdapterViewHolder(view);
     }
 

@@ -15,16 +15,10 @@
  */
 package com.example.android.popularmovies.utilities;
 
-import android.content.ContentValues;
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -52,7 +46,7 @@ public final class JsonUtils {
         final String IMAGE_NAME = "backdrop_path";
         final String IMAGE_POSTER= "poster_path";
 
-        /* Date the movei was released */
+        /* Date the movie was released */
         final String RELEASE_DATE = "release_date";
 
         //Movie title and overview
@@ -128,8 +122,8 @@ public final class JsonUtils {
                         //add movie info to movie data array
                         movieData.add(mInfo);
 
-                        //destory hashmap object
-                        mInfo=null;
+
+
 
 
                     }
