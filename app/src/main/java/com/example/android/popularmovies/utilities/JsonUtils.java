@@ -16,11 +16,16 @@
 package com.example.android.popularmovies.utilities;
 
 import android.util.Log;
+
+import com.example.android.popularmovies.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Utility functions to handle tmDB Movie data JSON data.
@@ -36,7 +41,7 @@ public final class JsonUtils {
      * @return Array of Strings describing weather data
      * @throws JSONException If JSON data cannot be properly parsed
      */
-    public static ArrayList<HashMap<String, String>> getMovieDataFromJson(String movieJsonStr)
+    public static ArrayList<ParcelableUtils> getMovieDataFromJson(String movieJsonStr)
             throws JSONException {
 
         /* The "list" array of movie results*/
@@ -59,20 +64,21 @@ public final class JsonUtils {
         //return status code
         final String MOVIE_STATUS_CODE = "status_code";
 
-        //Array List to load Movie JSON Data
-        ArrayList<HashMap<String, String>> movieData;
-        movieData = new ArrayList<>();
+
+
+        // INITIALIZE NEW ARRAYLIST AND POPULATE
+        ArrayList<ParcelableUtils> movieData = new ArrayList<ParcelableUtils>();
 
 
         if (movieJsonStr != null) {
 
             try {
 
+
                 JSONObject movieJson = new JSONObject(movieJsonStr);
 
                 //JSON Array node
                 JSONArray movieJSONArray = movieJson.getJSONArray(RESULTS);
-
 
 
                 /* Is there an error? */
@@ -94,20 +100,21 @@ public final class JsonUtils {
                     }
                 } else {
 
-                    //Load movies into movie data array
 
                     for (int i = 0; i < movieJSONArray.length(); i++) {
 
                         JSONObject movieInfo = movieJSONArray.getJSONObject(i);
 
                         String image = movieInfo.getString(IMAGE_NAME);
-                        String image_poster = movieInfo.getString(IMAGE_POSTER);
+                        String imagePoster = movieInfo.getString(IMAGE_POSTER);
                         String title = movieInfo.getString(MOVIE_TITLE);
                         String description = movieInfo.getString(MOVIE_DESCRIPTION);
                         String releaseDate = movieInfo.getString(RELEASE_DATE);
                         String userRating = movieInfo.getString(USER_RATING);
 
+
                         //hash map for pre load of movie info
+/*
                         HashMap<String, String> mInfo = new HashMap<>();
 
                         //Load movie info into hash map
@@ -117,10 +124,13 @@ public final class JsonUtils {
                         mInfo.put(MOVIE_DESCRIPTION, description);
                         mInfo.put(RELEASE_DATE, releaseDate);
                         mInfo.put(USER_RATING, userRating);
+*/
 
+
+                        movieData.add(new ParcelableUtils(releaseDate, description, title, image, imagePoster, userRating));;
 
                         //add movie info to movie data array
-                        movieData.add(mInfo);
+                        //movieData.add(mInfo);
 
 
 
@@ -134,6 +144,7 @@ public final class JsonUtils {
 
             }
         }
+        Log.d("JsonUtils", "getMovieDataFromJson: " + movieData.size());
 
         //return movie array data
         return movieData;

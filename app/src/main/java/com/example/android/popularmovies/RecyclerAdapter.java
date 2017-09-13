@@ -3,12 +3,16 @@ package com.example.android.popularmovies;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+
+import com.example.android.popularmovies.utilities.ParcelableUtils;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,15 +21,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
 
 
 
-    private ArrayList<HashMap<String, String>> movieList;
+    //private ArrayList<ParcelableUtils> movieList;
+    ArrayList<ParcelableUtils> movieList = new ArrayList<ParcelableUtils>();
     final private Context context;
 
-    public RecyclerAdapter(Context context, ArrayList movielist) {
+    public RecyclerAdapter(Context context, ArrayList<ParcelableUtils> movielist) {
         this.context = context;
         this.movieList = movielist;
     }
 
-    public void setMovieList ( ArrayList movielist) {
+    public void setMovieList ( ArrayList<ParcelableUtils> movielist) {
         this.movieList = movielist;
 
     }
@@ -45,8 +50,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     @Override
     public void onBindViewHolder(final RecyclerAdapterViewHolder holder, int position) {
 
-        String imageURL= "https://image.tmdb.org/t/p/w185/"  + movieList.get(position).get("poster_path");
+        //String imageURL= "https://image.tmdb.org/t/p/w185/"  + movieList.get(position).get("poster_path");
+        String imageURL= "https://image.tmdb.org/t/p/w185/"  + movieList.get(position).getImage_poster();
 
+        Log.d("RecyclerAdapter", "onBindViewHolder: imageURL"+ imageURL);
 
         //Picasso:Listen for loading errors
         Picasso.Builder builder = new Picasso.Builder(context);
@@ -94,14 +101,21 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
 
 
             // Pass the movie details to the DetailsActivity
-            intentDetailActivity.putExtra(context.getString(R.string.title), movieList.get(adapterPosition).get(context.getString(R.string.title)));
-            intentDetailActivity.putExtra(context.getString(R.string.image_poster), "https://image.tmdb.org/t/p/w185/"  + movieList.get(adapterPosition).get(context.getString(R.string.image_poster)));
+            intentDetailActivity.putExtra(context.getString(R.string.title), movieList.get(adapterPosition).getTitle());
+            intentDetailActivity.putExtra(context.getString(R.string.image_poster), "https://image.tmdb.org/t/p/w185/"  + movieList.get(adapterPosition).getImage_poster());
             //intentDetailActivity.putExtra(IMAGE_NAME, "https://image.tmdb.org/t/p/w185/"  + movieList.get(adapterPosition).get(IMAGE_NAME));
-            intentDetailActivity.putExtra(context.getString(R.string.release_date), movieList.get(adapterPosition).get(context.getString(R.string.release_date)));
-            intentDetailActivity.putExtra(context.getString(R.string.user_rating), movieList.get(adapterPosition).get(context.getString(R.string.user_rating)));
-            intentDetailActivity.putExtra(context.getString(R.string.overview), movieList.get(adapterPosition).get(context.getString(R.string.overview)));
+            intentDetailActivity.putExtra(context.getString(R.string.release_date), movieList.get(adapterPosition).getRelease_date());
+            intentDetailActivity.putExtra(context.getString(R.string.user_rating), movieList.get(adapterPosition).getUser_rating());
+            intentDetailActivity.putExtra(context.getString(R.string.overview), movieList.get(adapterPosition).getOverview());
+
+            // EMBED INTO INTENT
+            //intentDetailActivity.putParcelableArrayListExtra("movie", movieList.get(adapterPosition));
+
+
             context.startActivity(intentDetailActivity);
 
         }
+
+
     }
 }

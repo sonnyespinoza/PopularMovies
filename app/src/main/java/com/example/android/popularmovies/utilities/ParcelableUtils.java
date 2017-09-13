@@ -16,8 +16,15 @@ public class ParcelableUtils implements Parcelable{
     private String user_rating;
 
 
-    public ParcelableUtils(){
-        super();
+    public ParcelableUtils(String mRelease_date, String mOverview, String mTitle, String mImage_name, String mImage_poster, String mUser_rating  ){
+        this.release_date = mRelease_date;
+        this.overview=mOverview;
+        this.title=mTitle;
+        this.image_name=mImage_name;
+        this.image_poster=mImage_poster;
+        this.user_rating=mUser_rating;
+
+
     }
 
     public ParcelableUtils(Parcel parcel) {
@@ -48,8 +55,8 @@ public class ParcelableUtils implements Parcelable{
     }
     public static final Creator<ParcelableUtils> CREATOR=new Creator<ParcelableUtils>() {
         @Override
-        public ParcelableUtils createFromParcel(Parcel source) {
-            return new ParcelableUtils(source);
+        public ParcelableUtils createFromParcel(Parcel parcel) {
+            return new ParcelableUtils(parcel);
         }
 
         @Override

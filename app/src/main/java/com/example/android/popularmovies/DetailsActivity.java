@@ -8,11 +8,15 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.popularmovies.utilities.ParcelableUtils;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 public class DetailsActivity extends AppCompatActivity {
 
 
+    private List<ParcelableUtils> movie;
     private Context context;
 
     @Override
@@ -20,7 +24,12 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+
+
         Intent intent = getIntent();
+        movie = intent.getParcelableArrayListExtra("movie");
+        ;
+
 
         String title = intent.getStringExtra(this.getString(R.string.title));
         //this.setTitle(title);

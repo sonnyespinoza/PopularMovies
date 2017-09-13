@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
+import com.example.android.popularmovies.utilities.ParcelableUtils;
 
 import org.json.JSONException;
 import java.io.IOException;
@@ -30,11 +32,21 @@ public class MainActivity extends AppCompatActivity {
 
     private final String byMostPopular = "popular";
 
+    //ArrayList<HashMap<String, String>> mParsedData; //Array to hold parsed data from tmdb
+    ArrayList<ParcelableUtils> mParsedData; //Array to hold parsed data from tmdb
+
 
     private RecyclerAdapter mAdapter;
 
     private RecyclerView mMovieImage;
     private GridLayoutManager layoutManager;
+
+/*    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList("movies", mParsedData);
+        outState.putParcelableArrayList();
+        super.onSaveInstanceState(outState);
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
     public class MovieQueryTask extends AsyncTask<URL, Void, ArrayList> {
 
-        ArrayList<HashMap<String, String>> mParsedData; //Array to hold parsed data from tmdb
+
 
 
 
