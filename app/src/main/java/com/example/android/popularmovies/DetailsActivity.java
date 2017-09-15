@@ -27,8 +27,8 @@ public class DetailsActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        movie = intent.getParcelableArrayListExtra("movie");
-        ;
+        //movie = intent.getParcelableArrayListExtra("movie");
+        //;
 
 
         String title = intent.getStringExtra(this.getString(R.string.title));

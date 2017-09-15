@@ -3,7 +3,6 @@ package com.example.android.popularmovies;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,13 +14,10 @@ import android.widget.ImageView;
 import com.example.android.popularmovies.utilities.ParcelableUtils;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecyclerAdapterViewHolder> {
 
 
-
-    //private ArrayList<ParcelableUtils> movieList;
     ArrayList<ParcelableUtils> movieList = new ArrayList<ParcelableUtils>();
     final private Context context;
 
@@ -32,7 +28,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
 
     public void setMovieList ( ArrayList<ParcelableUtils> movielist) {
         this.movieList = movielist;
-
     }
 
 
@@ -107,10 +102,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
             intentDetailActivity.putExtra(context.getString(R.string.release_date), movieList.get(adapterPosition).getRelease_date());
             intentDetailActivity.putExtra(context.getString(R.string.user_rating), movieList.get(adapterPosition).getUser_rating());
             intentDetailActivity.putExtra(context.getString(R.string.overview), movieList.get(adapterPosition).getOverview());
-
-            // EMBED INTO INTENT
-            //intentDetailActivity.putParcelableArrayListExtra("movie", movieList.get(adapterPosition));
-
+     //       intentDetailActivity.putParcelableArrayListExtra("movies", movieList);
 
             context.startActivity(intentDetailActivity);
 

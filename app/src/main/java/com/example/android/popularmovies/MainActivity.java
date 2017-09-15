@@ -1,9 +1,11 @@
 package com.example.android.popularmovies;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import com.example.android.popularmovies.utilities.NetworkUtils;
 import com.example.android.popularmovies.utilities.ParcelableUtils;
 
 import org.json.JSONException;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -41,12 +44,23 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mMovieImage;
     private GridLayoutManager layoutManager;
 
-/*    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("movies", mParsedData);
-        outState.putParcelableArrayList();
-        super.onSaveInstanceState(outState);
-    }*/
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putParcelableArrayList("movies", mParsedData);
+
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        Log.i("onRestoreInstanceState", "onRestoreInstanceState");
+        // Restore UI state from the savedInstanceState.
+        // This bundle has also been passed to onCreate.
+        super.onRestoreInstanceState(savedInstanceState);
+        mParsedData = savedInstanceState.getParcelableArrayList("movies");
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,16 +79,20 @@ public class MainActivity extends AppCompatActivity {
 
         URL mSearchUrl = createSearchURL(byMostPopular, "1");
 
+        // Set Adapter
+        mAdapter = new RecyclerAdapter(this, new ArrayList());
+        mMovieImage.setAdapter(mAdapter);
 
-
-        if (isNetworkAvailable()){
-
-            /**
-             *Pass url to query and fires off an AsyncTask
-             *to perform the GET request using
-             * {@link MovieQueryTask}
-             */
-            new MovieQueryTask().execute(mSearchUrl);
+        if (isNetworkAvailable()) {
+            if (savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
+                new MovieQueryTask().execute(mSearchUrl);
+                //Toast.makeText(this, "mParsedData is null ", Toast.LENGTH_LONG).show();
+            } else {
+                mParsedData = savedInstanceState.getParcelableArrayList("movies");
+                mAdapter.setMovieList(mParsedData);
+                mAdapter.notifyDataSetChanged();
+                //Toast.makeText(this, "mParsedData is NOT null " + mParsedData.get(0).getTitle(), Toast.LENGTH_LONG).show();
+            }
 
         } else {
             Toast.makeText(this, "No Internet Connection",
@@ -83,17 +101,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        // Set Adapter
-        mAdapter = new RecyclerAdapter(this, new ArrayList());
-        mMovieImage.setAdapter(mAdapter);
-
-
-
-
-
-
     }
-
 
 
     /**
@@ -113,9 +121,6 @@ public class MainActivity extends AppCompatActivity {
     public class MovieQueryTask extends AsyncTask<URL, Void, ArrayList> {
 
 
-
-
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -130,11 +135,15 @@ public class MainActivity extends AppCompatActivity {
             String mSearchResults;
 
             try {
-                //get search results
-                mSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
 
-                //parse json
-                mParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
+
+                //get search results
+                if (mParsedData == null) {
+                    mSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
+                    //parse json
+                    mParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
+                }
+
 
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
@@ -147,10 +156,11 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(ArrayList m_parsed_data) {
             mLoadingIndicator.setVisibility(View.INVISIBLE);
 
-            Log.d("onPostExecute: arySize", String.valueOf(m_parsed_data.size()) );
+            Log.d("onPostExecute: arySize", String.valueOf(m_parsed_data.size()));
             if (m_parsed_data != null && !m_parsed_data.equals("")) {
+                //onSaveInstanceState();
 
-                mAdapter.setMovieList( m_parsed_data);
+                mAdapter.setMovieList(m_parsed_data);
                 mAdapter.notifyDataSetChanged();
             }
         }
@@ -170,12 +180,14 @@ public class MainActivity extends AppCompatActivity {
         int menuItemClicked = item.getItemId();
 
         if (menuItemClicked == R.id.action_sortby_popular) {
-            createSearchURL(byMostPopular, "1");
+            //createSearchURL(byMostPopular, "1");
 
+            mParsedData = null;
             URL mSearchUrl = createSearchURL(byMostPopular, "1");
+            Log.i("menuByPopular", mSearchUrl.toString());
 
 
-            if (isNetworkAvailable()){
+            if (isNetworkAvailable()) {
 
                 /**
                  *Pass url to query and fires off an AsyncTask
@@ -192,9 +204,11 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if (menuItemClicked == R.id.action_sortby_rating) {
 
+            mParsedData = null;
             URL mSearchUrl = createSearchURL(byTopRated, "1");
+            Log.i("menuByRating", mSearchUrl.toString());
 
-            if (isNetworkAvailable()){
+            if (isNetworkAvailable()) {
 
                 /**
                  *Pass url to query and fires off an AsyncTask
@@ -215,19 +229,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //check for network connection
-    private  boolean isNetworkAvailable() {
+    private boolean isNetworkAvailable() {
         boolean isConnected = false;
-        try{
+        try {
 
             ConnectivityManager cm =
-                    (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+                    (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
             NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
             isConnected = activeNetwork != null &&
                     activeNetwork.isConnectedOrConnecting();
 
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
 
         }
