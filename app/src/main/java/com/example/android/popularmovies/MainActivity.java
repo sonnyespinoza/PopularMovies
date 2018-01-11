@@ -1,14 +1,13 @@
 package com.example.android.popularmovies;
 
+import android.app.LoaderManager;
 import android.content.Context;
-import android.content.Intent;
+import android.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Parcelable;
-import android.os.PersistableBundle;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,9 +26,8 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String>{
 
     private ProgressBar mLoadingIndicator;
 
@@ -38,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     //ArrayList<HashMap<String, String>> mParsedData; //Array to hold parsed data from tmdb
     ArrayList<ParcelableUtils> mParsedData; //Array to hold parsed data from tmdb
 
+    //TaskLoader unique identifier
+    private static final int MOVIE_QUERY_TASK = 22;
 
     private RecyclerAdapter mAdapter;
 
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (isNetworkAvailable()) {
             if (savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
-                new MovieQueryTask().execute(mSearchUrl);
+                //new MovieQueryTask().execute(mSearchUrl);
                 //Toast.makeText(this, "mParsedData is null ", Toast.LENGTH_LONG).show();
             } else {
                 mParsedData = savedInstanceState.getParcelableArrayList("movies");
@@ -115,6 +115,36 @@ public class MainActivity extends AppCompatActivity {
         Log.i("createSearchQuery", movieSearchUrl.toString());
 
         return movieSearchUrl;
+    }
+
+    /**
+     * Instantiate and return a new Loader for the given ID.
+     *
+     * @param id   The ID whose loader is to be created.
+     * @param args Any arguments supplied by the caller.
+     * @return Return a new Loader instance that is ready to start loading.
+     */
+    @Override
+    public Loader<String> onCreateLoader(int id, Bundle args) {
+        return null;
+    }
+
+
+    @Override
+    public void onLoadFinished(Loader<String> loader, String data) {
+
+    }
+
+    /**
+     * Called when a previously created loader is being reset, and thus
+     * making its data unavailable.  The application should at this point
+     * remove any references it has to the Loader's data.
+     *
+     * @param loader The Loader that is being reset.
+     */
+    @Override
+    public void onLoaderReset(Loader<String> loader) {
+
     }
 
 
@@ -194,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
                  *to perform the GET request using
                  * {@link MovieQueryTask}
                  */
-                new MovieQueryTask().execute(mSearchUrl);
+                //new MovieQueryTask().execute(mSearchUrl);
 
             } else {
                 Toast.makeText(this, "No Internet Connection",
@@ -215,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
                  *to perform the GET request using
                  * {@link MovieQueryTask}
                  */
-                new MovieQueryTask().execute(mSearchUrl);
+                //new MovieQueryTask().execute(mSearchUrl);
 
             } else {
                 Toast.makeText(this, "No Internet Connection",
