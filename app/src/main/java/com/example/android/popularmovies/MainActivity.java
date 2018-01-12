@@ -96,8 +96,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 //get library for loadermanager
                 LoaderManager loaderManager = getSupportLoaderManager();
 
-                 Loader<ArrayList> movieSearchLoader = loaderManager.getLoader(MOVIE_QUERY_LOADER);
+                //call getLoader with loader id
+                Loader<ArrayList> movieSearchLoader = loaderManager.getLoader(MOVIE_QUERY_LOADER);
 
+                //If the Loader was null, initialize it
+                if (movieSearchLoader == null){
+                    loaderManager.initLoader(MOVIE_QUERY_LOADER, movieQueryBundle,this );
+                } else {
+                    loaderManager.restartLoader(MOVIE_QUERY_LOADER,movieQueryBundle,this);
+                }
                 //TODO 1. Clean up commented code
                 //new MovieQueryTask().execute(mSearchUrl);
                 //Toast.makeText(this, "mParsedData is null ", Toast.LENGTH_LONG).show();
