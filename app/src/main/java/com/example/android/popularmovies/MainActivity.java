@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -147,7 +148,28 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             @Override
             public ArrayList loadInBackground() {
-                return null;
+                String movieQueryUrlString = args.getString(MOVIE_QUERY_URL_EXTRA);
+                if (movieQueryUrlString == null || TextUtils.isEmpty(movieQueryUrlString)){
+                    return null;
+                }
+                String mSearchResults;
+
+                try {
+
+                    URL searchUrl = new URL(movieQueryUrlString);
+                    //get search results
+                    if (mParsedData == null) {
+                        mSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
+                        //parse json
+                        mParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
+                    }
+                    return mParsedData;
+
+
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                    return null;
+                }
             }
         };
     }
