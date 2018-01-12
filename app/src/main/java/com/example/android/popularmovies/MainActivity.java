@@ -87,9 +87,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mMovieImage.setAdapter(mAdapter);
 
         if (isNetworkAvailable()) {
+            Log.i("isNetworkAvailable", "true");
             if (savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
 
+                Log.i("savedInstanceState", "null/''");
                 makeSearchQuery(mSearchUrl.toString());
+
 
                 //TODO 1. Clean up commented code
                 //new MovieQueryTask().execute(mSearchUrl);
@@ -162,14 +165,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             protected void onStartLoading() {
                 super.onStartLoading();
                 if (args == null){
+                    Log.i("onStartLoad", "args null");
                     return;
                 }
+                Log.i("onStartLoad", "Loading Indicator");
                 mLoadingIndicator.setVisibility(View.VISIBLE);
+                forceLoad();
             }
 
             @Override
             public ArrayList loadInBackground() {
                 String movieQueryUrlString = args.getString(MOVIE_QUERY_URL_EXTRA);
+                Log.i("LoadInBAckground", "movieQueryUrlString");
                 if (movieQueryUrlString == null || TextUtils.isEmpty(movieQueryUrlString)){
                     return null;
                 }
