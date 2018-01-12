@@ -93,6 +93,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 Bundle movieQueryBundle = new Bundle();
                 movieQueryBundle.putString(MOVIE_QUERY_URL_EXTRA, mSearchUrl.toString());
 
+                //get library for loadermanager
+                android.support.v4.app.LoaderManager loaderManager = getSupportLoaderManager();
+
+                
                 //TODO 1. Clean up commented code
                 //new MovieQueryTask().execute(mSearchUrl);
                 //Toast.makeText(this, "mParsedData is null ", Toast.LENGTH_LONG).show();
@@ -182,6 +186,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<ArrayList> loader, ArrayList data) {
 
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
+
+        Log.d("onPostExecute: arySize", String.valueOf(data.size()));
+        if (data != null && !data.equals("")) {
+            //onSaveInstanceState();
+
+            mAdapter.setMovieList(data);
+            mAdapter.notifyDataSetChanged();
+        }
+
     }
 
     /**
@@ -211,7 +225,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // perform the query. Return the results.
         @Override
         protected ArrayList doInBackground(URL... urls) {
-            URL searchUrl = urls[0];
+            //TODO Clean up commented code
+/*            URL searchUrl = urls[0];
             String mSearchResults;
 
             try {
@@ -227,14 +242,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
-            }
+            }*/
             return mParsedData;
         }
 
 
         @Override
         protected void onPostExecute(ArrayList m_parsed_data) {
-            mLoadingIndicator.setVisibility(View.INVISIBLE);
+
+            //TODO clean up commented code
+/*            mLoadingIndicator.setVisibility(View.INVISIBLE);
 
             Log.d("onPostExecute: arySize", String.valueOf(m_parsed_data.size()));
             if (m_parsed_data != null && !m_parsed_data.equals("")) {
@@ -242,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
                 mAdapter.setMovieList(m_parsed_data);
                 mAdapter.notifyDataSetChanged();
-            }
+            }*/
         }
     }
 
