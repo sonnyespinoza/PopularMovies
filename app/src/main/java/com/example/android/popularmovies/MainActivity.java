@@ -89,22 +89,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (isNetworkAvailable()) {
             if (savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
 
-                // created bundle movieQueryBundle to store key:value for the URL
-                Bundle movieQueryBundle = new Bundle();
-                movieQueryBundle.putString(MOVIE_QUERY_URL_EXTRA, mSearchUrl.toString());
+                makeSearchQuery(mSearchUrl.toString());
 
-                //get library for loadermanager
-                LoaderManager loaderManager = getSupportLoaderManager();
-
-                //call getLoader with loader id
-                Loader<ArrayList> movieSearchLoader = loaderManager.getLoader(MOVIE_QUERY_LOADER);
-
-                //If the Loader was null, initialize it
-                if (movieSearchLoader == null){
-                    loaderManager.initLoader(MOVIE_QUERY_LOADER, movieQueryBundle,this );
-                } else {
-                    loaderManager.restartLoader(MOVIE_QUERY_LOADER,movieQueryBundle,this);
-                }
                 //TODO 1. Clean up commented code
                 //new MovieQueryTask().execute(mSearchUrl);
                 //Toast.makeText(this, "mParsedData is null ", Toast.LENGTH_LONG).show();
@@ -115,12 +101,35 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 //Toast.makeText(this, "mParsedData is NOT null " + mParsedData.get(0).getTitle(), Toast.LENGTH_LONG).show();
             }
 
+            //Initialize the loader with id
+            getSupportLoaderManager().initLoader(MOVIE_QUERY_LOADER,null,this);
+
         } else {
             Toast.makeText(this, "No Internet Connection",
                     Toast.LENGTH_LONG).show();
 
         }
 
+
+    }
+
+    private void makeSearchQuery(String url){
+        // created bundle movieQueryBundle to store key:value for the URL
+        Bundle movieQueryBundle = new Bundle();
+        movieQueryBundle.putString(MOVIE_QUERY_URL_EXTRA, url.toString());
+
+        //get library for loadermanager
+        LoaderManager loaderManager = getSupportLoaderManager();
+
+        //call getLoader with loader id
+        Loader<ArrayList> movieSearchLoader = loaderManager.getLoader(MOVIE_QUERY_LOADER);
+
+        //If the Loader was null, initialize it otherwise restart it
+        if (movieSearchLoader == null){
+            loaderManager.initLoader(MOVIE_QUERY_LOADER, movieQueryBundle,this );
+        } else {
+            loaderManager.restartLoader(MOVIE_QUERY_LOADER,movieQueryBundle,this);
+        }
 
     }
 
@@ -301,6 +310,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                  */
                 //TODO 2. Clean up commented code
                 //new MovieQueryTask().execute(mSearchUrl);
+                makeSearchQuery(mSearchUrl.toString());
 
             } else {
                 Toast.makeText(this, "No Internet Connection",
@@ -315,6 +325,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             Log.i("menuByRating", mSearchUrl.toString());
 
             if (isNetworkAvailable()) {
+                makeSearchQuery(mSearchUrl.toString());
 
                 /**
                  *Pass url to query and fires off an AsyncTask
