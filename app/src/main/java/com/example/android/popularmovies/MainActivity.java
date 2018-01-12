@@ -1,9 +1,9 @@
 package com.example.android.popularmovies;
 
-import android.app.LoaderManager;
-import android.content.AsyncTaskLoader;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
 import android.content.Context;
-import android.content.Loader;
+import android.support.v4.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     ArrayList<ParcelableUtils> mParsedData; //Array to hold parsed data from tmdb
 
     //TaskLoader unique identifier
-    private static final int MOVIE_QUERY_TASK = 22;
+    private static final int MOVIE_QUERY_LOADER = 22;
     private static final String MOVIE_QUERY_URL_EXTRA = "query";
 
     private RecyclerAdapter mAdapter;
@@ -94,9 +94,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 movieQueryBundle.putString(MOVIE_QUERY_URL_EXTRA, mSearchUrl.toString());
 
                 //get library for loadermanager
-                android.support.v4.app.LoaderManager loaderManager = getSupportLoaderManager();
+                LoaderManager loaderManager = getSupportLoaderManager();
 
-                
+                 Loader<ArrayList> movieSearchLoader = loaderManager.getLoader(MOVIE_QUERY_LOADER);
+
                 //TODO 1. Clean up commented code
                 //new MovieQueryTask().execute(mSearchUrl);
                 //Toast.makeText(this, "mParsedData is null ", Toast.LENGTH_LONG).show();
