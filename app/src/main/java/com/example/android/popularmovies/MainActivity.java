@@ -1,6 +1,7 @@
 package com.example.android.popularmovies;
 
 import android.app.LoaderManager;
+import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.content.Loader;
 import android.net.ConnectivityManager;
@@ -132,8 +133,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * @return Return a new Loader instance that is ready to start loading.
      */
     @Override
-    public Loader<ArrayList> onCreateLoader(int id, Bundle args) {
-        return null;
+    public Loader<ArrayList> onCreateLoader(int id, final Bundle args) {
+        return new AsyncTaskLoader<ArrayList>(this) {
+
+            @Override
+            protected void onStartLoading() {
+                super.onStartLoading();
+                if (args == null){
+                    return;
+                }
+                mLoadingIndicator.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public ArrayList loadInBackground() {
+                return null;
+            }
+        };
     }
 
     /**
@@ -164,8 +180,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
-            mLoadingIndicator.setVisibility(View.VISIBLE);
+            //TODO 4. Clean up commented code
+            //super.onPreExecute();
+            //mLoadingIndicator.setVisibility(View.VISIBLE);
         }
 
 
