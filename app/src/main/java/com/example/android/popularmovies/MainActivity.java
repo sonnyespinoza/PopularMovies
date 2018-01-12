@@ -1,13 +1,12 @@
 package com.example.android.popularmovies;
 
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
 import android.content.Context;
-import android.support.v4.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -89,19 +88,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (isNetworkAvailable()) {
             Log.i("isNetworkAvailable", "true");
             if (savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
-
-                Log.i("savedInstanceState", "null/''");
                 makeSearchQuery(mSearchUrl.toString());
-
-
-                //TODO 1. Clean up commented code
-                //new MovieQueryTask().execute(mSearchUrl);
-                //Toast.makeText(this, "mParsedData is null ", Toast.LENGTH_LONG).show();
             } else {
                 mParsedData = savedInstanceState.getParcelableArrayList("movies");
                 mAdapter.setMovieList(mParsedData);
                 mAdapter.notifyDataSetChanged();
-                //Toast.makeText(this, "mParsedData is NOT null " + mParsedData.get(0).getTitle(), Toast.LENGTH_LONG).show();
             }
 
             //Initialize the loader with id
@@ -116,6 +107,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
+    /* This method constructs the URL
+     * and Request that an AsyncTaskLoader performs the GET request.
+     */
     private void makeSearchQuery(String url){
         // created bundle movieQueryBundle to store key:value for the URL
         Bundle movieQueryBundle = new Bundle();
@@ -165,10 +159,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             protected void onStartLoading() {
                 super.onStartLoading();
                 if (args == null){
-                    Log.i("onStartLoad", "args null");
+
                     return;
                 }
-                Log.i("onStartLoad", "Loading Indicator");
+                Log.i("onStartLoading", "");
                 mLoadingIndicator.setVisibility(View.VISIBLE);
                 forceLoad();
             }
@@ -176,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public ArrayList loadInBackground() {
                 String movieQueryUrlString = args.getString(MOVIE_QUERY_URL_EXTRA);
-                Log.i("LoadInBAckground", "movieQueryUrlString");
+                Log.i("LoadInBackground", "movieQueryUrlString");
                 if (movieQueryUrlString == null || TextUtils.isEmpty(movieQueryUrlString)){
                     return null;
                 }
@@ -212,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         mLoadingIndicator.setVisibility(View.INVISIBLE);
 
-        Log.d("onPostExecute: arySize", String.valueOf(data.size()));
+        Log.i("onLoadFinish: arySize", String.valueOf(data.size()));
         if (data != null && !data.equals("")) {
             //onSaveInstanceState();
 
@@ -234,58 +228,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
-
-    public class MovieQueryTask extends AsyncTask<URL, Void, ArrayList> {
-
-
-        @Override
-        protected void onPreExecute() {
-            //TODO 4. Clean up commented code
-            //super.onPreExecute();
-            //mLoadingIndicator.setVisibility(View.VISIBLE);
-        }
-
-
-        // perform the query. Return the results.
-        @Override
-        protected ArrayList doInBackground(URL... urls) {
-            //TODO Clean up commented code
-/*            URL searchUrl = urls[0];
-            String mSearchResults;
-
-            try {
-
-
-                //get search results
-                if (mParsedData == null) {
-                    mSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
-                    //parse json
-                    mParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
-                }
-
-
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-            }*/
-            return mParsedData;
-        }
-
-
-        @Override
-        protected void onPostExecute(ArrayList m_parsed_data) {
-
-            //TODO clean up commented code
-/*            mLoadingIndicator.setVisibility(View.INVISIBLE);
-
-            Log.d("onPostExecute: arySize", String.valueOf(m_parsed_data.size()));
-            if (m_parsed_data != null && !m_parsed_data.equals("")) {
-                //onSaveInstanceState();
-
-                mAdapter.setMovieList(m_parsed_data);
-                mAdapter.notifyDataSetChanged();
-            }*/
-        }
-    }
 
 
     @Override
@@ -310,21 +252,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             if (isNetworkAvailable()) {
 
-                /**
-                 *Pass url to query and fires off an AsyncTask
-                 *to perform the GET request using
-                 * {@link MovieQueryTask}
-                 */
-                //TODO 2. Clean up commented code
-                //new MovieQueryTask().execute(mSearchUrl);
+                //Pass url to query and fires off an AsyncTaskLoader
                 makeSearchQuery(mSearchUrl.toString());
 
             } else {
+
                 Toast.makeText(this, "No Internet Connection",
                         Toast.LENGTH_LONG).show();
 
             }
             return true;
+
         } else if (menuItemClicked == R.id.action_sortby_rating) {
 
             mParsedData = null;
@@ -332,15 +270,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             Log.i("menuByRating", mSearchUrl.toString());
 
             if (isNetworkAvailable()) {
-                makeSearchQuery(mSearchUrl.toString());
 
-                /**
-                 *Pass url to query and fires off an AsyncTask
-                 *to perform the GET request using
-                 * {@link MovieQueryTask}
-                 */
-                //TODO 3. Clean up commented code
-                //new MovieQueryTask().execute(mSearchUrl);
+                //Pass url to query and fires off an AsyncTaskLoader
+                makeSearchQuery(mSearchUrl.toString());
 
             } else {
                 Toast.makeText(this, "No Internet Connection",
