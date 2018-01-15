@@ -1,6 +1,7 @@
 package com.example.android.popularmovies;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         //progress bar indicator for loading movie images.
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
+
 
         //reference to recyclerview for displaying movie in a grid
         mMovieImage = (RecyclerView) findViewById(R.id.rv_movies);
@@ -239,10 +241,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        final String byTopRated = "top_rated";
-        int menuItemClicked = item.getItemId();
+        //final String byTopRated = "top_rated";
+        //final String byFavorites = "favorites";
 
-        if (menuItemClicked == R.id.action_sortby_popular) {
+        int menuItemClicked = item.getItemId();
+        if(menuItemClicked == R.id.action_settings){
+            Intent settingsActivity= new Intent(this, SettingsActivity.class);
+            startActivity(settingsActivity);
+            return true;
+        }
+
+/*        if (menuItemClicked == R.id.action_sortby_popular) {
             //createSearchURL(byMostPopular, "1");
 
             mParsedData = null;
@@ -280,7 +289,26 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             }
             return true;
-        }
+        }else if (menuItemClicked == R.id.action_sortby_favorites) {
+
+            mParsedData = null;
+            URL mSearchUrl = createSearchURL(byTopRated, "1");
+            Log.i("menuByFavorites", mSearchUrl.toString());
+
+            if (isNetworkAvailable()) {
+
+                //Pass url to query and fires off an AsyncTaskLoader
+                //REMOVE -- makeSearchQuery(mSearchUrl.toString());
+                //TODO add call to search favorites either update mackSearchQuery or create new method using content provider to db
+
+            } else {
+                Toast.makeText(this, "No Internet Connection",
+                        Toast.LENGTH_LONG).show();
+
+            }
+            return true;
+        }*/
+
 
         return super.onOptionsItemSelected(item);
     }
