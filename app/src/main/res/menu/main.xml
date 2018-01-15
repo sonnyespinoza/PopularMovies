@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res_auto">
     <item
         android:id="@+id/action_sortby_popular"
         android:orderInCategory="1"
-        android:title="@string/sortbypopular"/>
+        android:title="@string/sortbypopular"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_sortby_rating"
         android:orderInCategory="2"
-        android:title="@string/sortbyrating"/>
+        android:title="@string/sortbyrating"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_sortby_favorites"
         android:orderInCategory="3"
-        android:title="@string/sortbyfavorites"/>
+        android:title="@string/sortbyfavorites"
+        app:showAsAction="never"/>
 </menu>
