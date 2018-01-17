@@ -3,26 +3,62 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res_auto">
 
+
+    <item
+        android:id="@+id/action_sort"
+        android:orderInCategory="100"
+        android:title="@string/action_sort"
+        app:showAsAction="never">
+        <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/action_sortby_popular"
+                    android:title="@string/sortbypopular"
+                    android:orderInCategory="1"
+                    android:onClick="onGroupItemClick" />
+
+                <item
+                    android:id="@+id/action_sortby_rating"
+                    android:title="@string/sortbyrating"
+                    android:orderInCategory="2"
+                    android:onClick="onGroupItemClick"/>
+
+                <item
+                    android:id="@+id/action_sortby_favorites"
+                    android:title="@string/sortbyfavorites"
+                    android:orderInCategory="3"
+                    android:onClick="onGroupItemClick"/>
+
+
+            </group>
+
+        </menu>
+    </item>
+
     <item
         android:id="@+id/action_settings"
-        android:orderInCategory="1"
+        android:orderInCategory="200"
         android:title="@string/action_settings"
-        app:showAsAction="never"/>
-<!--    <item
-        android:id="@+id/action_sortby_popular"
-        android:orderInCategory="1"
-        android:title="@string/sortbypopular"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
-    <item
-        android:id="@+id/action_sortby_rating"
-        android:orderInCategory="2"
-        android:title="@string/sortbyrating"
-        app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/action_sortby_favorites"
-        android:orderInCategory="3"
-        android:title="@string/sortbyfavorites"
-        app:showAsAction="never"/>-->
+
+    <!--    <item
+            android:id="@+id/action_sortby_popular"
+            android:orderInCategory="1"
+            android:title="@string/sortbypopular"
+            app:showAsAction="never"/>
+
+        <item
+            android:id="@+id/action_sortby_rating"
+            android:orderInCategory="2"
+            android:title="@string/sortbyrating"
+            app:showAsAction="never"/>
+
+        <item
+            android:id="@+id/action_sortby_favorites"
+            android:orderInCategory="3"
+            android:title="@string/sortbyfavorites"
+            app:showAsAction="never"/>-->
 </menu>
