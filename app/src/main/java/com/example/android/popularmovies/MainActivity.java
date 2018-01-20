@@ -214,9 +214,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     URL searchUrl = new URL(movieQueryUrlString);
                     //get search results
                     //if (mParsedData == null) {
-                        mSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
+                    mSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
                         //parse json
-                        mParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
+                    mParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
                     //}
                     return mParsedData;
 
