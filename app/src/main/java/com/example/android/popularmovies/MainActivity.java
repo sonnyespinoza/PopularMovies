@@ -31,6 +31,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList> {
 
+
+    //TODO Clean up Log.i statements
     private ProgressBar mLoadingIndicator;
 
     private final String byMostPopular = "popular";
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        Log.i("onSaveInstanceState", "onSaveInstanceState");
+        Log.i("onSaveInstanceState", "yes");
         super.onSaveInstanceState(savedInstanceState);
         //TODO  add save instance state for sort menu selected see bookmark
         savedInstanceState.putParcelableArrayList("movies", mParsedData);
@@ -58,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-        Log.i("onRestoreInstanceState", "onRestoreInstanceState");
+        Log.i("onRestoreInstanceState", "yes");
         // Restore UI state from the savedInstanceState.
         // This bundle has also been passed to onCreate.
         super.onRestoreInstanceState(savedInstanceState);
@@ -93,15 +95,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (isNetworkAvailable()) {
             Log.i("isNetworkAvailable", "true");
             if (savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
+                Log.i("savedInstance:isNetwork", "isNull");
                 makeSearchQuery(mSearchUrl.toString());
             } else {
+                Log.i("isNetworkAvailable", "false");
                 mParsedData = savedInstanceState.getParcelableArrayList("movies");
                 mAdapter.setMovieList(mParsedData);
                 mAdapter.notifyDataSetChanged();
             }
 
             //Initialize the loader with id
-            getSupportLoaderManager().initLoader(MOVIE_QUERY_LOADER, null, this);
+            //getSupportLoaderManager().initLoader(MOVIE_QUERY_LOADER, null, this);
 
         } else {
             Toast.makeText(this, "No Internet Connection",
@@ -128,8 +132,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         //If the Loader was null, initialize it otherwise restart it
         if (movieSearchLoader == null) {
+            Log.i("movieSearchLoader", "isNull");
             loaderManager.initLoader(MOVIE_QUERY_LOADER, movieQueryBundle, this);
         } else {
+            Log.i("movieSearchLoader", "notNull");
             loaderManager.restartLoader(MOVIE_QUERY_LOADER, movieQueryBundle, this);
         }
 
@@ -169,8 +175,29 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     return;
                 }
                 Log.i("onStartLoading", "");
-                mLoadingIndicator.setVisibility(View.VISIBLE);
-                forceLoad();
+
+
+
+                if (mParsedData != null){
+                    Log.i("onStartLoading", "parsedDataNotNull");
+                    //mLoadingIndicator.setVisibility(View.VISIBLE);
+                    deliverResult(mParsedData);
+
+                } else {
+                    Log.i("onStartLoading", "parsedDataNull");
+                    mLoadingIndicator.setVisibility(View.VISIBLE);
+                   /* try {
+
+                        //sleep 5 seconds
+                        Thread.sleep(10000);
+
+                        System.out.println("Sleeping...");
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }*/
+                    forceLoad();
+                }
             }
 
             @Override
@@ -186,11 +213,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
                     URL searchUrl = new URL(movieQueryUrlString);
                     //get search results
-                    if (mParsedData == null) {
+                    //if (mParsedData == null) {
                         mSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
                         //parse json
                         mParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
-                    }
+                    //}
                     return mParsedData;
 
 
@@ -199,6 +226,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     e.printStackTrace();
                     return null;
                 }
+            }
+
+            @Override
+            public void deliverResult(ArrayList data) {
+                mParsedData = data;
+                Log.i("deliverResults", data.toString());
+                super.deliverResult(data);
             }
         };
     }
@@ -221,6 +255,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             mAdapter.setMovieList(data);
             mAdapter.notifyDataSetChanged();
         }
+
 
     }
 
