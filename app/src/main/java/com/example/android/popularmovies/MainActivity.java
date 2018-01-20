@@ -49,7 +49,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+        Log.i("onSaveInstanceState", "onSaveInstanceState");
         super.onSaveInstanceState(savedInstanceState);
+        //TODO  add save instance state for sort menu selected see bookmark
         savedInstanceState.putParcelableArrayList("movies", mParsedData);
 
     }
@@ -61,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // This bundle has also been passed to onCreate.
         super.onRestoreInstanceState(savedInstanceState);
         mParsedData = savedInstanceState.getParcelableArrayList("movies");
+        //mLoadingIndicator.setVisibility(View.INVISIBLE);
 
     }
 
@@ -161,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             protected void onStartLoading() {
                 super.onStartLoading();
                 if (args == null) {
+                    Log.i("onStartLoading", "null args");
 
                     return;
                 }
@@ -172,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public ArrayList loadInBackground() {
                 String movieQueryUrlString = args.getString(MOVIE_QUERY_URL_EXTRA);
-                Log.i("LoadInBackground", "movieQueryUrlString");
+                Log.i("LoadInBackground", movieQueryUrlString);
                 if (movieQueryUrlString == null || TextUtils.isEmpty(movieQueryUrlString)) {
                     return null;
                 }
@@ -191,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
                 } catch (IOException | JSONException e) {
+                    Log.i("LoadInBackground", "Exception");
                     e.printStackTrace();
                     return null;
                 }
