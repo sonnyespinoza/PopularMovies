@@ -12,24 +12,24 @@ public final class favoritesContract {
 
     }
 
-    public static class favoriteMovies implements BaseColumns {
+    public static final class favoriteMovies implements BaseColumns {
 
         /* Used internally as the name of our favorites movies table. */
         public static final String TABLE_NAME = "favoritemovies";
 
         /* Name of the image file */
-        public String IMAGE_NAME = "backdrop_path";
-        public String IMAGE_POSTER= "poster_path";
+        public static final String IMAGE_NAME = "backdrop_path";
+        public static final String IMAGE_POSTER= "poster_path";
 
         /* Date the movie was released */
-        public String RELEASE_DATE = "release_date";
+        public static final String RELEASE_DATE = "release_date";
 
         //Movie title and overview
-        public String MOVIE_DESCRIPTION = "overview";
-        public String MOVIE_TITLE = "title";
+        public static final String MOVIE_DESCRIPTION = "overview";
+        public static final String MOVIE_TITLE = "title";
 
         //User movie rating
-        public String USER_RATING = "vote_average";
+        public static final String USER_RATING = "vote_average";
 
 
     }
