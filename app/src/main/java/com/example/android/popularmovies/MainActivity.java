@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.android.popularmovies.data.PopularMoviesDBHelper;
 import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 import com.example.android.popularmovies.utilities.ParcelableUtils;
@@ -276,6 +277,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         final String byTopRated = "top_rated";
         final String byFavorites = "favorites";
+
+        PopularMoviesDBHelper popularMoviesDBHelper = new PopularMoviesDBHelper(this);
+
 
         int groupMenuItemClicked = item.getItemId();
 

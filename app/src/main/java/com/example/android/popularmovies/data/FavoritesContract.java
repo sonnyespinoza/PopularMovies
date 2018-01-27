@@ -6,16 +6,16 @@ import android.provider.BaseColumns;
  * Created by sonny on 1/22/18.
  */
 
-public final class favoritesContract {
+public final class FavoritesContract {
 
-    private favoritesContract (){
+    private FavoritesContract(){
 
     }
 
     public static final class favoriteMovies implements BaseColumns {
 
         /* Used internally as the name of our favorites movies table. */
-        public static final String TABLE_NAME = "favoritemovies";
+        public static final String TABLE_NAME = "favorite_movies";
 
         /* Name of the image file */
         public static final String IMAGE_NAME = "backdrop_path";
