@@ -344,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             //Log.i("menuByFavorites", mSearchUrl.toString());
 
 
-            
+
             Cursor cursor = getFavorites();
 
             //TODO may need to get rid of network check since its pulling db data for favorites
