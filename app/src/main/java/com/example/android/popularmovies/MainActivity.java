@@ -2,6 +2,8 @@ package com.example.android.popularmovies;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.android.popularmovies.data.FavoritesContract;
 import com.example.android.popularmovies.data.PopularMoviesDBHelper;
 import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     //ArrayList<HashMap<String, String>> mParsedData; //Array to hold parsed data from tmdb
     ArrayList<ParcelableUtils> mParsedData; //Array to hold parsed data from tmdb
 
+    SQLiteDatabase pmDB;
     //TaskLoader unique identifier
     private static final int MOVIE_QUERY_LOADER = 22;
     private static final String MOVIE_QUERY_URL_EXTRA = "query";
@@ -278,7 +282,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         final String byTopRated = "top_rated";
         final String byFavorites = "favorites";
 
-        PopularMoviesDBHelper popularMoviesDBHelper = new PopularMoviesDBHelper(this);
+
 
 
         int groupMenuItemClicked = item.getItemId();
@@ -330,7 +334,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         } else if (groupMenuItemClicked == R.id.action_sortby_favorites) {
 
             mParsedData = null;
-            URL mSearchUrl = createSearchURL(byFavorites, "1");
+
+            PopularMoviesDBHelper popularMoviesDBHelper = new PopularMoviesDBHelper(this);
+            pmDB = popularMoviesDBHelper.getWritableDatabase();
+
+            //TODO integrate with content provide once built
+            //URL mSearchUrl = createSearchURL(byFavorites, "1");
             item.setChecked(true);
             Log.i("menuByFavorites", mSearchUrl.toString());
 
@@ -349,6 +358,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
 
     }
+
+    private Cursor getFavorites (){
+
+        return pmDB.query(FavoritesContract.favoriteMovies.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                FavoritesContract.favoriteMovies.USER_RATING);
+
+    };
 
 
     @Override
