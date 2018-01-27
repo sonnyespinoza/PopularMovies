@@ -341,9 +341,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             //TODO integrate with content provide once built
             //URL mSearchUrl = createSearchURL(byFavorites, "1");
             item.setChecked(true);
-            Log.i("menuByFavorites", mSearchUrl.toString());
+            //Log.i("menuByFavorites", mSearchUrl.toString());
 
+
+            
+            Cursor cursor = getFavorites();
+
+            //TODO may need to get rid of network check since its pulling db data for favorites
             if (isNetworkAvailable()) {
+
 
                 //Pass url to query and fires off an AsyncTaskLoader
                 //REMOVE -- makeSearchQuery(mSearchUrl.toString());
