@@ -17,15 +17,11 @@ package com.example.android.popularmovies.utilities;
 
 import android.util.Log;
 
-import com.example.android.popularmovies.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Utility functions to handle tmDB Movie data JSON data.
@@ -106,6 +102,7 @@ public final class JsonUtils {
                         JSONObject movieInfo = movieJSONArray.getJSONObject(i);
 
                         String image = movieInfo.getString(IMAGE_NAME);
+                        //Log.i("backdrop_path", image );
                         String imagePoster = movieInfo.getString(IMAGE_POSTER);
                         String title = movieInfo.getString(MOVIE_TITLE);
                         String description = movieInfo.getString(MOVIE_DESCRIPTION);

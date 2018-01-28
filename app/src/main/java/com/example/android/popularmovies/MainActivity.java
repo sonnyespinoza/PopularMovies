@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.android.popularmovies.data.FavoritesContract;
 import com.example.android.popularmovies.data.PopularMoviesDBHelper;
+import com.example.android.popularmovies.data.TestUtil;
 import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 import com.example.android.popularmovies.utilities.ParcelableUtils;
@@ -338,14 +339,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             PopularMoviesDBHelper popularMoviesDBHelper = new PopularMoviesDBHelper(this);
             pmDB = popularMoviesDBHelper.getWritableDatabase();
 
+            //Remove test data
+            TestUtil.insertFakeData(pmDB);
+            Log.i("onGroupItemClick", " sort by favorites: insertFakeData");
+
             //TODO integrate with content provide once built
+            Cursor cursor = getFavorites();
             //URL mSearchUrl = createSearchURL(byFavorites, "1");
             item.setChecked(true);
             //Log.i("menuByFavorites", mSearchUrl.toString());
 
-
-
-            Cursor cursor = getFavorites();
 
             //TODO may need to get rid of network check since its pulling db data for favorites
             if (isNetworkAvailable()) {

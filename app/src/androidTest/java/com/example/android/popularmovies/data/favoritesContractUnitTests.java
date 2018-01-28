@@ -19,13 +19,14 @@ public class favoritesContractUnitTests {
 
     @Test
     public void inner_class_exists() throws Exception {
-        Class[] innerClasses = favoritesContract.class.getDeclaredClasses();
+        Class[] innerClasses;
+        innerClasses = FavoritesContract.class.getDeclaredClasses();
         assertEquals("There should be 1 Inner class inside the contract class", 1, innerClasses.length);
     }
 
     @Test
     public void inner_class_type_correct() throws Exception {
-        Class[] innerClasses = favoritesContract.class.getDeclaredClasses();
+        Class[] innerClasses = FavoritesContract.class.getDeclaredClasses();
         assertEquals("Cannot find inner class to complete unit test", 1, innerClasses.length);
         Class entryClass = innerClasses[0];
         assertTrue("Inner class should implement the BaseColumns interface", BaseColumns.class.isAssignableFrom(entryClass));
@@ -35,7 +36,7 @@ public class favoritesContractUnitTests {
 
     @Test
     public void inner_class_members_correct() throws Exception {
-        Class[] innerClasses = favoritesContract.class.getDeclaredClasses();
+        Class[] innerClasses = FavoritesContract.class.getDeclaredClasses();
         assertEquals("Cannot find inner class to complete unit test", 1, innerClasses.length);
         Class entryClass = innerClasses[0];
         Field[] allFields = entryClass.getDeclaredFields();
