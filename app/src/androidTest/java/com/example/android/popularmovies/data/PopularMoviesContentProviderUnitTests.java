@@ -16,7 +16,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
-public class FavoritesContentProviderUnitTests {
+public class PopularMoviesContentProviderUnitTests {
 
     /* Context used to access various parts of the system */
     private final Context mContext = InstrumentationRegistry.getTargetContext();
@@ -60,7 +60,7 @@ public class FavoritesContentProviderUnitTests {
          * registered.
          */
         String packageName = mContext.getPackageName();
-        String taskProviderClassName = FavoritesContentProvider.class.getName();
+        String taskProviderClassName = PopularMoviesContentProvider.class.getName();
         ComponentName componentName = new ComponentName(packageName, taskProviderClassName);
 
         try {

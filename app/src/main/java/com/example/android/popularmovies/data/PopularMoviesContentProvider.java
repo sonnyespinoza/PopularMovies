@@ -8,7 +8,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 
 //
-public class FavoritesContentProvider extends ContentProvider {
+public class PopularMoviesContentProvider extends ContentProvider {
 
     // Member variable
     private PopularMoviesDBHelper mPopularMoviesDbHelper;

@@ -1,5 +1,6 @@
 package com.example.android.popularmovies.data;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
@@ -8,11 +9,26 @@ import android.provider.BaseColumns;
 
 public final class FavoritesContract {
 
+    /* Content provider constants
+    */
+    // The authority, Content Provider to access
+    public static final String AUTHORITY = "com.example.android.popularmovies";
+    // The base content URI = "content://" + <authority>
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
+    // Path for accessing movie favorites data in this contract
+    public static final String PATH_MOVIES = "favorites";
+
+
     private FavoritesContract(){
 
     }
 
     public static final class favoriteMovies implements BaseColumns {
+
+
+            // favorites content URI = base content URI + path
+            public static final Uri CONTENT_URI =
+                    BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIES).build();
 
         /* Used internally as the name of our favorites movies table. */
         public static final String TABLE_NAME = "favorite_movies";
