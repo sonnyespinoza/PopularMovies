@@ -5,17 +5,22 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-//
+
+
+
 public class PopularMoviesContentProvider extends ContentProvider {
 
+    
     // Member variable
     private PopularMoviesDBHelper mPopularMoviesDbHelper;
 
+
     // Integer constants for the directory of favorite movies and a single favorite movie item.
-    // 100 - for directories
+    // 100 - for directory
     // 101 - items in 100 directory.
     public static final int FAVORITES = 100;
     public static final int FAVORITES_WITH_ID = 101;
@@ -28,14 +33,14 @@ public class PopularMoviesContentProvider extends ContentProvider {
         // Initialize a UriMatcher with NO_MATCH
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
-        /* UriMatcher add matches for the favorites directory and a single favorites item by ID.
-         */
+        // UriMatcher for directory
         uriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_MOVIES, FAVORITES);
+
+        // UriMatcher for single favorites item by ID
         uriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_MOVIES + "/#", FAVORITES_WITH_ID);
 
         return uriMatcher;
     }
-
 
     @Override
     public boolean onCreate() {
@@ -49,6 +54,8 @@ public class PopularMoviesContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
+
+        final SQLiteDatabase db = mPopularMoviesDbHelper.getWritableDatabase();
 
         throw new UnsupportedOperationException("Not yet implemented");
     }

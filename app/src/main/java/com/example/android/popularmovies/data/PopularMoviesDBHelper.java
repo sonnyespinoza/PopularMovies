@@ -48,7 +48,7 @@ public class PopularMoviesDBHelper extends SQLiteOpenHelper {
     private static final String ALTER_FAVORITES_TABLE = "ALTER TABLE " + favoriteMovies.TABLE_NAME + " ADD COLUMN ";
 
 
-    public PopularMoviesDBHelper(Context context) {
+    PopularMoviesDBHelper(Context context) {
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
     }
 
