@@ -1,6 +1,7 @@
 package com.example.android.popularmovies.data;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
@@ -14,7 +15,7 @@ import android.support.annotation.NonNull;
 
 public class PopularMoviesContentProvider extends ContentProvider {
 
-    
+
     // Member variable
     private PopularMoviesDBHelper mPopularMoviesDbHelper;
 
@@ -57,8 +58,31 @@ public class PopularMoviesContentProvider extends ContentProvider {
 
         final SQLiteDatabase db = mPopularMoviesDbHelper.getWritableDatabase();
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        int match = sUriMatcher.match(uri);
+
+        Uri returnUri;
+
+        switch (match) {
+            case FAVORITES:
+                long id = db.insert(FavoritesContract.favoriteMovies.TABLE_NAME, null, values);
+                if (id >0) {
+                    //success
+                    returnUri = ContentUris.withAppendedId(FavoritesContract.favoriteMovies.CONTENT_URI, id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        getContext().getContentResolver().notifyChange(uri,null);
+
+        return returnUri;
+
     }
+
+
 
 
     @Override
