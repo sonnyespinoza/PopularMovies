@@ -3,8 +3,11 @@ package com.example.android.popularmovies;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +21,30 @@ public class DetailsActivity extends AppCompatActivity {
 
     private List<ParcelableUtils> movie;
     private Context context;
+    boolean isFavorite= false;
+
+
+
+
+
+
+
+
+    /*
+     * onClickAddFavorite is called when the favorites button is click
+     */
+    public void onClickAddFavorite(View view) {
+
+        ImageButton ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
+
+        if (isFavorite){
+            ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star));
+        }else{
+            ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_on));
+        }
+        isFavorite = !isFavorite;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +73,16 @@ public class DetailsActivity extends AppCompatActivity {
 
         TextView tv_user_rating = (TextView) findViewById(R.id.tv_user_rating);
         tv_user_rating.setText(user_rating );
+
+        //TODO clean up mock boolean once live data is plugged in stringExtras
+        Boolean movie_favorite = false ;
+                //intent.getStringExtra("movie_favorites");
+        ImageButton ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
+
+        if (movie_favorite){
+            ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_on));
+            isFavorite = !isFavorite;
+        }
 
 
 
