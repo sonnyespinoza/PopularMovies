@@ -20,14 +20,15 @@ public class PopularMoviesDBHelper extends SQLiteOpenHelper {
     // Create Favorites Table SQL String
     private static final String CREATE_FAVORITES_TABLE ="CREATE TABLE " + favoriteMovies.TABLE_NAME + " (" +
 
-            favoriteMovies._ID                  + " INTEGER PRIMARY KEY AUTOINCREMENT, INTEGER NOT NULL," +
+            favoriteMovies._ID                  + " INTEGER PRIMARY KEY AUTOINCREMENT," +
 
-            favoriteMovies.IMAGE_NAME           + " TEXT,"                             +
-            favoriteMovies.IMAGE_POSTER         + " TEXT NOT NULL,"                    +
-            favoriteMovies.RELEASE_DATE         + " INTEGER NOT NULL,"                 +
-            favoriteMovies.MOVIE_DESCRIPTION        + " TEXT,"                         +
-            favoriteMovies.MOVIE_TITLE          + " TEXT NOT NULL,"                    +
-            favoriteMovies.USER_RATING          + " TEXT,"                             +
+            favoriteMovies.IMAGE_NAME           + " TEXT,"                    +
+            favoriteMovies.IMAGE_POSTER         + " TEXT,"                    +
+            favoriteMovies.RELEASE_DATE         + " TEXT,"                    +
+            favoriteMovies.MOVIE_DESCRIPTION    + " TEXT,"                    +
+            favoriteMovies.MOVIE_TITLE          + " TEXT,"                    +
+            favoriteMovies.USER_RATING          + " TEXT,"                    +
+            favoriteMovies.USER_FAVORITES       + " TEXT,"                    +
 
             " UNIQUE (" + favoriteMovies._ID + ") ON CONFLICT REPLACE);";
 

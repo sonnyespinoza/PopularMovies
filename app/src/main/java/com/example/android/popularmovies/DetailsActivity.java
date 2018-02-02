@@ -1,16 +1,19 @@
 package com.example.android.popularmovies;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.popularmovies.data.FavoritesContract;
 import com.example.android.popularmovies.utilities.ParcelableUtils;
 import com.squareup.picasso.Picasso;
 
@@ -23,9 +26,11 @@ public class DetailsActivity extends AppCompatActivity {
     private Context context;
     boolean isFavorite= false;
 
-
-
-
+    String title;
+    String release_date;
+    String user_rating;
+    String movie_image;
+    String movie_desc;
 
 
 
@@ -36,13 +41,32 @@ public class DetailsActivity extends AppCompatActivity {
     public void onClickAddFavorite(View view) {
 
         ImageButton ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
+        ContentValues contentValues = new ContentValues();
 
-        if (isFavorite){
+        if (isFavorite){ //if true remove data from favorites
             ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star));
-        }else{
+            //TODO add ContentValue and delete record
+            Log.i("oClkAddFavorites star", "isFavorite: " + String.valueOf(isFavorite));
+
+        }else{ //otherwise added the data to favorites
             ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_on));
+            contentValues.put(FavoritesContract.favoriteMovies.MOVIE_TITLE, title);
+            contentValues.put(FavoritesContract.favoriteMovies.RELEASE_DATE, release_date);
+            contentValues.put(FavoritesContract.favoriteMovies.USER_RATING, user_rating);
+            contentValues.put(FavoritesContract.favoriteMovies.USER_FAVORITES, "true");
+            contentValues.put(FavoritesContract.favoriteMovies.MOVIE_DESCRIPTION, movie_desc );
+            contentValues.put(FavoritesContract.favoriteMovies.IMAGE_POSTER, movie_image );
+
+            Uri uri = getContentResolver().insert(FavoritesContract.favoriteMovies.CONTENT_URI, contentValues);
+
+            if (uri != null){
+
+                Log.d("onClickAddFav", "Uri " + uri);
+            }
+
         }
         isFavorite = !isFavorite;
+
     }
 
 
@@ -58,17 +82,17 @@ public class DetailsActivity extends AppCompatActivity {
         //;
 
 
-        String title = intent.getStringExtra(this.getString(R.string.title));
+        title = intent.getStringExtra(this.getString(R.string.title));
         //this.setTitle(title);
         TextView tv_title = (TextView) findViewById(R.id.tv_detail_movie_title);
         tv_title.setText(title);
 
-        String release_date = intent.getStringExtra(this.getString(R.string.release_date));
+        release_date = intent.getStringExtra(this.getString(R.string.release_date));
         TextView tv_release_date = (TextView) findViewById(R.id.tv_release_date);
         tv_release_date.setText(release_date);
 
 
-        String user_rating = intent.getStringExtra(this.getString(R.string.user_rating));
+        user_rating = intent.getStringExtra(this.getString(R.string.user_rating));
         user_rating = user_rating + this.getString(R.string.details_max_user_rating);
 
         TextView tv_user_rating = (TextView) findViewById(R.id.tv_user_rating);
@@ -103,7 +127,7 @@ public class DetailsActivity extends AppCompatActivity {
         ImageView iv_img_backdrop = (ImageView) findViewById(R.id.iv_details_poster) ;
         builder.build().load(movie_image).into(iv_img_backdrop);
 
-        String movie_desc = intent.getStringExtra(this.getString(R.string.overview));
+        movie_desc = intent.getStringExtra(this.getString(R.string.overview));
         TextView tv_movie_desc = (TextView) findViewById(R.id.tv_detail_movie_description);
         tv_movie_desc.setText(movie_desc);
     }

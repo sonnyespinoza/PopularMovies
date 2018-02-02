@@ -9,8 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-
-
+import android.util.Log;
 
 
 public class PopularMoviesContentProvider extends ContentProvider {
@@ -64,6 +63,7 @@ public class PopularMoviesContentProvider extends ContentProvider {
 
         switch (match) {
             case FAVORITES:
+                Log.i("provider", "insert favs");
                 long id = db.insert(FavoritesContract.favoriteMovies.TABLE_NAME, null, values);
                 if (id >0) {
                     //success

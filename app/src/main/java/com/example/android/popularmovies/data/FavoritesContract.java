@@ -47,6 +47,8 @@ public final class FavoritesContract {
         //User movie rating
         public static final String USER_RATING = "vote_average";
 
+        public static final String USER_FAVORITES = "favorites";
+
 
     }
 }
