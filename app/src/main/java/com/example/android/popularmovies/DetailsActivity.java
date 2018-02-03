@@ -31,6 +31,7 @@ public class DetailsActivity extends AppCompatActivity {
     String user_rating;
     String movie_image;
     String movie_desc;
+    String id;
 
 
 
@@ -42,11 +43,15 @@ public class DetailsActivity extends AppCompatActivity {
 
         ImageButton ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
         ContentValues contentValues = new ContentValues();
+        Uri uri;
 
-        if (isFavorite){ //if true remove data from favorites
+        if (isFavorite){ //if true re-move data from favorites
             ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star));
-            //TODO add ContentValue and delete record
-            Log.i("oClkAddFavorites star", "isFavorite: " + String.valueOf(isFavorite));
+
+            //TODO WIP will need to match query method in content provider
+            getContentResolver().delete(FavoritesContract.favoriteMovies.CONTENT_URI,FavoritesContract.favoriteMovies._ID+"=?", new String[]{id});
+
+            Log.i("onClickAddFav", "Rec Deleted: " + id);
 
         }else{ //otherwise added the data to favorites
             ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_on));
@@ -57,7 +62,7 @@ public class DetailsActivity extends AppCompatActivity {
             contentValues.put(FavoritesContract.favoriteMovies.MOVIE_DESCRIPTION, movie_desc );
             contentValues.put(FavoritesContract.favoriteMovies.IMAGE_POSTER, movie_image );
 
-            Uri uri = getContentResolver().insert(FavoritesContract.favoriteMovies.CONTENT_URI, contentValues);
+            uri = getContentResolver().insert(FavoritesContract.favoriteMovies.CONTENT_URI, contentValues);
 
             if (uri != null){
 
@@ -97,6 +102,8 @@ public class DetailsActivity extends AppCompatActivity {
 
         TextView tv_user_rating = (TextView) findViewById(R.id.tv_user_rating);
         tv_user_rating.setText(user_rating );
+
+        //TODO add record _id to String id from StringExtra
 
         //TODO clean up mock boolean once live data is plugged in stringExtras
         Boolean movie_favorite = false ;

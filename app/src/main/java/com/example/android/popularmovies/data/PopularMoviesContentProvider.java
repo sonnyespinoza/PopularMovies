@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 
 public class PopularMoviesContentProvider extends ContentProvider {
@@ -63,7 +62,6 @@ public class PopularMoviesContentProvider extends ContentProvider {
 
         switch (match) {
             case FAVORITES:
-                Log.i("provider", "insert favs");
                 long id = db.insert(FavoritesContract.favoriteMovies.TABLE_NAME, null, values);
                 if (id >0) {
                     //success
@@ -89,14 +87,69 @@ public class PopularMoviesContentProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        final SQLiteDatabase db = mPopularMoviesDbHelper.getReadableDatabase();
+
+        int match = sUriMatcher.match(uri);
+
+        Cursor rCursor;
+
+        switch (match) {
+            case FAVORITES:
+                rCursor = db.query(FavoritesContract.favoriteMovies.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+                case FAVORITES_WITH_ID:
+                String id = uri.getPathSegments().get(1);
+                rCursor = db.query(FavoritesContract.favoriteMovies.TABLE_NAME,
+                        projection,
+                        selection,
+                        new String[]{id},
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        rCursor.setNotificationUri(getContext().getContentResolver(),uri);
+
+        return rCursor;
     }
 
 
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        final SQLiteDatabase db = mPopularMoviesDbHelper.getWritableDatabase();
+
+        int match = sUriMatcher.match(uri);
+
+        int favoritesDeleted;
+
+        switch (match) {
+            case FAVORITES_WITH_ID:
+
+
+                String id = uri.getPathSegments().get(1);
+                favoritesDeleted = db.delete(FavoritesContract.favoriteMovies.TABLE_NAME,
+                        FavoritesContract.favoriteMovies._ID+"=?",new String[]{id});
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        if(favoritesDeleted !=0){
+            getContext().getContentResolver().notifyChange(uri, null);
+
+        }
+
+        return favoritesDeleted;
     }
 
 

@@ -95,6 +95,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
             Intent intentDetailActivity = new Intent(context, destinationClass);
 
 
+            //TODO add query to check if favorite
+            movieList.get(adapterPosition).getImage_poster();
+            //intentDetailActivity.putExtra("favorite", )
+
+
             // Pass the movie details to the DetailsActivity
             intentDetailActivity.putExtra(context.getString(R.string.title), movieList.get(adapterPosition).getTitle());
             intentDetailActivity.putExtra(context.getString(R.string.image_poster), "https://image.tmdb.org/t/p/w185/"  + movieList.get(adapterPosition).getImage_poster());
