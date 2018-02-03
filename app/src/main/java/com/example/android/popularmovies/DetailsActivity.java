@@ -3,6 +3,7 @@ package com.example.android.popularmovies;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -25,6 +26,8 @@ public class DetailsActivity extends AppCompatActivity {
     private List<ParcelableUtils> movie;
     private Context context;
     Uri uri;
+
+
     boolean isFavorite= false;
 
     String title;
@@ -33,6 +36,8 @@ public class DetailsActivity extends AppCompatActivity {
     String movie_image;
     String movie_desc;
     String id;
+
+
 
 
 
@@ -104,23 +109,6 @@ public class DetailsActivity extends AppCompatActivity {
         TextView tv_user_rating = (TextView) findViewById(R.id.tv_user_rating);
         tv_user_rating.setText(user_rating );
 
-        //TODO #2 query favorites from intent.getStringExtra(this.getString(R.string.image_poster));
-            //Needed for research
-            //https://books.google.com/books?id=hI8sBQAAQBAJ&pg=PA57&lpg=PA57&dq=contentprovider+query+single+item+uri+match+string&source=bl&ots=IpKr_pWkf6&sig=RlIQX9_97dIN4WaW3KIfs-6aK4I&hl=en&sa=X&ved=0ahUKEwj_sKrpr4rZAhVN-mMKHUR8D0gQ6AEIbjAJ#v=onepage&q=contentprovider%20query%20single%20item%20uri%20match%20string&f=false
-
-        //TODO #3 update boolean based on search result >0
-        Boolean movie_favorite = false ;
-
-
-        ImageButton ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
-
-        if (movie_favorite){
-            ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_on));
-            isFavorite = !isFavorite;
-        }
-
-
-
 
         //Picasso:Listen for loading errors
         context = getApplicationContext();
@@ -134,13 +122,80 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
         //Load images to image view
-        String movie_image = intent.getStringExtra(this.getString(R.string.image_poster));
+        movie_image = intent.getStringExtra(this.getString(R.string.image_poster));
         ImageView iv_img_backdrop = (ImageView) findViewById(R.id.iv_details_poster) ;
         builder.build().load(movie_image).into(iv_img_backdrop);
 
         movie_desc = intent.getStringExtra(this.getString(R.string.overview));
         TextView tv_movie_desc = (TextView) findViewById(R.id.tv_detail_movie_description);
         tv_movie_desc.setText(movie_desc);
+
+        //TODO #2 query favorites from intent.getStringExtra(this.getString(R.string.image_poster));
+
+        String[] mProjection =  {FavoritesContract.favoriteMovies._ID, FavoritesContract.favoriteMovies.MOVIE_TITLE};
+        String mSelection = FavoritesContract.favoriteMovies.IMAGE_POSTER + " = ?";
+        String[] mSelectionArgs = {""};
+        mSelectionArgs[2] = movie_image;
+
+        Cursor mCursor = getContentResolver().query(FavoritesContract.favoriteMovies.CONTENT_URI,
+                mProjection,
+                mSelection,
+                mSelectionArgs,
+                null  );
+
+        // null = error
+        if (null == mCursor) {
+
+            Log.e("DetailsActivty: mCursor", "Error ocurred");
+
+            // Insert code here to handle the error. Be sure not to use the cursor! You may want to
+            // call android.util.Log.e() to log this error.
+
+
+            //  no matches
+        } else if (mCursor.getCount() < 1) {
+
+            // Insert code here to notify the user that the contact query was unsuccessful. This isn’t necessarily
+            // an error. You may want to offer the user the option to insert a new row, or re-type the
+            // search term.
+
+
+        }else {
+
+            // Insert code here to do something with the results
+
+            // Moves to the next row in the cursor. Before the first movement in the cursor, the
+            // "row pointer" is -1, and if you try to retrieve data at that position you will get an
+            // exception.
+
+            //while (mCursor.moveToNext()) {
+
+                // Gets the value from the column.
+
+               // phoneNumber = mCursor.getString(index);
+
+                // Show phone number in Logcat
+                //Log.i("Phone"," Numbers : " + "");
+
+                // end of while loop
+            //}
+
+
+        }
+
+        //Needed for research
+        //https://books.google.com/books?id=hI8sBQAAQBAJ&pg=PA57&lpg=PA57&dq=contentprovider+query+single+item+uri+match+string&source=bl&ots=IpKr_pWkf6&sig=RlIQX9_97dIN4WaW3KIfs-6aK4I&hl=en&sa=X&ved=0ahUKEwj_sKrpr4rZAhVN-mMKHUR8D0gQ6AEIbjAJ#v=onepage&q=contentprovider%20query%20single%20item%20uri%20match%20string&f=false
+
+        //TODO #3 update boolean based on search result >0
+        Boolean movie_favorite = false ;
+
+
+        ImageButton ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
+
+        if (movie_favorite){
+            ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_on));
+            isFavorite = !isFavorite;
+        }
     }
 }
 

@@ -133,7 +133,7 @@ public class PopularMoviesContentProvider extends ContentProvider {
                         null,
                         null,
                         sortOrder);
-                break
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
