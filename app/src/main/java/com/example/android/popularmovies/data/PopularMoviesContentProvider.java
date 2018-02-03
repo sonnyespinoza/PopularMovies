@@ -23,6 +23,7 @@ public class PopularMoviesContentProvider extends ContentProvider {
     // 101 - items in 100 directory.
     public static final int FAVORITES = 100;
     public static final int FAVORITES_WITH_ID = 101;
+    public static final int FAVORITES_WITH_IMAGE_POSTER = 201;
 
     // Static variable for the Uri matcher
     private static final UriMatcher sUriMatcher = buildUriMatcher();
@@ -37,6 +38,8 @@ public class PopularMoviesContentProvider extends ContentProvider {
 
         // UriMatcher for single favorites item by ID
         uriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_MOVIES + "/#", FAVORITES_WITH_ID);
+
+        uriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_MOVIES + "/image", FAVORITES_WITH_IMAGE_POSTER);
 
         return uriMatcher;
     }
@@ -102,17 +105,35 @@ public class PopularMoviesContentProvider extends ContentProvider {
                         null,
                         null,
                         sortOrder);
+
                 break;
-                case FAVORITES_WITH_ID:
+            case FAVORITES_WITH_ID:
                 String id = uri.getPathSegments().get(1);
+                String mSelection = "_id=?";
+                String [] mSelectionArgsId = new String[]{id};
+
+                rCursor = db.query(FavoritesContract.favoriteMovies.TABLE_NAME,
+                    projection,
+                    mSelection,
+                    mSelectionArgsId,
+                    null,
+                    null,
+                    sortOrder);
+                break;
+
+            case FAVORITES_WITH_IMAGE_POSTER:
+                String image = uri.getPathSegments().get(1);
+                String mSelectionImage = FavoritesContract.favoriteMovies.IMAGE_POSTER+"=?";
+                String [] mSelectionArgsImage = new String[]{image};
+
                 rCursor = db.query(FavoritesContract.favoriteMovies.TABLE_NAME,
                         projection,
-                        selection,
-                        new String[]{id},
+                        mSelectionImage,
+                        mSelectionArgsImage,
                         null,
                         null,
                         sortOrder);
-                break;
+                break
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

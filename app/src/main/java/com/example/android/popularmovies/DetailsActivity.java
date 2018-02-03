@@ -24,6 +24,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     private List<ParcelableUtils> movie;
     private Context context;
+    Uri uri;
     boolean isFavorite= false;
 
     String title;
@@ -43,12 +44,12 @@ public class DetailsActivity extends AppCompatActivity {
 
         ImageButton ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
         ContentValues contentValues = new ContentValues();
-        Uri uri;
+
 
         if (isFavorite){ //if true re-move data from favorites
             ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star));
 
-            //TODO WIP will need to match query method in content provider
+            // TODO #1 : WIP will need to match query method in content provider
             getContentResolver().delete(FavoritesContract.favoriteMovies.CONTENT_URI,FavoritesContract.favoriteMovies._ID+"=?", new String[]{id});
 
             Log.i("onClickAddFav", "Rec Deleted: " + id);
@@ -103,11 +104,14 @@ public class DetailsActivity extends AppCompatActivity {
         TextView tv_user_rating = (TextView) findViewById(R.id.tv_user_rating);
         tv_user_rating.setText(user_rating );
 
-        //TODO add record _id to String id from StringExtra
+        //TODO #2 query favorites from intent.getStringExtra(this.getString(R.string.image_poster));
+            //Needed for research
+            //https://books.google.com/books?id=hI8sBQAAQBAJ&pg=PA57&lpg=PA57&dq=contentprovider+query+single+item+uri+match+string&source=bl&ots=IpKr_pWkf6&sig=RlIQX9_97dIN4WaW3KIfs-6aK4I&hl=en&sa=X&ved=0ahUKEwj_sKrpr4rZAhVN-mMKHUR8D0gQ6AEIbjAJ#v=onepage&q=contentprovider%20query%20single%20item%20uri%20match%20string&f=false
 
-        //TODO clean up mock boolean once live data is plugged in stringExtras
+        //TODO #3 update boolean based on search result >0
         Boolean movie_favorite = false ;
-                //intent.getStringExtra("movie_favorites");
+
+
         ImageButton ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
 
         if (movie_favorite){
