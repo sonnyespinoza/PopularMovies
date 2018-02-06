@@ -3,7 +3,6 @@ package com.example.android.popularmovies;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -35,7 +34,7 @@ public class DetailsActivity extends AppCompatActivity {
     String user_rating;
     String movie_image;
     String movie_desc;
-    String id;
+    int id;
 
 
 
@@ -55,7 +54,7 @@ public class DetailsActivity extends AppCompatActivity {
             ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star));
 
             // TODO #1 : WIP will need to match query method in content provider
-            getContentResolver().delete(FavoritesContract.favoriteMovies.CONTENT_URI,FavoritesContract.favoriteMovies._ID+"=?", new String[]{id});
+            getContentResolver().delete(FavoritesContract.favoriteMovies.CONTENT_URI,FavoritesContract.favoriteMovies._ID+"=?", new String[]{String.valueOf(id)});
 
             Log.i("onClickAddFav", "Rec Deleted: " + id);
 
@@ -73,6 +72,14 @@ public class DetailsActivity extends AppCompatActivity {
             if (uri != null){
 
                 Log.d("onClickAddFav", "Uri " + uri);
+
+
+
+                //id = Long.valueOf(uri.getLastPathSegment());
+
+
+                id = Integer.valueOf(uri.getLastPathSegment());
+                Log.d("onClickAddFav", "id: " + id);
             }
 
         }
@@ -131,8 +138,9 @@ public class DetailsActivity extends AppCompatActivity {
         tv_movie_desc.setText(movie_desc);
 
         //TODO #2 query favorites from intent.getStringExtra(this.getString(R.string.image_poster));
-
-        String[] mProjection =  {FavoritesContract.favoriteMovies._ID, FavoritesContract.favoriteMovies.MOVIE_TITLE};
+        //https://androidexample.com/Content_Provider_Basic/index.php?view=article_discription&aid=120
+        //getcontentresolver().query android example
+/*        String[] mProjection =  {FavoritesContract.favoriteMovies._ID, FavoritesContract.favoriteMovies.MOVIE_TITLE};
         String mSelection = FavoritesContract.favoriteMovies.IMAGE_POSTER + " = ?";
         String[] mSelectionArgs = {""};
         mSelectionArgs[2] = movie_image;
@@ -181,7 +189,7 @@ public class DetailsActivity extends AppCompatActivity {
             //}
 
 
-        }
+        }*/
 
         //Needed for research
         //https://books.google.com/books?id=hI8sBQAAQBAJ&pg=PA57&lpg=PA57&dq=contentprovider+query+single+item+uri+match+string&source=bl&ots=IpKr_pWkf6&sig=RlIQX9_97dIN4WaW3KIfs-6aK4I&hl=en&sa=X&ved=0ahUKEwj_sKrpr4rZAhVN-mMKHUR8D0gQ6AEIbjAJ#v=onepage&q=contentprovider%20query%20single%20item%20uri%20match%20string&f=false

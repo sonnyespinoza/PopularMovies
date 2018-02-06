@@ -35,11 +35,11 @@ public class PopularMoviesContentProvider extends ContentProvider {
 
         // UriMatcher for directory
         uriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_MOVIES, FAVORITES);
-
         // UriMatcher for single favorites item by ID
         uriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_MOVIES + "/#", FAVORITES_WITH_ID);
 
-        uriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_MOVIES + "/image", FAVORITES_WITH_IMAGE_POSTER);
+
+        uriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_MOVIES + "image", FAVORITES_WITH_IMAGE_POSTER);
 
         return uriMatcher;
     }
@@ -154,10 +154,10 @@ public class PopularMoviesContentProvider extends ContentProvider {
         int favoritesDeleted;
 
         switch (match) {
-            case FAVORITES_WITH_ID:
+            case FAVORITES:
 
 
-                String id = uri.getPathSegments().get(1);
+                String id = selectionArgs[0];
                 favoritesDeleted = db.delete(FavoritesContract.favoriteMovies.TABLE_NAME,
                         FavoritesContract.favoriteMovies._ID+"=?",new String[]{id});
                 break;
