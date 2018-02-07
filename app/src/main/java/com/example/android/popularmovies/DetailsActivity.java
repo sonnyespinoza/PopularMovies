@@ -34,6 +34,7 @@ public class DetailsActivity extends AppCompatActivity {
     String release_date;
     String user_rating;
     String movie_image;
+    String[] mSelectionArgs = {""};
     String movie_desc;
     int id;
 
@@ -54,7 +55,7 @@ public class DetailsActivity extends AppCompatActivity {
         if (isFavorite){ //if true re-move data from favorites
             ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star));
 
-            getContentResolver().delete(FavoritesContract.favoriteMovies.CONTENT_URI,FavoritesContract.favoriteMovies._ID+"=?", new String[]{String.valueOf(id)});
+            getContentResolver().delete(FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI,null, new String[]{String.valueOf(id)});
 
             Log.i("onClickAddFav", "Rec Deleted: " + id);
 
@@ -67,7 +68,7 @@ public class DetailsActivity extends AppCompatActivity {
             contentValues.put(FavoritesContract.favoriteMovies.MOVIE_DESCRIPTION, movie_desc );
             contentValues.put(FavoritesContract.favoriteMovies.IMAGE_POSTER, movie_image );
 
-            uri = getContentResolver().insert(FavoritesContract.favoriteMovies.CONTENT_URI, contentValues);
+            uri = getContentResolver().insert(FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, contentValues);
 
             if (uri != null){
 
@@ -131,82 +132,48 @@ public class DetailsActivity extends AppCompatActivity {
         //Load images to image view
         movie_image = intent.getStringExtra(this.getString(R.string.image_poster));
         ImageView iv_img_backdrop = (ImageView) findViewById(R.id.iv_details_poster) ;
-        builder.build().load(movie_image).into(iv_img_backdrop);
+        builder.build().load(getResources().getString(R.string.image_url) + movie_image).into(iv_img_backdrop);
+
+        //Query to determine if Movie is in favorites list;
+        String[] mProjection =  {FavoritesContract.favoriteMovies._ID};
+        mSelectionArgs[0] = movie_image;
+
+        Cursor mCursor = getContentResolver().query(FavoritesContract.favoriteMovies.CONTENT_IMAGE_URI,
+                mProjection,
+                null,
+                mSelectionArgs,
+                null  );
+
+        ImageButton ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
+
+        if (null == mCursor) { //null == error
+
+            Log.e("DetailsActivty: mCursor", "Error ocurred");
+
+        } else if (mCursor.getCount() < 1) { //No record found
+
+            Log.e("DetailsActivty: mCursor", "No Record Found");
+            ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star));
+
+
+        }else { //Record found
+
+            Log.e("DetailsActivty: mCursor", "Found Something");
+
+            ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_on));
+            isFavorite = !isFavorite; //found true
+
+
+            //update id reference
+            mCursor.moveToFirst();
+            id = Integer.valueOf(mCursor.getString(0));
+
+        }
 
         movie_desc = intent.getStringExtra(this.getString(R.string.overview));
         TextView tv_movie_desc = (TextView) findViewById(R.id.tv_detail_movie_description);
         tv_movie_desc.setText(movie_desc);
 
-        //TODO #2 query favorites from intent.getStringExtra(this.getString(R.string.image_poster));
-        //https://androidexample.com/Content_Provider_Basic/index.php?view=article_discription&aid=120
-        //getcontentresolver().query android example
-        String[] mProjection =  {FavoritesContract.favoriteMovies._ID, FavoritesContract.favoriteMovies.MOVIE_TITLE};
-        String mSelection = FavoritesContract.favoriteMovies.IMAGE_POSTER + " = ?";
-        String[] mSelectionArgs = {""};
-        mSelectionArgs[0] = movie_image;
-
-        Cursor mCursor = getContentResolver().query(FavoritesContract.favoriteMovies.CONTENT_URI,
-                mProjection,
-                mSelection,
-                mSelectionArgs,
-                null  );
-
-        // null = error
-        if (null == mCursor) {
-
-            Log.e("DetailsActivty: mCursor", "Error ocurred");
-
-            // Insert code here to handle the error. Be sure not to use the cursor! You may want to
-            // call android.util.Log.e() to log this error.
-
-
-            //  no matches
-        } else if (mCursor.getCount() < 1) {
-
-            // Insert code here to notify the user that the contact query was unsuccessful. This isn’t necessarily
-            // an error. You may want to offer the user the option to insert a new row, or re-type the
-            // search term.
-            Log.e("DetailsActivty: mCursor", "No Record Found");
-
-
-        }else {
-
-            Log.e("DetailsActivty: mCursor", "Found Something");
-
-            // Insert code here to do something with the results
-
-            // Moves to the next row in the cursor. Before the first movement in the cursor, the
-            // "row pointer" is -1, and if you try to retrieve data at that position you will get an
-            // exception.
-
-            //while (mCursor.moveToNext()) {
-
-                // Gets the value from the column.
-
-               // phoneNumber = mCursor.getString(index);
-
-                // Show phone number in Logcat
-                //Log.i("Phone"," Numbers : " + "");
-
-                // end of while loop
-            //}
-
-
-        }
-
-        //Needed for research
-        //https://books.google.com/books?id=hI8sBQAAQBAJ&pg=PA57&lpg=PA57&dq=contentprovider+query+single+item+uri+match+string&source=bl&ots=IpKr_pWkf6&sig=RlIQX9_97dIN4WaW3KIfs-6aK4I&hl=en&sa=X&ved=0ahUKEwj_sKrpr4rZAhVN-mMKHUR8D0gQ6AEIbjAJ#v=onepage&q=contentprovider%20query%20single%20item%20uri%20match%20string&f=false
-
-        //TODO #3 update boolean based on search result >0
-        Boolean movie_favorite = false ;
-
-
-        ImageButton ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
-
-        if (movie_favorite){
-            ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_on));
-            isFavorite = !isFavorite;
-        }
     }
 }
 

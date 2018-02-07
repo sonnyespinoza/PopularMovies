@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Popular Movies</string>
 
     <string name="action_settings">Settings</string>
@@ -16,6 +16,9 @@
     <string name="image_name">backdrop_path</string>
     <string name="image_poster">poster_path</string>
     <string name="user_rating">vote_average</string>
+
+    <string name="image_url">"https://image.tmdb.org/t/p/w185"</string>
+
 
     <string name="details_max_user_rating">"/10"</string>
 

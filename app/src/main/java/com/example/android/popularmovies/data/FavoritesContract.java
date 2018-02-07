@@ -17,6 +17,9 @@ public final class FavoritesContract {
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
     // Path for accessing movie favorites data in this contract
     public static final String PATH_MOVIES = "favorites";
+    // Path for accessing movie favorites image data in this contract
+    public static final String PATH_MOVIE_IMAGE = "image";
+
 
 
     private FavoritesContract(){
@@ -27,8 +30,11 @@ public final class FavoritesContract {
 
 
             // favorites content URI = base content URI + path
-            public static final Uri CONTENT_URI =
+            public static final Uri CONTENT_FAVORITES_URI =
                     BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIES).build();
+
+            public static final Uri CONTENT_IMAGE_URI =
+                    BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE_IMAGE).build();
 
         /* Used internally as the name of our favorites movies table. */
         public static final String TABLE_NAME = "favorite_movies";

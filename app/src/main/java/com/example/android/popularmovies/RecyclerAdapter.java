@@ -102,7 +102,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
 
             // Pass the movie details to the DetailsActivity
             intentDetailActivity.putExtra(context.getString(R.string.title), movieList.get(adapterPosition).getTitle());
-            intentDetailActivity.putExtra(context.getString(R.string.image_poster), "https://image.tmdb.org/t/p/w185/"  + movieList.get(adapterPosition).getImage_poster());
+            intentDetailActivity.putExtra(context.getString(R.string.image_poster),  movieList.get(adapterPosition).getImage_poster());
             //intentDetailActivity.putExtra(IMAGE_NAME, "https://image.tmdb.org/t/p/w185/"  + movieList.get(adapterPosition).get(IMAGE_NAME));
             intentDetailActivity.putExtra(context.getString(R.string.release_date), movieList.get(adapterPosition).getRelease_date());
             intentDetailActivity.putExtra(context.getString(R.string.user_rating), movieList.get(adapterPosition).getUser_rating());

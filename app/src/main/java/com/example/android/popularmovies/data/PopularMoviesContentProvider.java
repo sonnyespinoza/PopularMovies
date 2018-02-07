@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 
 public class PopularMoviesContentProvider extends ContentProvider {
@@ -39,7 +40,7 @@ public class PopularMoviesContentProvider extends ContentProvider {
         uriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_MOVIES + "/#", FAVORITES_WITH_ID);
 
 
-        uriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_MOVIES + "image", FAVORITES_WITH_IMAGE_POSTER);
+        uriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_MOVIE_IMAGE +"/", FAVORITES_WITH_IMAGE_POSTER);
 
         return uriMatcher;
     }
@@ -68,7 +69,7 @@ public class PopularMoviesContentProvider extends ContentProvider {
                 long id = db.insert(FavoritesContract.favoriteMovies.TABLE_NAME, null, values);
                 if (id >0) {
                     //success
-                    returnUri = ContentUris.withAppendedId(FavoritesContract.favoriteMovies.CONTENT_URI, id);
+                    returnUri = ContentUris.withAppendedId(FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, id);
                 } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
@@ -94,6 +95,9 @@ public class PopularMoviesContentProvider extends ContentProvider {
 
         int match = sUriMatcher.match(uri);
 
+        String [] mSelectionArgs;
+        String mSelection;
+
         Cursor rCursor;
 
         switch (match) {
@@ -107,32 +111,26 @@ public class PopularMoviesContentProvider extends ContentProvider {
                         sortOrder);
 
                 break;
-            case FAVORITES_WITH_ID:
-                String id = uri.getPathSegments().get(1);
-                String mSelection = "_id=?";
-                String [] mSelectionArgsId = new String[]{id};
-
-                rCursor = db.query(FavoritesContract.favoriteMovies.TABLE_NAME,
-                    projection,
-                    mSelection,
-                    mSelectionArgsId,
-                    null,
-                    null,
-                    sortOrder);
-                break;
 
             case FAVORITES_WITH_IMAGE_POSTER:
-                String image = uri.getPathSegments().get(1);
-                String mSelectionImage = FavoritesContract.favoriteMovies.IMAGE_POSTER+"=?";
-                String [] mSelectionArgsImage = new String[]{image};
+                Log.d("contentProvider image: ", uri.getPathSegments().get(0));
+                Log.d("CProvider SegmentSize: ", String.valueOf(uri.getPathSegments().size()));
+                Log.d("CProvider args: ", selectionArgs[0]);
+
+                mSelection = FavoritesContract.favoriteMovies.IMAGE_POSTER+"=?";
+                mSelectionArgs = new String[]{selectionArgs[0]};
+
 
                 rCursor = db.query(FavoritesContract.favoriteMovies.TABLE_NAME,
                         projection,
-                        mSelectionImage,
-                        mSelectionArgsImage,
+                        mSelection,
+                        mSelectionArgs,
                         null,
                         null,
                         sortOrder);
+
+                //Log.d("ContentProvider", DatabaseUtils.dumpCursorToString(rCursor));
+
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -144,14 +142,18 @@ public class PopularMoviesContentProvider extends ContentProvider {
     }
 
 
+    //TODO Clean up delete re-move duplicate selection in DetailsActivity and provider
+    //TODO add by id and fix uri in detailactivity to point to correct uri
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
 
         final SQLiteDatabase db = mPopularMoviesDbHelper.getWritableDatabase();
 
+        Log.d("CP delete: ", String.valueOf(uri));
+
         int match = sUriMatcher.match(uri);
 
-        int favoritesDeleted;
+        int favoritesDeleted = 0;
 
         switch (match) {
             case FAVORITES:
@@ -161,6 +163,12 @@ public class PopularMoviesContentProvider extends ContentProvider {
                 favoritesDeleted = db.delete(FavoritesContract.favoriteMovies.TABLE_NAME,
                         FavoritesContract.favoriteMovies._ID+"=?",new String[]{id});
                 break;
+/*            case FAVORITES_WITH_ID:
+
+                String id = selectionArgs[0];
+                favoritesDeleted = db.delete(FavoritesContract.favoriteMovies.TABLE_NAME,
+                        FavoritesContract.favoriteMovies._ID+"=?",new String[]{id});
+                break;*/
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
