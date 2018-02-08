@@ -26,17 +26,13 @@ public class DetailsActivity extends AppCompatActivity {
     private List<ParcelableUtils> movie;
     private Context context;
     Uri uri;
-
-
     boolean isFavorite= false;
-
     String title;
     String release_date;
     String user_rating;
     String movie_image;
-    String[] mSelectionArgs = {""};
     String movie_desc;
-    int id;
+    String[] mSelectionArgs = {""};
 
 
 
@@ -53,11 +49,9 @@ public class DetailsActivity extends AppCompatActivity {
 
 
         if (isFavorite){ //if true re-move data from favorites
+
             ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star));
-
-            getContentResolver().delete(FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI,null, new String[]{String.valueOf(id)});
-
-            Log.i("onClickAddFav", "Rec Deleted: " + id);
+            getContentResolver().delete(FavoritesContract.favoriteMovies.CONTENT_IMAGE_URI,null, new String[]{String.valueOf(movie_image)});
 
         }else{ //otherwise added the data to favorites
             ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_on));
@@ -68,21 +62,13 @@ public class DetailsActivity extends AppCompatActivity {
             contentValues.put(FavoritesContract.favoriteMovies.MOVIE_DESCRIPTION, movie_desc );
             contentValues.put(FavoritesContract.favoriteMovies.IMAGE_POSTER, movie_image );
 
-            uri = getContentResolver().insert(FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, contentValues);
-
-            if (uri != null){
-
-                Log.d("onClickAddFav", "Uri " + uri);
-
-
-
-                //id = Long.valueOf(uri.getLastPathSegment());
-
-
-                id = Integer.valueOf(uri.getLastPathSegment());
-                Log.d("onClickAddFav", "id: " + id);
+            try {
+                uri = getContentResolver().insert(FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, contentValues);
             }
+            catch (Exception e){
 
+                Log.e("onClickAddFavorite", "insert failed: ", e);
+            }
         }
         isFavorite = !isFavorite;
 
@@ -91,15 +77,11 @@ public class DetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-
-
         Intent intent = getIntent();
-        //movie = intent.getParcelableArrayListExtra("movie");
-        //;
-
 
         title = intent.getStringExtra(this.getString(R.string.title));
         //this.setTitle(title);
@@ -148,7 +130,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         if (null == mCursor) { //null == error
 
-            Log.e("DetailsActivty: mCursor", "Error ocurred");
+            Log.e("DetailsActivity: ", " mCursor: Query Error Occurred");
 
         } else if (mCursor.getCount() < 1) { //No record found
 
@@ -159,15 +141,8 @@ public class DetailsActivity extends AppCompatActivity {
         }else { //Record found
 
             Log.e("DetailsActivty: mCursor", "Found Something");
-
             ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_on));
             isFavorite = !isFavorite; //found true
-
-
-            //update id reference
-            mCursor.moveToFirst();
-            id = Integer.valueOf(mCursor.getString(0));
-
         }
 
         movie_desc = intent.getStringExtra(this.getString(R.string.overview));

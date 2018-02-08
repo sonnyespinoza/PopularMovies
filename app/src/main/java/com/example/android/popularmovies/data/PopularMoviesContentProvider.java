@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 
 public class PopularMoviesContentProvider extends ContentProvider {
@@ -20,11 +19,12 @@ public class PopularMoviesContentProvider extends ContentProvider {
 
 
     // Integer constants for the directory of favorite movies and a single favorite movie item.
-    // 100 - for directory
+    // 100 - for favorites directory
     // 101 - items in 100 directory.
+    // 200 - for image directory
     public static final int FAVORITES = 100;
     public static final int FAVORITES_WITH_ID = 101;
-    public static final int FAVORITES_WITH_IMAGE_POSTER = 201;
+    public static final int FAVORITES_WITH_IMAGE_POSTER = 200;
 
     // Static variable for the Uri matcher
     private static final UriMatcher sUriMatcher = buildUriMatcher();
@@ -38,8 +38,7 @@ public class PopularMoviesContentProvider extends ContentProvider {
         uriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_MOVIES, FAVORITES);
         // UriMatcher for single favorites item by ID
         uriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_MOVIES + "/#", FAVORITES_WITH_ID);
-
-
+        //UriMatcher for image poster name
         uriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_MOVIE_IMAGE +"/", FAVORITES_WITH_IMAGE_POSTER);
 
         return uriMatcher;
@@ -48,7 +47,7 @@ public class PopularMoviesContentProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
 
-        //initialize a PopularMoviesDBHelper
+        //initialize PopularMoviesDBHelper
         Context context = getContext();
         mPopularMoviesDbHelper = new PopularMoviesDBHelper(context);
         return true;
@@ -113,10 +112,6 @@ public class PopularMoviesContentProvider extends ContentProvider {
                 break;
 
             case FAVORITES_WITH_IMAGE_POSTER:
-                Log.d("contentProvider image: ", uri.getPathSegments().get(0));
-                Log.d("CProvider SegmentSize: ", String.valueOf(uri.getPathSegments().size()));
-                Log.d("CProvider args: ", selectionArgs[0]);
-
                 mSelection = FavoritesContract.favoriteMovies.IMAGE_POSTER+"=?";
                 mSelectionArgs = new String[]{selectionArgs[0]};
 
@@ -128,10 +123,8 @@ public class PopularMoviesContentProvider extends ContentProvider {
                         null,
                         null,
                         sortOrder);
-
-                //Log.d("ContentProvider", DatabaseUtils.dumpCursorToString(rCursor));
-
                 break;
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -142,33 +135,24 @@ public class PopularMoviesContentProvider extends ContentProvider {
     }
 
 
-    //TODO Clean up delete re-move duplicate selection in DetailsActivity and provider
-    //TODO add by id and fix uri in detailactivity to point to correct uri
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
 
         final SQLiteDatabase db = mPopularMoviesDbHelper.getWritableDatabase();
-
-        Log.d("CP delete: ", String.valueOf(uri));
-
         int match = sUriMatcher.match(uri);
-
         int favoritesDeleted = 0;
 
         switch (match) {
             case FAVORITES:
-
-
-                String id = selectionArgs[0];
-                favoritesDeleted = db.delete(FavoritesContract.favoriteMovies.TABLE_NAME,
-                        FavoritesContract.favoriteMovies._ID+"=?",new String[]{id});
+                favoritesDeleted = db.delete(FavoritesContract.favoriteMovies.TABLE_NAME, selection,selectionArgs);
                 break;
-/*            case FAVORITES_WITH_ID:
 
-                String id = selectionArgs[0];
+            case FAVORITES_WITH_IMAGE_POSTER:
+                String movie_image = selectionArgs[0];
                 favoritesDeleted = db.delete(FavoritesContract.favoriteMovies.TABLE_NAME,
-                        FavoritesContract.favoriteMovies._ID+"=?",new String[]{id});
-                break;*/
+                        FavoritesContract.favoriteMovies.IMAGE_POSTER+"=?",new String[]{movie_image});
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
