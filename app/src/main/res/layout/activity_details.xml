@@ -79,8 +79,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="32dp"
-            android:layout_toRightOf="@+id/iv_details_poster"
-            android:layout_below="@+id/ib_favorite_button"
+            android:layout_toRightOf="@+id/ib_favorite_button"
+            android:layout_below="@+id/tv_user_rating"
             android:textSize="16sp" />
 
 
