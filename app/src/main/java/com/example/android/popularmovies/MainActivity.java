@@ -1,5 +1,6 @@
 package com.example.android.popularmovies;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -22,7 +23,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.android.popularmovies.data.FavoritesContract;
-import com.example.android.popularmovies.data.PopularMoviesDBHelper;
 import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 import com.example.android.popularmovies.utilities.ParcelableUtils;
@@ -160,6 +160,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return movieSearchUrl;
     }
 
+
     /**
      * Instantiate and return a new Loader for the given ID.
      *
@@ -167,8 +168,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * @param args Any arguments supplied by the caller.
      * @return Return a new Loader instance that is ready to start loading.
      */
+    @SuppressLint("StaticFieldLeak")//ignore Lint warning
     @Override
-    public Loader<ArrayList> onCreateLoader(int id, final Bundle args) {
+    public Loader<ArrayList>  onCreateLoader(int id, final Bundle args) {
         return new AsyncTaskLoader<ArrayList>(this) {
 
             @Override

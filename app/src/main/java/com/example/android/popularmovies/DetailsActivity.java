@@ -1,5 +1,6 @@
 package com.example.android.popularmovies;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -122,9 +123,9 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
     }
 
-
+    @SuppressLint("StaticFieldLeak") //ignore Lint warning
     @Override
-    public Loader<Cursor> onCreateLoader(int id, final Bundle args) {
+    public  Loader<Cursor> onCreateLoader(int id, final Bundle args) {
         return new AsyncTaskLoader<Cursor>(this) {
 
             @Override
@@ -159,12 +160,12 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                 try {
 
                     Uri uri = Uri.parse(favoritesQueryUrlString);
-                    Cursor mCursor = getContentResolver().query(uri,
+                    return getContentResolver().query(uri,
                             mProjection,
                             null,
                             mSelectionArgs,
                             null);
-                    return mCursor;
+
 
 
                 } catch (Exception e) {
