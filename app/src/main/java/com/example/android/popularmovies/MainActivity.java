@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private void makeSearchQuery(String url) {
         // created bundle movieQueryBundle to store key:value for the URL
         Bundle movieQueryBundle = new Bundle();
-        movieQueryBundle.putString(MOVIE_QUERY_URL_EXTRA, url.toString());
+        movieQueryBundle.putString(MOVIE_QUERY_URL_EXTRA, url);
 
         //get library for loadermanager
         LoaderManager loaderManager = getSupportLoaderManager();
@@ -378,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 null,
                 FavoritesContract.favoriteMovies.USER_RATING);
 
-    };
+    }
 
 
     @Override
@@ -408,7 +408,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             ConnectivityManager cm =
                     (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            NetworkInfo activeNetwork = null;
+            if (cm != null) {
+                activeNetwork = cm.getActiveNetworkInfo();
+            }
             isConnected = activeNetwork != null &&
                     activeNetwork.isConnectedOrConnecting();
 

@@ -134,7 +134,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                 super.onStartLoading();
                 if (args == null) {
                     Log.i("onStartLoading", "null args");
-                    return;
 
                 } else {
                     forceLoad();
