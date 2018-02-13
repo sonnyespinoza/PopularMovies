@@ -24,6 +24,7 @@ import com.squareup.picasso.Picasso;
 
 public class DetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    //TODO clean up commented code prior to submission
     //TaskLoader unique identifier
     private int FAVORITES_LOADER;
     private static final int FAVORITES_READ_LOADER = 22;
