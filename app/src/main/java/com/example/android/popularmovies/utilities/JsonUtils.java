@@ -60,6 +60,9 @@ public final class JsonUtils {
         //return status code
         final String MOVIE_STATUS_CODE = "status_code";
 
+        //movie id
+        final String MOVIE_ID = "id";
+
 
 
         // INITIALIZE NEW ARRAYLIST AND POPULATE
@@ -108,6 +111,7 @@ public final class JsonUtils {
                         String description = movieInfo.getString(MOVIE_DESCRIPTION);
                         String releaseDate = movieInfo.getString(RELEASE_DATE);
                         String userRating = movieInfo.getString(USER_RATING);
+                        String id = movieInfo.getString(MOVIE_ID);
 
 
                         //hash map for pre load of movie info
@@ -124,7 +128,7 @@ public final class JsonUtils {
 */
 
 
-                        movieData.add(new ParcelableUtils(releaseDate, description, title, image, imagePoster, userRating));;
+                        movieData.add(new ParcelableUtils(releaseDate, description, title, image, imagePoster, userRating, id));;
 
                         //add movie info to movie data array
                         //movieData.add(mInfo);

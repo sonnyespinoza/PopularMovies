@@ -151,11 +151,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * This method creates the movie search URL
      * (using {@link NetworkUtils}) for the tmDB  movie repository
      */
+    //TODO might need to move this method into the NetworkUtils so that you can reuse with trailer and reviews
     private URL createSearchURL(String sortby, String page) {
 
         //Create url
         URL movieSearchUrl = NetworkUtils.buildUrl(sortby, page);
-        Log.i("createSearchQuery", movieSearchUrl.toString());
+        Log.i("createSearchURL", movieSearchUrl.toString());
 
         return movieSearchUrl;
     }

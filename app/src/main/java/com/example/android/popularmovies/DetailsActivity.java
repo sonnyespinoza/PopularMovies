@@ -195,6 +195,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                         }
 
                         break;
+
                     case FAVORITES_CREATE_LOADER:
                         ContentValues contentValues = new ContentValues();
                         contentValues.put(FavoritesContract.favoriteMovies.MOVIE_TITLE, title);

@@ -14,15 +14,17 @@ public class ParcelableUtils implements Parcelable{
     private String image_name;
     private String image_poster;
     private String user_rating;
+    private String id;
 
 
-    public ParcelableUtils(String mRelease_date, String mOverview, String mTitle, String mImage_name, String mImage_poster, String mUser_rating  ){
+    public ParcelableUtils(String mRelease_date, String mOverview, String mTitle, String mImage_name, String mImage_poster, String mUser_rating, String mId  ){
         this.release_date = mRelease_date;
         this.overview=mOverview;
         this.title=mTitle;
         this.image_name=mImage_name;
         this.image_poster=mImage_poster;
         this.user_rating=mUser_rating;
+        this.id=mId;
 
 
     }
@@ -34,6 +36,7 @@ public class ParcelableUtils implements Parcelable{
         this.image_name=parcel.readString();
         this.image_poster=parcel.readString();
         this.user_rating=parcel.readString();
+        this.id=parcel.readString();
 
     }
 
@@ -51,6 +54,7 @@ public class ParcelableUtils implements Parcelable{
         parcel.writeString(this.image_name);
         parcel.writeString(this.image_poster);
         parcel.writeString(this.user_rating);
+        parcel.writeString(this.id);
 
     }
     public static final Creator<ParcelableUtils> CREATOR=new Creator<ParcelableUtils>() {
@@ -71,6 +75,7 @@ public class ParcelableUtils implements Parcelable{
     public void setImage_name(String image_name) {this.image_name = image_name;}
     public void setImage_poster(String image_poster) {this.image_poster = image_poster;}
     public void setUser_rating(String user_rating) {this.user_rating = user_rating;}
+    public void setId(String id) {this.id = id;}
 
     public String getRelease_date(){return release_date;}
     public String getOverview(){return overview;}
@@ -78,6 +83,7 @@ public class ParcelableUtils implements Parcelable{
     public String getImage_name(){return image_name;}
     public String getImage_poster(){return image_poster;}
     public String getUser_rating(){return user_rating;}
+    public String getId(){return id;}
 
 
 
