@@ -16,6 +16,7 @@
     <string name="image_name">backdrop_path</string>
     <string name="image_poster">poster_path</string>
     <string name="user_rating">vote_average</string>
+    <string name="movie_id">id</string>
 
     <string name="image_url">"https://image.tmdb.org/t/p/w185"</string>
 

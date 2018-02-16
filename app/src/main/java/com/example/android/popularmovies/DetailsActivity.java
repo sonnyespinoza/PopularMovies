@@ -1,6 +1,7 @@
 package com.example.android.popularmovies;
 
 import android.annotation.SuppressLint;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -38,13 +39,14 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
     //private List<ParcelableUtils> movie;
     private Context context;
-    Uri uri;
+    //Uri uri;
     boolean isFavorite = false;
     String title;
     String release_date;
     String user_rating;
     String movie_image;
     String movie_desc;
+    String movie_id;
     String[] mSelectionArgs = {""};
 
 
@@ -61,8 +63,13 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
             //ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star));
             //getContentResolver().delete(FavoritesContract.favoriteMovies.CONTENT_IMAGE_URI, null, new String[]{String.valueOf(movie_image)});
+            //ContentUris.withAppendedId(FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, Integer.valueOf(movie_id));
 
-            makeQuery(FavoritesContract.favoriteMovies.CONTENT_IMAGE_URI, FAVORITES_DELETE_LOADER);
+            //makeQuery(FavoritesContract.favoriteMovies.CONTENT_IMAGE_URI, FAVORITES_DELETE_LOADER);
+
+            makeQuery(ContentUris.withAppendedId(
+                    FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, Integer.valueOf(movie_id)),
+                    FAVORITES_DELETE_LOADER);
 
         } else { //otherwise added the data to favorites
             //ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star_big_on));
@@ -81,7 +88,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             }*/
 
             //Query Favorites for movie
-            makeQuery(FavoritesContract.favoriteMovies.CONTENT_IMAGE_URI, FAVORITES_CREATE_LOADER);
+            makeQuery(FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, FAVORITES_CREATE_LOADER);
         }
         isFavorite = !isFavorite;
 
@@ -131,8 +138,12 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         TextView tv_movie_desc = (TextView) findViewById(R.id.tv_detail_movie_description);
         tv_movie_desc.setText(movie_desc);
 
+        movie_id = intent.getStringExtra(this.getString(R.string.movie_id));
+
         //Query Favorites for movie
-        makeQuery(FavoritesContract.favoriteMovies.CONTENT_IMAGE_URI, FAVORITES_READ_LOADER);
+        makeQuery(ContentUris.withAppendedId(
+                FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, Integer.valueOf(movie_id)),
+                FAVORITES_READ_LOADER);
 
     }
 
@@ -165,18 +176,19 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                 switch(id) {
                     case FAVORITES_READ_LOADER:
                         //Query to determine if Movie is in favorites list;
-                        String[] mProjection = {FavoritesContract.favoriteMovies._ID};
-                        mSelectionArgs[0] = movie_image;
+                        String[] mProjection = {FavoritesContract.favoriteMovies.MOVIE_ID};
+                        //mSelectionArgs[0] = movie_image;
+                        mSelectionArgs[0] = movie_id;
                         try {
 
-                            Uri uri = Uri.parse(favoritesQueryUrlString);
-                            return getContentResolver().query(uri,
+                            Uri favorites_uri = Uri.parse(favoritesQueryUrlString);
+                            return getContentResolver().query(favorites_uri,
                                     mProjection,
                                     null,
                                     mSelectionArgs,
                                     null);
                         } catch (Exception e) {
-                            Log.e("LoadInBackground", "Exception");
+                            Log.e("LoadInBackground READ ", "Exception");
                             e.printStackTrace();
                             return null;
                         }
@@ -186,7 +198,8 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
                         try {
 
-                            getContentResolver().delete(FavoritesContract.favoriteMovies.CONTENT_IMAGE_URI, null, new String[]{String.valueOf(movie_image)});
+                            Uri favorites_uri = Uri.parse(favoritesQueryUrlString);
+                            getContentResolver().delete(favorites_uri, null, new String[]{String.valueOf(movie_id)});
                             Log.i("LoadInBackground", "FAVORITES_DELETE_LOADER");
                         } catch (Exception e) {
 
@@ -204,10 +217,11 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                         contentValues.put(FavoritesContract.favoriteMovies.USER_FAVORITES, "true");
                         contentValues.put(FavoritesContract.favoriteMovies.MOVIE_DESCRIPTION, movie_desc);
                         contentValues.put(FavoritesContract.favoriteMovies.IMAGE_POSTER, movie_image);
+                        contentValues.put(FavoritesContract.favoriteMovies.MOVIE_ID, movie_id);
 
                         try {
-
-                            uri = getContentResolver().insert(FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, contentValues);
+                            Uri uri = Uri.parse(favoritesQueryUrlString);
+                            getContentResolver().insert(uri, contentValues);
                             Log.i("LoadInBackground", "FAVORITES_CREATE_LOADER");
 
                         } catch (Exception e) {

@@ -28,6 +28,7 @@ public class PopularMoviesDBHelper extends SQLiteOpenHelper {
             favoriteMovies.MOVIE_DESCRIPTION    + " TEXT,"                    +
             favoriteMovies.MOVIE_TITLE          + " TEXT,"                    +
             favoriteMovies.USER_RATING          + " TEXT,"                    +
+            favoriteMovies.MOVIE_ID             + " TEXT,"                    +
             favoriteMovies.USER_FAVORITES       + " TEXT,"                    +
 
             " UNIQUE (" + favoriteMovies._ID + ") ON CONFLICT REPLACE);";

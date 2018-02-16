@@ -187,12 +187,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
                 if (mParsedData != null){
-                    Log.i("onStartLoading", "parsedDataNotNull");
+                    Log.i("onStartLoading", "parsedData Not Null");
                     //mLoadingIndicator.setVisibility(View.VISIBLE);
                     deliverResult(mParsedData);
 
                 } else {
-                    Log.i("onStartLoading", "parsedDataNull");
+                    Log.i("onStartLoading", "parsed Data Null");
                     mLoadingIndicator.setVisibility(View.VISIBLE);
                    /* try {
 

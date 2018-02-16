@@ -54,6 +54,7 @@ public final class FavoritesContract {
         public static final String USER_RATING = "vote_average";
 
         public static final String USER_FAVORITES = "favorites";
+        public static final String MOVIE_ID = "id";
 
 
     }

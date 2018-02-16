@@ -107,6 +107,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
             intentDetailActivity.putExtra(context.getString(R.string.release_date), movieList.get(adapterPosition).getRelease_date());
             intentDetailActivity.putExtra(context.getString(R.string.user_rating), movieList.get(adapterPosition).getUser_rating());
             intentDetailActivity.putExtra(context.getString(R.string.overview), movieList.get(adapterPosition).getOverview());
+            intentDetailActivity.putExtra(context.getString(R.string.movie_id), movieList.get(adapterPosition).getId());
      //       intentDetailActivity.putParcelableArrayListExtra("movies", movieList);
 
             context.startActivity(intentDetailActivity);
