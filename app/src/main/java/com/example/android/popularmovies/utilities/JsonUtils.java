@@ -154,33 +154,32 @@ public final class JsonUtils {
     public static ArrayList<ParcelableUtils> getTrailerDataFromJson(String trailerJsonStr)
             throws JSONException {
 
-        /* The "list" array of movie results*/
+        /* The "list" array of trailer results*/
         final String RESULTS = "results";
 
-        /* Name of the image file */
-        final String IMAGE_NAME = "backdrop_path";
-        final String IMAGE_POSTER= "poster_path";
+        /* Name and Type of video  */
+        final String TRAILER_NAME = "name";
+        final String TRAILER_TYPE= "type";
 
-        /* Date the movie was released */
-        final String RELEASE_DATE = "release_date";
+        /* video key for call to youtube */
+        final String TRAILER_KEY = "key";
 
-        //Movie title and overview
-        final String MOVIE_DESCRIPTION = "overview";
-        final String MOVIE_TITLE = "title";
+        //what site is the video from
+        // i.e. YouTube (will use to limit
+            // to just YouTube for this project)
+        final String TRAILER_SITE = "site";
 
-        //User movie rating
-        final String USER_RATING = "vote_average";
+
+        //trailer id
+        final String TRAILER_ID = "id";
 
         //return status code
-        final String MOVIE_STATUS_CODE = "status_code";
-
-        //movie id
-        final String MOVIE_ID = "id";
+        final String TRAILER_STATUS_CODE = "status_code";
 
 
 
         // INITIALIZE NEW ARRAYLIST AND POPULATE
-        ArrayList<ParcelableUtils> movieData = new ArrayList<ParcelableUtils>();
+        ArrayList<ParcelableUtils> trailerData = new ArrayList<ParcelableUtils>();
 
 
         if (trailerJsonStr != null) {
@@ -195,11 +194,11 @@ public final class JsonUtils {
 
 
                 /* Is there an error? */
-                if (movieJson.has(MOVIE_STATUS_CODE)) {
+                if (movieJson.has(TRAILER_STATUS_CODE)) {
 
-                    int errorCode = movieJson.getInt(MOVIE_STATUS_CODE);
+                    int errorCode = movieJson.getInt(TRAILER_STATUS_CODE);
 
-                    Log.e("JSONUtil:Status Code", String.valueOf(MOVIE_STATUS_CODE) );
+                    Log.e("JSONUtil:Status Code", String.valueOf(TRAILER_STATUS_CODE) );
                     Log.e("JSONUtil:Message", movieJson.get("status_message").toString());
                     switch (errorCode) {
                         case 1:
@@ -218,39 +217,16 @@ public final class JsonUtils {
 
                         JSONObject movieInfo = movieJSONArray.getJSONObject(i);
 
-                        String image = movieInfo.getString(IMAGE_NAME);
-                        //Log.i("backdrop_path", image );
-                        String imagePoster = movieInfo.getString(IMAGE_POSTER);
-                        String title = movieInfo.getString(MOVIE_TITLE);
-                        String description = movieInfo.getString(MOVIE_DESCRIPTION);
-                        String releaseDate = movieInfo.getString(RELEASE_DATE);
-                        String userRating = movieInfo.getString(USER_RATING);
-                        String id = movieInfo.getString(MOVIE_ID);
+                        String trailerId = movieInfo.getString(TRAILER_ID);
+                        Log.d("id", trailerId );
+                        String trailerKey = movieInfo.getString(TRAILER_KEY);
+                        String trailerName = movieInfo.getString(TRAILER_NAME);
+                        String trailerSite = movieInfo.getString(TRAILER_SITE);
+                        String trailerType = movieInfo.getString(TRAILER_TYPE);
 
 
-                        //hash map for pre load of movie info
-/*
-                        HashMap<String, String> mInfo = new HashMap<>();
-
-                        //Load movie info into hash map
-                        mInfo.put(IMAGE_NAME, image);
-                        mInfo.put(IMAGE_POSTER, image_poster);
-                        mInfo.put(MOVIE_TITLE, title);
-                        mInfo.put(MOVIE_DESCRIPTION, description);
-                        mInfo.put(RELEASE_DATE, releaseDate);
-                        mInfo.put(USER_RATING, userRating);
-*/
-
-
-                        movieData.add(new ParcelableUtils(releaseDate, description, title, image, imagePoster, userRating, id));;
-
-                        //add movie info to movie data array
-                        //movieData.add(mInfo);
-
-
-
-
-
+                        //TODO ParcelableUtils needs to have a constructor overload
+                        // trailerData.add(new ParcelableUtils(trailerId, trailerKey, trailerName, trailerSite, trailerType));;
                     }
 
                 }
@@ -259,9 +235,9 @@ public final class JsonUtils {
 
             }
         }
-        Log.d("JsonUtils", "getMovieDataFromJson: " + movieData.size());
+        Log.d("JsonUtils", "getMovieDataFromJson: " + trailerData.size());
 
-        //return movie array data
-        return movieData;
+        //return trailer array data
+        return trailerData;
     }
 }
