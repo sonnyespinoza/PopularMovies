@@ -98,5 +98,18 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/iv_details_poster" />
     </ScrollView>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:layout_marginLeft="16dp">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_movie_trailers"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tv_detail_movie_description" />
+    </ScrollView>
 </LinearLayout>
 

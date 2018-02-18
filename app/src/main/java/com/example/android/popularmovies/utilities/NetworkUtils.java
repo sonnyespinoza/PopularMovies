@@ -40,19 +40,24 @@ public class NetworkUtils {
     final static String LANGUAGE = "en-US";
     final static String PAGE = "page";
 
+    final static String TYPE_TRAILER = "trailer_list";
+    final static String TYPE_REVIEWS = "review_list";
+
     /**
      * Builds the URL
      *
      * @param sortBy The sort criteria that will be queried for.
-     * @param page the page to return.
-     * @return The URL to use to query the GitHub.
+     * @param page   the page to return.
+     * @return The URL to use to query.
      */
-    public static URL buildUrl(String sortBy, String page ) {
-        Uri builtUri = Uri.parse(BASE_URL +  sortBy).buildUpon()
+    public static URL buildUrl(String sortBy, String page) {
+        Uri builtUri = Uri.parse(BASE_URL + sortBy).buildUpon()
                 .appendQueryParameter(API_VAR, API_KEY)
                 .appendQueryParameter(LANGUAGE_VAR, LANGUAGE)
                 //.appendQueryParameter(PAGE, page)
                 .build();
+
+        //https://api.themoviedb.org/3/movie/popular?api_key=27870a6246d2191e0a996bb1e04e2cea&language=en-US
 
         URL url = null;
         try {
@@ -62,6 +67,54 @@ public class NetworkUtils {
         }
 
         return url;
+    }
+
+    /**
+     * Builds the URL
+     *
+     * @param id   used to specifiy which movie trailers
+     * @param type the type of url to build (currently either trailer_list or review_list)
+     *             * @param page   the page to return.
+     * @return The URL to use to query.
+     */
+
+    public static URL buildUrl(String type, String id, String page) {
+
+        Uri builtUri = null;
+        URL url = null;
+        switch (type) {
+            case TYPE_TRAILER:
+                builtUri = Uri.parse(BASE_URL + id + "/videos").buildUpon()
+                        .appendQueryParameter(API_VAR, API_KEY)
+                        .appendQueryParameter(LANGUAGE_VAR, LANGUAGE)
+                        .build();
+                try {
+                    url = new URL(builtUri.toString());
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            case TYPE_REVIEWS:
+                builtUri = Uri.parse(BASE_URL + id + "/reviews").buildUpon()
+                        .appendQueryParameter(API_VAR, API_KEY)
+                        .appendQueryParameter(LANGUAGE_VAR, LANGUAGE)
+                        .build();
+                try {
+                    url = new URL(builtUri.toString());
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + builtUri);
+        }
+        return url;
+
+        //examples
+        //https://api.themoviedb.org/3/movie/254128/videos?api_key=27870a6246d2191e0a996bb1e04e2cea&language=en-US
+        //https://api.themoviedb.org/3/movie/254128/reviews?api_key=27870a6246d2191e0a996bb1e04e2cea&language=en-US
     }
 
     /**

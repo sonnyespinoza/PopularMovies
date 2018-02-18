@@ -91,7 +91,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         layoutManager = new GridLayoutManager(this, 2);
         mMovieImage.setLayoutManager(layoutManager);
 
-        URL mSearchUrl = createSearchURL(byMostPopular, "1");
+        URL mSearchUrl = NetworkUtils.buildUrl(byMostPopular, "1");
+        Log.i("createSearchURL", mSearchUrl.toString());
+
+        URL mTrailerUrl = NetworkUtils.buildUrl("trailer_list", "254128", "1");
+        Log.i("createTrailerURL", mTrailerUrl.toString());
+
+        URL mReviewUrl = NetworkUtils.buildUrl("review_list", "254128", "1");
+        Log.i("createReviewURL", mReviewUrl.toString());
+
 
         // Set Adapter
         mAdapter = new RecyclerAdapter(this, new ArrayList());
@@ -151,7 +159,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * This method creates the movie search URL
      * (using {@link NetworkUtils}) for the tmDB  movie repository
      */
-    //TODO might need to move this method into the NetworkUtils so that you can reuse with trailer and reviews
+/*
+    //DONE might need to move this method into the NetworkUtils so that you can reuse with trailer and reviews
     private URL createSearchURL(String sortby, String page) {
 
         //Create url
@@ -160,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         return movieSearchUrl;
     }
+*/
 
 
     /**
@@ -295,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             //createSearchURL(byMostPopular, "1");
 
             mParsedData = null;
-            URL mSearchUrl = createSearchURL(byMostPopular, "1");
+            URL mSearchUrl = NetworkUtils.buildUrl(byMostPopular, "1");
 
             Log.i("menuByPopular", mSearchUrl.toString());
 
@@ -319,7 +329,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         } else if (groupMenuItemClicked == R.id.action_sortby_rating) {
 
             mParsedData = null;
-            URL mSearchUrl = createSearchURL(byTopRated, "1");
+            URL mSearchUrl = NetworkUtils.buildUrl(byTopRated, "1");
+
             item.setChecked(true);
             Log.i("menuByRating", mSearchUrl.toString());
 
