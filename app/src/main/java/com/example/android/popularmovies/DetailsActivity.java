@@ -21,7 +21,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.popularmovies.data.FavoritesContract;
+import com.example.android.popularmovies.utilities.JsonUtils;
+import com.example.android.popularmovies.utilities.NetworkUtils;
+import com.example.android.popularmovies.utilities.ParcelableUtils;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
 
 public class DetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -48,6 +57,8 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     String movie_desc;
     String movie_id;
     String[] mSelectionArgs = {""};
+
+    ArrayList<ParcelableUtils> mParsedData; //Array to hold parsed data from tmdb
 
 
     /*
@@ -118,6 +129,29 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         makeQuery(ContentUris.withAppendedId(
                 FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, Integer.valueOf(movie_id)),
                 FAVORITES_READ_LOADER);
+
+        //TODO need to re-move this is a test call to validate correctness of the URL
+        URL mTrailerUrl = NetworkUtils.buildUrl("trailer_list", "254128", "1");
+        Log.i("createTrailerURL", mTrailerUrl.toString());
+
+        //TODO need to re-move this is a test call to validate correctness of the URL
+        URL mReviewUrl = NetworkUtils.buildUrl("review_list", "254128", "1");
+        Log.i("createReviewURL", mReviewUrl.toString());
+
+        //fetch data from API
+        try {
+
+            String mSearchResults = NetworkUtils.getResponseFromHttpUrl(mTrailerUrl);
+            //parse json
+            mParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
+            //}
+            //return mParsedData;
+        } catch (IOException | JSONException e) {
+            Log.i("LoadInBackground", "Exception");
+            e.printStackTrace();
+            //return null;
+        }
+
 
     }
 

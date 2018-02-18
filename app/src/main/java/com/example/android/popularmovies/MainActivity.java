@@ -94,11 +94,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         URL mSearchUrl = NetworkUtils.buildUrl(byMostPopular, "1");
         Log.i("createSearchURL", mSearchUrl.toString());
 
-        URL mTrailerUrl = NetworkUtils.buildUrl("trailer_list", "254128", "1");
-        Log.i("createTrailerURL", mTrailerUrl.toString());
 
-        URL mReviewUrl = NetworkUtils.buildUrl("review_list", "254128", "1");
-        Log.i("createReviewURL", mReviewUrl.toString());
 
 
         // Set Adapter

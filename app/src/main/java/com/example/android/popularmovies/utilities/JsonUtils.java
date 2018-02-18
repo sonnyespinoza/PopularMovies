@@ -150,4 +150,118 @@ public final class JsonUtils {
         //return movie array data
         return movieData;
     }
+
+    public static ArrayList<ParcelableUtils> getTrailerDataFromJson(String trailerJsonStr)
+            throws JSONException {
+
+        /* The "list" array of movie results*/
+        final String RESULTS = "results";
+
+        /* Name of the image file */
+        final String IMAGE_NAME = "backdrop_path";
+        final String IMAGE_POSTER= "poster_path";
+
+        /* Date the movie was released */
+        final String RELEASE_DATE = "release_date";
+
+        //Movie title and overview
+        final String MOVIE_DESCRIPTION = "overview";
+        final String MOVIE_TITLE = "title";
+
+        //User movie rating
+        final String USER_RATING = "vote_average";
+
+        //return status code
+        final String MOVIE_STATUS_CODE = "status_code";
+
+        //movie id
+        final String MOVIE_ID = "id";
+
+
+
+        // INITIALIZE NEW ARRAYLIST AND POPULATE
+        ArrayList<ParcelableUtils> movieData = new ArrayList<ParcelableUtils>();
+
+
+        if (trailerJsonStr != null) {
+
+            try {
+
+
+                JSONObject movieJson = new JSONObject(trailerJsonStr);
+
+                //JSON Array node
+                JSONArray movieJSONArray = movieJson.getJSONArray(RESULTS);
+
+
+                /* Is there an error? */
+                if (movieJson.has(MOVIE_STATUS_CODE)) {
+
+                    int errorCode = movieJson.getInt(MOVIE_STATUS_CODE);
+
+                    Log.e("JSONUtil:Status Code", String.valueOf(MOVIE_STATUS_CODE) );
+                    Log.e("JSONUtil:Message", movieJson.get("status_message").toString());
+                    switch (errorCode) {
+                        case 1:
+                            break;
+                        case 2:
+                    /* Location invalid */
+                            return null;
+                        default:
+                    /* Server probably down */
+                            return null;
+                    }
+                } else {
+
+
+                    for (int i = 0; i < movieJSONArray.length(); i++) {
+
+                        JSONObject movieInfo = movieJSONArray.getJSONObject(i);
+
+                        String image = movieInfo.getString(IMAGE_NAME);
+                        //Log.i("backdrop_path", image );
+                        String imagePoster = movieInfo.getString(IMAGE_POSTER);
+                        String title = movieInfo.getString(MOVIE_TITLE);
+                        String description = movieInfo.getString(MOVIE_DESCRIPTION);
+                        String releaseDate = movieInfo.getString(RELEASE_DATE);
+                        String userRating = movieInfo.getString(USER_RATING);
+                        String id = movieInfo.getString(MOVIE_ID);
+
+
+                        //hash map for pre load of movie info
+/*
+                        HashMap<String, String> mInfo = new HashMap<>();
+
+                        //Load movie info into hash map
+                        mInfo.put(IMAGE_NAME, image);
+                        mInfo.put(IMAGE_POSTER, image_poster);
+                        mInfo.put(MOVIE_TITLE, title);
+                        mInfo.put(MOVIE_DESCRIPTION, description);
+                        mInfo.put(RELEASE_DATE, releaseDate);
+                        mInfo.put(USER_RATING, userRating);
+*/
+
+
+                        movieData.add(new ParcelableUtils(releaseDate, description, title, image, imagePoster, userRating, id));;
+
+                        //add movie info to movie data array
+                        //movieData.add(mInfo);
+
+
+
+
+
+                    }
+
+                }
+            } catch (final JSONException e) {
+                e.printStackTrace();
+
+            }
+        }
+        Log.d("JsonUtils", "getMovieDataFromJson: " + movieData.size());
+
+        //return movie array data
+        return movieData;
+    }
 }
