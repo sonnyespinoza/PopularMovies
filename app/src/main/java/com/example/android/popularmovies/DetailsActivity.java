@@ -143,7 +143,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
             String mSearchResults = NetworkUtils.getResponseFromHttpUrl(mTrailerUrl);
             //parse json
-            mParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
+            mParsedData = JsonUtils.getTrailerDataFromJson(mSearchResults);
             //}
             //return mParsedData;
         } catch (IOException | JSONException e) {
