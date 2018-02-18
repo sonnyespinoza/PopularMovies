@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
                 } catch (IOException | JSONException e) {
-                    Log.i("LoadInBackground", "Exception");
+                    Log.e("LoadInBackground", "Exception");
                     e.printStackTrace();
                     return null;
                 }

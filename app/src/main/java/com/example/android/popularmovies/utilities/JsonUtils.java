@@ -225,7 +225,7 @@ public final class JsonUtils {
                         String trailerType = movieInfo.getString(TRAILER_TYPE);
 
 
-                        //TODO ParcelableUtils needs to have a constructor overload
+                        //TODO #1 ParcelableUtils needs to have a constructor overload
                         // trailerData.add(new ParcelableUtils(trailerId, trailerKey, trailerName, trailerSite, trailerType));;
                     }
 
@@ -235,7 +235,7 @@ public final class JsonUtils {
 
             }
         }
-        Log.d("JsonUtils", "getMovieDataFromJson: " + trailerData.size());
+        Log.d("JsonUtils", "getTrailerDataFromJson: " + trailerData.size());
 
         //return trailer array data
         return trailerData;

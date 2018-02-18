@@ -125,11 +125,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
         movie_id = intent.getStringExtra(this.getString(R.string.movie_id));
 
-        //Query Favorites for movie
-        makeQuery(ContentUris.withAppendedId(
-                FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, Integer.valueOf(movie_id)),
-                FAVORITES_READ_LOADER);
-
         //TODO need to re-move this is a test call to validate correctness of the URL
         URL mTrailerUrl = NetworkUtils.buildUrl("trailer_list", "254128", "1");
         Log.i("createTrailerURL", mTrailerUrl.toString());
@@ -147,10 +142,18 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             //}
             //return mParsedData;
         } catch (IOException | JSONException e) {
-            Log.i("LoadInBackground", "Exception");
+            Log.e("LoadInBackground", "Exception");
             e.printStackTrace();
             //return null;
         }
+        Log.i("Details:Trailer: ", String.valueOf(mParsedData.size()));
+
+        //Query Favorites for movie
+        makeQuery(ContentUris.withAppendedId(
+                FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, Integer.valueOf(movie_id)),
+                FAVORITES_READ_LOADER);
+
+
 
 
     }

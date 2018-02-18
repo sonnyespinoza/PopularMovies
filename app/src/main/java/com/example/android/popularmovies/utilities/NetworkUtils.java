@@ -16,6 +16,7 @@
 package com.example.android.popularmovies.utilities;
 
 import android.net.Uri;
+import android.os.StrictMode;
 
 import com.example.android.popularmovies.BuildConfig;
 
@@ -125,20 +126,31 @@ public class NetworkUtils {
      * @throws IOException Related to network and stream reading
      */
     public static String getResponseFromHttpUrl(URL url) throws IOException {
+
+        //TODO - Re-move StrictMode once Trailer and reviews are moved off the main thread
+        //added for testing of data retrieval on the main thread
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        //Log.d("getResponseFromHttpUrl:", "url: " +url.toString());
         try {
             InputStream in = urlConnection.getInputStream();
+            //Log.d("getResponseFromHttpUrl:", in.toString());
 
             Scanner scanner = new Scanner(in);
             scanner.useDelimiter("\\A");
 
             boolean hasInput = scanner.hasNext();
             if (hasInput) {
+                //Log.d("getResponseFromHttpUrl:", "hasInput");
                 return scanner.next();
             } else {
+                //Log.d("getResponseFromHttpUrl:", "noInput");
                 return null;
             }
         } finally {
+            //Log.d("getResponseFromHttpUrl ", "finally");
             urlConnection.disconnect();
         }
     }
