@@ -55,39 +55,14 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
      */
     public void onClickAddFavorite(View view) {
 
-        //ImageButton ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
-        //ContentValues contentValues = new ContentValues();
-
-
-        if (isFavorite) { //if true re-move data from favorites
-
-            //ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star));
-            //getContentResolver().delete(FavoritesContract.favoriteMovies.CONTENT_IMAGE_URI, null, new String[]{String.valueOf(movie_image)});
-            //ContentUris.withAppendedId(FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, Integer.valueOf(movie_id));
-
-            //makeQuery(FavoritesContract.favoriteMovies.CONTENT_IMAGE_URI, FAVORITES_DELETE_LOADER);
+        if (isFavorite) { //Re-move data from favorites
 
             makeQuery(ContentUris.withAppendedId(
                     FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, Integer.valueOf(movie_id)),
                     FAVORITES_DELETE_LOADER);
 
-        } else { //otherwise added the data to favorites
-            //ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star_big_on));
-/*            contentValues.put(FavoritesContract.favoriteMovies.MOVIE_TITLE, title);
-            contentValues.put(FavoritesContract.favoriteMovies.RELEASE_DATE, release_date);
-            contentValues.put(FavoritesContract.favoriteMovies.USER_RATING, user_rating);
-            contentValues.put(FavoritesContract.favoriteMovies.USER_FAVORITES, "true");
-            contentValues.put(FavoritesContract.favoriteMovies.MOVIE_DESCRIPTION, movie_desc);
-            contentValues.put(FavoritesContract.favoriteMovies.IMAGE_POSTER, movie_image);*/
+        } else { //Added the data to favorites
 
-/*            try {
-                uri = getContentResolver().insert(FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, contentValues);
-            } catch (Exception e) {
-
-                Log.e("onClickAddFavorite", "insert failed: ", e);
-            }*/
-
-            //Query Favorites for movie
             makeQuery(FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, FAVORITES_CREATE_LOADER);
         }
         isFavorite = !isFavorite;
@@ -104,7 +79,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         Intent intent = getIntent();
 
         title = intent.getStringExtra(this.getString(R.string.title));
-        //this.setTitle(title);
         TextView tv_title = (TextView) findViewById(R.id.tv_detail_movie_title);
         tv_title.setText(title);
 
