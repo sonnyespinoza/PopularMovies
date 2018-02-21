@@ -21,9 +21,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.popularmovies.data.FavoritesContract;
+import com.example.android.popularmovies.parcelables.TrailerParcelable;
 import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
-import com.example.android.popularmovies.utilities.ParcelableUtils;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -36,7 +36,7 @@ public class DetailsActivity extends AppCompatActivity  {
 
     //TODO clean up commented code prior to submission
     //TaskLoader unique identifier
-    private int FAVORITES_LOADER;
+    //private int FAVORITES_LOADER;
     private static final int FAVORITES_READ_LOADER = 22;
     private static final int FAVORITES_DELETE_LOADER = 44;
     private static final int FAVORITES_CREATE_LOADER = 66;
@@ -46,7 +46,7 @@ public class DetailsActivity extends AppCompatActivity  {
     //private static final String FAVORITES_READ_URL_EXTRA = "query";
     //private static final String FAVORITES_DELETE_URL_EXTRA = "delete";
 
-    //private List<ParcelableUtils> movie;
+    //private List<MovieParcelable> movie;
     private Context context;
     //Uri uri;
     boolean isFavorite = false;
@@ -58,7 +58,7 @@ public class DetailsActivity extends AppCompatActivity  {
     String movie_id;
     String[] mSelectionArgs = {""};
 
-    ArrayList<ParcelableUtils> mParsedData; //Array to hold parsed data from tmdb
+    ArrayList<TrailerParcelable> mTrailerData; //Array to hold parsed data from tmdb
 
 
     /*
@@ -138,7 +138,7 @@ public class DetailsActivity extends AppCompatActivity  {
 
             String mSearchResults = NetworkUtils.getResponseFromHttpUrl(mTrailerUrl);
             //parse json
-            mParsedData = JsonUtils.getTrailerDataFromJson(mSearchResults);
+            mTrailerData = JsonUtils.getTrailerDataFromJson(mSearchResults);
             //}
             //return mParsedData;
         } catch (IOException | JSONException e) {
@@ -146,7 +146,7 @@ public class DetailsActivity extends AppCompatActivity  {
             e.printStackTrace();
             //return null;
         }
-        Log.i("Details:Trailer: ", String.valueOf(mParsedData.size()));
+        Log.i("Details:Trailer: ", String.valueOf(mTrailerData.size()));
 
         //Query Favorites for movie
         makeQuery(ContentUris.withAppendedId(
@@ -159,9 +159,25 @@ public class DetailsActivity extends AppCompatActivity  {
     }
 
 
+    @SuppressLint("StaticFieldLeak") //ignore Lint warning
+    private LoaderManager.LoaderCallbacks<ArrayList> movieDataExtras  = new LoaderManager.LoaderCallbacks<ArrayList>() {
+        @Override
+        public Loader<ArrayList> onCreateLoader(int id, Bundle args) {
+            return null;
+        }
+
+        @Override
+        public void onLoadFinished(Loader<ArrayList> loader, ArrayList data) {
+
+        }
+
+        @Override
+        public void onLoaderReset(Loader<ArrayList> loader) {
+
+        }
+    };
 
     @SuppressLint("StaticFieldLeak") //ignore Lint warning
-
     private LoaderManager.LoaderCallbacks<Cursor> favoritesData = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
@@ -260,10 +276,11 @@ public class DetailsActivity extends AppCompatActivity  {
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 
-            ImageButton ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
-            switch(FAVORITES_LOADER) {
-                case FAVORITES_READ_LOADER:
 
+            ImageButton ButtonStar;
+            switch(loader.getId()) {
+                case FAVORITES_READ_LOADER:
+                    ButtonStar =  (ImageButton) findViewById(R.id.ib_favorite_button);
                     if (null == cursor) { //null == error
 
                         Log.e("onLoadFinished: ", "cursor: Error Occurred");
@@ -284,11 +301,12 @@ public class DetailsActivity extends AppCompatActivity  {
 
                 case FAVORITES_DELETE_LOADER:
 
+                    ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
                     ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star));
                     break;
 
                 case FAVORITES_CREATE_LOADER:
-
+                    ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
                     ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star_big_on));
                     break;
             }
@@ -306,7 +324,7 @@ public class DetailsActivity extends AppCompatActivity  {
          */
     private void makeQuery(Uri uri, int loaderID) {
 
-        FAVORITES_LOADER = loaderID;
+        //FAVORITES_LOADER = loaderID;
         // created bundle movieQueryBundle to store key:value for the URL
         Bundle favoritesBundle = new Bundle();
         favoritesBundle.putString(FAVORITES_CRUD_URL_EXTRA, uri.toString());
@@ -315,15 +333,15 @@ public class DetailsActivity extends AppCompatActivity  {
         LoaderManager loaderManager = getSupportLoaderManager();
 
         //call getLoader with loader id
-        Loader<Cursor> favoritesLoader = loaderManager.getLoader(FAVORITES_LOADER);
+        Loader<Cursor> favoritesLoader = loaderManager.getLoader(loaderID);
 
         //If the Loader was null, initialize it otherwise restart it
         if (favoritesLoader == null) {
             Log.i("makeQuery", "favoritesLoader "+ "isNull");
-            loaderManager.initLoader(FAVORITES_LOADER, favoritesBundle, favoritesData);
+            loaderManager.initLoader(loaderID, favoritesBundle, favoritesData);
         } else {
             Log.i("makeQuery", "favoritesLoader "+"notNull");
-            loaderManager.restartLoader(FAVORITES_LOADER, favoritesBundle, favoritesData);
+            loaderManager.restartLoader(loaderID, favoritesBundle, favoritesData);
         }
 
     }

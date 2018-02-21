@@ -17,6 +17,9 @@ package com.example.android.popularmovies.utilities;
 
 import android.util.Log;
 
+import com.example.android.popularmovies.parcelables.MovieParcelable;
+import com.example.android.popularmovies.parcelables.TrailerParcelable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +40,7 @@ public final class JsonUtils {
      * @return Array of Strings describing weather data
      * @throws JSONException If JSON data cannot be properly parsed
      */
-    public static ArrayList<ParcelableUtils> getMovieDataFromJson(String movieJsonStr)
+    public static ArrayList<MovieParcelable> getMovieDataFromJson(String movieJsonStr)
             throws JSONException {
 
         /* The "list" array of movie results*/
@@ -66,7 +69,7 @@ public final class JsonUtils {
 
 
         // INITIALIZE NEW ARRAYLIST AND POPULATE
-        ArrayList<ParcelableUtils> movieData = new ArrayList<ParcelableUtils>();
+        ArrayList<MovieParcelable> movieData = new ArrayList<MovieParcelable>();
 
 
         if (movieJsonStr != null) {
@@ -128,7 +131,7 @@ public final class JsonUtils {
 */
 
 
-                        movieData.add(new ParcelableUtils(releaseDate, description, title, image, imagePoster, userRating, id));;
+                        movieData.add(new MovieParcelable(releaseDate, description, title, image, imagePoster, userRating, id));;
 
                         //add movie info to movie data array
                         //movieData.add(mInfo);
@@ -151,7 +154,7 @@ public final class JsonUtils {
         return movieData;
     }
 
-    public static ArrayList<ParcelableUtils> getTrailerDataFromJson(String trailerJsonStr)
+    public static ArrayList<TrailerParcelable> getTrailerDataFromJson(String trailerJsonStr)
             throws JSONException {
 
         /* The "list" array of trailer results*/
@@ -179,7 +182,7 @@ public final class JsonUtils {
 
 
         // INITIALIZE NEW ARRAYLIST AND POPULATE
-        ArrayList<ParcelableUtils> trailerData = new ArrayList<ParcelableUtils>();
+        ArrayList<TrailerParcelable> trailerData = new ArrayList<TrailerParcelable>();
 
 
         if (trailerJsonStr != null) {
@@ -187,19 +190,19 @@ public final class JsonUtils {
             try {
 
 
-                JSONObject movieJson = new JSONObject(trailerJsonStr);
+                JSONObject trailerJson = new JSONObject(trailerJsonStr);
 
                 //JSON Array node
-                JSONArray movieJSONArray = movieJson.getJSONArray(RESULTS);
+                JSONArray trailerJSONArray = trailerJson.getJSONArray(RESULTS);
 
 
                 /* Is there an error? */
-                if (movieJson.has(TRAILER_STATUS_CODE)) {
+                if (trailerJson.has(TRAILER_STATUS_CODE)) {
 
-                    int errorCode = movieJson.getInt(TRAILER_STATUS_CODE);
+                    int errorCode = trailerJson.getInt(TRAILER_STATUS_CODE);
 
                     Log.e("JSONUtil:Status Code", String.valueOf(TRAILER_STATUS_CODE) );
-                    Log.e("JSONUtil:Message", movieJson.get("status_message").toString());
+                    Log.e("JSONUtil:Message", trailerJson.get("status_message").toString());
                     switch (errorCode) {
                         case 1:
                             break;
@@ -213,20 +216,20 @@ public final class JsonUtils {
                 } else {
 
 
-                    for (int i = 0; i < movieJSONArray.length(); i++) {
+                    for (int i = 0; i < trailerJSONArray.length(); i++) {
 
-                        JSONObject movieInfo = movieJSONArray.getJSONObject(i);
+                        JSONObject trailerInfo = trailerJSONArray.getJSONObject(i);
 
-                        String trailerId = movieInfo.getString(TRAILER_ID);
+                        String trailerId = trailerInfo.getString(TRAILER_ID);
                         Log.d("id", trailerId );
-                        String trailerKey = movieInfo.getString(TRAILER_KEY);
-                        String trailerName = movieInfo.getString(TRAILER_NAME);
-                        String trailerSite = movieInfo.getString(TRAILER_SITE);
-                        String trailerType = movieInfo.getString(TRAILER_TYPE);
+                        String trailerKey = trailerInfo.getString(TRAILER_KEY);
+                        String trailerName = trailerInfo.getString(TRAILER_NAME);
+                        String trailerSite = trailerInfo.getString(TRAILER_SITE);
+                        String trailerType = trailerInfo.getString(TRAILER_TYPE);
 
 
-                        //TODO #1 ParcelableUtils needs to have a constructor overload
-                        // trailerData.add(new ParcelableUtils(trailerId, trailerKey, trailerName, trailerSite, trailerType));;
+                        //TODO #1 MovieParcelable needs to have a constructor overload
+                        trailerData.add(new TrailerParcelable(trailerId, trailerKey, trailerName, trailerSite, trailerType));;
                     }
 
                 }

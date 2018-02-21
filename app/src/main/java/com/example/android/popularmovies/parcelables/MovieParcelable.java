@@ -1,4 +1,4 @@
-package com.example.android.popularmovies.utilities;
+package com.example.android.popularmovies.parcelables;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * Created by sonny on 9/10/17.
  */
-public class ParcelableUtils implements Parcelable{
+public class MovieParcelable implements Parcelable{
 
     private String release_date;
     private String overview;
@@ -17,7 +17,7 @@ public class ParcelableUtils implements Parcelable{
     private String id;
 
 
-    public ParcelableUtils(String mRelease_date, String mOverview, String mTitle, String mImage_name, String mImage_poster, String mUser_rating, String mId  ){
+    public MovieParcelable(String mRelease_date, String mOverview, String mTitle, String mImage_name, String mImage_poster, String mUser_rating, String mId  ){
         this.release_date = mRelease_date;
         this.overview=mOverview;
         this.title=mTitle;
@@ -29,7 +29,7 @@ public class ParcelableUtils implements Parcelable{
 
     }
 
-    public ParcelableUtils(Parcel parcel) {
+    public MovieParcelable(Parcel parcel) {
         this.release_date=parcel.readString();
         this.overview=parcel.readString();
         this.title=parcel.readString();
@@ -57,15 +57,15 @@ public class ParcelableUtils implements Parcelable{
         parcel.writeString(this.id);
 
     }
-    public static final Creator<ParcelableUtils> CREATOR=new Creator<ParcelableUtils>() {
+    public static final Creator<MovieParcelable> CREATOR=new Creator<MovieParcelable>() {
         @Override
-        public ParcelableUtils createFromParcel(Parcel parcel) {
-            return new ParcelableUtils(parcel);
+        public MovieParcelable createFromParcel(Parcel parcel) {
+            return new MovieParcelable(parcel);
         }
 
         @Override
-        public ParcelableUtils[] newArray(int i) {
-            return new ParcelableUtils[i];
+        public MovieParcelable[] newArray(int i) {
+            return new MovieParcelable[i];
         }
     };
 

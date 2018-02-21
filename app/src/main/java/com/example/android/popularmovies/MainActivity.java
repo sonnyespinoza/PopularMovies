@@ -22,10 +22,11 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.android.popularmovies.adapters.MovieAdapter;
 import com.example.android.popularmovies.data.FavoritesContract;
 import com.example.android.popularmovies.utilities.JsonUtils;
+import com.example.android.popularmovies.parcelables.MovieParcelable;
 import com.example.android.popularmovies.utilities.NetworkUtils;
-import com.example.android.popularmovies.utilities.ParcelableUtils;
 
 import org.json.JSONException;
 
@@ -42,14 +43,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private final String byMostPopular = "popular";
 
     //ArrayList<HashMap<String, String>> mParsedData; //Array to hold parsed data from tmdb
-    ArrayList<ParcelableUtils> mParsedData; //Array to hold parsed data from tmdb
+    ArrayList<MovieParcelable> mParsedData; //Array to hold parsed data from tmdb
 
     SQLiteDatabase pmDB;
     //TaskLoader unique identifier
     private static final int MOVIE_QUERY_LOADER = 22;
     private static final String MOVIE_QUERY_URL_EXTRA = "query";
 
-    private RecyclerAdapter mAdapter;
+    private MovieAdapter mAdapter;
 
     private RecyclerView mMovieImage;
     private GridLayoutManager layoutManager;
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
         // Set Adapter
-        mAdapter = new RecyclerAdapter(this, new ArrayList());
+        mAdapter = new MovieAdapter(this, new ArrayList());
         mMovieImage.setAdapter(mAdapter);
 
         if (isNetworkAvailable()) {

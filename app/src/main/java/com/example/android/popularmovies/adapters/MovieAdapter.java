@@ -1,4 +1,4 @@
-package com.example.android.popularmovies;
+package com.example.android.popularmovies.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,22 +11,24 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
-import com.example.android.popularmovies.utilities.ParcelableUtils;
+import com.example.android.popularmovies.DetailsActivity;
+import com.example.android.popularmovies.R;
+import com.example.android.popularmovies.parcelables.MovieParcelable;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecyclerAdapterViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.RecyclerAdapterViewHolder> {
 
 
-    ArrayList<ParcelableUtils> movieList = new ArrayList<ParcelableUtils>();
+    ArrayList<MovieParcelable> movieList = new ArrayList<MovieParcelable>();
     final private Context context;
 
-    public RecyclerAdapter(Context context, ArrayList<ParcelableUtils> movielist) {
+    public MovieAdapter(Context context, ArrayList<MovieParcelable> movielist) {
         this.context = context;
         this.movieList = movielist;
     }
 
-    public void setMovieList ( ArrayList<ParcelableUtils> movielist) {
+    public void setMovieList ( ArrayList<MovieParcelable> movielist) {
         this.movieList = movielist;
     }
 
@@ -48,7 +50,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         //String imageURL= "https://image.tmdb.org/t/p/w185/"  + movieList.get(position).get("poster_path");
         String imageURL= "https://image.tmdb.org/t/p/w185/"  + movieList.get(position).getImage_poster();
 
-        Log.d("RecyclerAdapter", "onBindViewHolder: imageURL"+ imageURL);
+        Log.d("MovieAdapter", "onBindViewHolder: imageURL"+ imageURL);
 
         //Picasso:Listen for loading errors
         Picasso.Builder builder = new Picasso.Builder(context);
