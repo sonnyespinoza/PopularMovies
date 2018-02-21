@@ -228,7 +228,7 @@ public final class JsonUtils {
                         String trailerType = trailerInfo.getString(TRAILER_TYPE);
 
 
-                        //TODO #1 MovieParcelable needs to have a constructor overload
+                        //
                         trailerData.add(new TrailerParcelable(trailerId, trailerKey, trailerName, trailerSite, trailerType));;
                     }
 
