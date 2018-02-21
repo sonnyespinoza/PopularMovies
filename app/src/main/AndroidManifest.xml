@@ -39,12 +39,10 @@
         </activity>
 
         <provider
-            android:name="com.example.android.popularmovies.data.PopularMoviesContentProvider"
+            android:name=".data.PopularMoviesContentProvider"
             android:authorities="com.example.android.popularmovies"
-            android:exported="false"/>
-        
-        <service android:name="com.example.android.popularmovies.sync.FavoritesIntentService"
-            android:exported="false"/>
+            android:exported="false" />
+
 
     </application>
 

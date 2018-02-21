@@ -13,6 +13,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "API_KEY", API_KEY)
         buildConfigField("String", "YOUTUBE_API_KEY", YOUTUBE_API_KEY)
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -30,6 +31,8 @@ repositories {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:design:25.4.0'
+    compile 'com.android.support:support-vector-drawable:25.4.0'
     testCompile 'junit:junit:4.12'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

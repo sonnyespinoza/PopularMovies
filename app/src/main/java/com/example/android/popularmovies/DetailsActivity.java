@@ -158,6 +158,8 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
     }
 
+
+
     @SuppressLint("StaticFieldLeak") //ignore Lint warning
     @Override
     public  Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
