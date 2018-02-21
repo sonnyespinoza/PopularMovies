@@ -32,7 +32,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class DetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DetailsActivity extends AppCompatActivity  {
 
     //TODO clean up commented code prior to submission
     //TaskLoader unique identifier
@@ -161,143 +161,145 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
 
     @SuppressLint("StaticFieldLeak") //ignore Lint warning
-    @Override
-    public  Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
-        return new AsyncTaskLoader<Cursor>(this) {
 
-            @Override
-            protected void onStartLoading() {
+    private LoaderManager.LoaderCallbacks<Cursor> favoritesData = new LoaderManager.LoaderCallbacks<Cursor>() {
+        @Override
+        public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
+            return new AsyncTaskLoader<Cursor>(getApplicationContext()) {
 
-                super.onStartLoading();
-                if (args == null) {
-                    Log.i("onStartLoading", "null args");
+                @Override
+                protected void onStartLoading() {
 
-                } else {
-                    forceLoad();
+                    super.onStartLoading();
+                    if (args == null) {
+                        Log.i("onStartLoading", "null args");
+
+                    } else {
+                        forceLoad();
+                    }
                 }
-            }
 
-            @Override
-            public Cursor loadInBackground() {
+                @Override
+                public Cursor loadInBackground() {
 
-                String favoritesQueryUrlString = args.getString(FAVORITES_CRUD_URL_EXTRA);
-                Log.i("LoadInBackground", favoritesQueryUrlString);
-                if (favoritesQueryUrlString == null || TextUtils.isEmpty(favoritesQueryUrlString)) {
+                    String favoritesQueryUrlString = args.getString(FAVORITES_CRUD_URL_EXTRA);
+                    Log.i("LoadInBackground", favoritesQueryUrlString);
+                    if (favoritesQueryUrlString == null || TextUtils.isEmpty(favoritesQueryUrlString)) {
+                        return null;
+                    }
+
+                    switch(id) {
+                        case FAVORITES_READ_LOADER:
+                            //Query to determine if Movie is in favorites list;
+                            String[] mProjection = {FavoritesContract.favoriteMovies.MOVIE_ID};
+                            //mSelectionArgs[0] = movie_image;
+                            mSelectionArgs[0] = movie_id;
+                            try {
+
+                                Uri favorites_uri = Uri.parse(favoritesQueryUrlString);
+                                return getContentResolver().query(favorites_uri,
+                                        mProjection,
+                                        null,
+                                        mSelectionArgs,
+                                        null);
+                            } catch (Exception e) {
+                                Log.e("LoadInBackground READ ", "Exception");
+                                e.printStackTrace();
+                                return null;
+                            }
+
+
+                        case FAVORITES_DELETE_LOADER:
+
+                            try {
+
+                                Uri favorites_uri = Uri.parse(favoritesQueryUrlString);
+                                getContentResolver().delete(favorites_uri, null, new String[]{String.valueOf(movie_id)});
+                                Log.i("LoadInBackground", "FAVORITES_DELETE_LOADER");
+                            } catch (Exception e) {
+
+                                Log.e("LoadInBackground", "Exception");
+                                e.printStackTrace();
+                            }
+
+                            break;
+
+                        case FAVORITES_CREATE_LOADER:
+                            ContentValues contentValues = new ContentValues();
+                            contentValues.put(FavoritesContract.favoriteMovies.MOVIE_TITLE, title);
+                            contentValues.put(FavoritesContract.favoriteMovies.RELEASE_DATE, release_date);
+                            contentValues.put(FavoritesContract.favoriteMovies.USER_RATING, user_rating);
+                            contentValues.put(FavoritesContract.favoriteMovies.USER_FAVORITES, "true");
+                            contentValues.put(FavoritesContract.favoriteMovies.MOVIE_DESCRIPTION, movie_desc);
+                            contentValues.put(FavoritesContract.favoriteMovies.IMAGE_POSTER, movie_image);
+                            contentValues.put(FavoritesContract.favoriteMovies.MOVIE_ID, movie_id);
+
+                            try {
+                                Uri uri = Uri.parse(favoritesQueryUrlString);
+                                getContentResolver().insert(uri, contentValues);
+                                Log.i("LoadInBackground", "FAVORITES_CREATE_LOADER");
+
+                            } catch (Exception e) {
+
+                                Log.e("LoadInBackground", "Exception");
+                                e.printStackTrace();
+                            }
+
+                            break;
+                    }
+
+
                     return null;
                 }
 
-                switch(id) {
-                    case FAVORITES_READ_LOADER:
-                        //Query to determine if Movie is in favorites list;
-                        String[] mProjection = {FavoritesContract.favoriteMovies.MOVIE_ID};
-                        //mSelectionArgs[0] = movie_image;
-                        mSelectionArgs[0] = movie_id;
-                        try {
-
-                            Uri favorites_uri = Uri.parse(favoritesQueryUrlString);
-                            return getContentResolver().query(favorites_uri,
-                                    mProjection,
-                                    null,
-                                    mSelectionArgs,
-                                    null);
-                        } catch (Exception e) {
-                            Log.e("LoadInBackground READ ", "Exception");
-                            e.printStackTrace();
-                            return null;
-                        }
 
 
-                    case FAVORITES_DELETE_LOADER:
-
-                        try {
-
-                            Uri favorites_uri = Uri.parse(favoritesQueryUrlString);
-                            getContentResolver().delete(favorites_uri, null, new String[]{String.valueOf(movie_id)});
-                            Log.i("LoadInBackground", "FAVORITES_DELETE_LOADER");
-                        } catch (Exception e) {
-
-                            Log.e("LoadInBackground", "Exception");
-                            e.printStackTrace();
-                        }
-
-                        break;
-
-                    case FAVORITES_CREATE_LOADER:
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put(FavoritesContract.favoriteMovies.MOVIE_TITLE, title);
-                        contentValues.put(FavoritesContract.favoriteMovies.RELEASE_DATE, release_date);
-                        contentValues.put(FavoritesContract.favoriteMovies.USER_RATING, user_rating);
-                        contentValues.put(FavoritesContract.favoriteMovies.USER_FAVORITES, "true");
-                        contentValues.put(FavoritesContract.favoriteMovies.MOVIE_DESCRIPTION, movie_desc);
-                        contentValues.put(FavoritesContract.favoriteMovies.IMAGE_POSTER, movie_image);
-                        contentValues.put(FavoritesContract.favoriteMovies.MOVIE_ID, movie_id);
-
-                        try {
-                            Uri uri = Uri.parse(favoritesQueryUrlString);
-                            getContentResolver().insert(uri, contentValues);
-                            Log.i("LoadInBackground", "FAVORITES_CREATE_LOADER");
-
-                        } catch (Exception e) {
-
-                            Log.e("LoadInBackground", "Exception");
-                            e.printStackTrace();
-                        }
-
-                        break;
-                }
-
-
-                return null;
-            }
-
-
-
-        };
-
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-
-        ImageButton ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
-        switch(FAVORITES_LOADER) {
-            case FAVORITES_READ_LOADER:
-
-                if (null == cursor) { //null == error
-
-                    Log.e("onLoadFinished: ", "cursor: Error Occurred");
-
-                } else if (cursor.getCount() < 1) { //No record found
-
-                    Log.i("onLoadFinished ", "FAVORITES_READ_LOADER: No Record Found");
-                    ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star));
-
-                } else { //Record found
-
-                    Log.i("onLoadFinished: ", "FAVORITES_READ_LOADER: Record Found");
-                    ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star_big_on));
-                    isFavorite = !isFavorite; //found true
-                }
-
-                break;
-
-            case FAVORITES_DELETE_LOADER:
-
-                ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star));
-                break;
-
-            case FAVORITES_CREATE_LOADER:
-
-                ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star_big_on));
-                break;
+            };
         }
 
-    }
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+            ImageButton ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
+            switch(FAVORITES_LOADER) {
+                case FAVORITES_READ_LOADER:
 
-    }
+                    if (null == cursor) { //null == error
+
+                        Log.e("onLoadFinished: ", "cursor: Error Occurred");
+
+                    } else if (cursor.getCount() < 1) { //No record found
+
+                        Log.i("onLoadFinished ", "FAVORITES_READ_LOADER: No Record Found");
+                        ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star));
+
+                    } else { //Record found
+
+                        Log.i("onLoadFinished: ", "FAVORITES_READ_LOADER: Record Found");
+                        ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star_big_on));
+                        isFavorite = !isFavorite; //found true
+                    }
+
+                    break;
+
+                case FAVORITES_DELETE_LOADER:
+
+                    ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star));
+                    break;
+
+                case FAVORITES_CREATE_LOADER:
+
+                    ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star_big_on));
+                    break;
+            }
+
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+
+        }
+    };
 
     /* This method constructs the URL
          * and Request that an AsyncTaskLoader performs the GET request.
@@ -318,10 +320,10 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         //If the Loader was null, initialize it otherwise restart it
         if (favoritesLoader == null) {
             Log.i("makeQuery", "favoritesLoader "+ "isNull");
-            loaderManager.initLoader(FAVORITES_LOADER, favoritesBundle, this);
+            loaderManager.initLoader(FAVORITES_LOADER, favoritesBundle, favoritesData);
         } else {
             Log.i("makeQuery", "favoritesLoader "+"notNull");
-            loaderManager.restartLoader(FAVORITES_LOADER, favoritesBundle, this);
+            loaderManager.restartLoader(FAVORITES_LOADER, favoritesBundle, favoritesData);
         }
 
     }
