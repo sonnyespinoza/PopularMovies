@@ -1,12 +1,9 @@
 package com.example.android.popularmovies;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -24,8 +21,8 @@ import android.widget.Toast;
 
 import com.example.android.popularmovies.adapters.MovieAdapter;
 import com.example.android.popularmovies.data.FavoritesContract;
-import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.parcelables.MovieParcelable;
+import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 
 import org.json.JSONException;
@@ -50,10 +47,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final int MOVIE_QUERY_LOADER = 22;
     private static final String MOVIE_QUERY_URL_EXTRA = "query";
 
-    private MovieAdapter mAdapter;
-
+    private MovieAdapter mMovieAdapter;
     private RecyclerView mMovieImage;
     private GridLayoutManager layoutManager;
+
+    private NetworkUtils networkUtils = new NetworkUtils(this);
+
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -98,11 +97,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
 
-        // Set Adapter
-        mAdapter = new MovieAdapter(this, new ArrayList());
-        mMovieImage.setAdapter(mAdapter);
 
-        if (isNetworkAvailable()) {
+        // Set Adapter
+        mMovieAdapter = new MovieAdapter(this, new ArrayList());
+        mMovieImage.setAdapter(mMovieAdapter);
+
+        if (networkUtils.isNetworkAvailable(this)) {
             Log.i("isNetworkAvailable", "true");
             if (savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
                 Log.i("savedInstance:isNetwork", "isNull");
@@ -110,12 +110,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             } else {
                 Log.i("isNetworkAvailable", "false");
                 mParsedData = savedInstanceState.getParcelableArrayList("movies");
-                mAdapter.setMovieList(mParsedData);
-                mAdapter.notifyDataSetChanged();
+                mMovieAdapter.setMovieList(mParsedData);
+                mMovieAdapter.notifyDataSetChanged();
             }
 
-            //Initialize the loader with id
-            //getSupportLoaderManager().initLoader(MOVIE_QUERY_LOADER, null, this);
 
         } else {
             Toast.makeText(this, "No Internet Connection",
@@ -267,8 +265,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (data != null && !data.equals("")) {
             //onSaveInstanceState();
 
-            mAdapter.setMovieList(data);
-            mAdapter.notifyDataSetChanged();
+            mMovieAdapter.setMovieList(data);
+            mMovieAdapter.notifyDataSetChanged();
         }
 
 
@@ -307,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             Log.i("menuByPopular", mSearchUrl.toString());
 
 
-            if (isNetworkAvailable()) {
+            if (networkUtils.isNetworkAvailable(this)) {
 
                 item.setChecked(true);
 
@@ -331,7 +329,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             item.setChecked(true);
             Log.i("menuByRating", mSearchUrl.toString());
 
-            if (isNetworkAvailable()) {
+            if (networkUtils.isNetworkAvailable(this)) {
 
                 //Pass url to query and fires off an AsyncTaskLoader
                 makeSearchQuery(mSearchUrl.toString());
@@ -360,7 +358,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
             //TODO may need to get rid of network check since its pulling db data for favorites
-            if (isNetworkAvailable()) {
+            if (networkUtils.isNetworkAvailable(this)) {
 
 
                 //Pass url to query and fires off an AsyncTaskLoader
@@ -409,13 +407,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return super.onOptionsItemSelected(item);
     }
 
-    //check for network connection
+/*    //check for network connection
     private boolean isNetworkAvailable() {
         boolean isConnected = false;
         try {
 
             ConnectivityManager cm =
                     (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
 
             NetworkInfo activeNetwork = null;
             if (cm != null) {
@@ -431,5 +430,5 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
         return isConnected;
 
-    }
+    }*/
 }

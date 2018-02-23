@@ -15,10 +15,15 @@
  */
 package com.example.android.popularmovies.utilities;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.StrictMode;
 
 import com.example.android.popularmovies.BuildConfig;
+import com.example.android.popularmovies.DetailsActivity;
+import com.example.android.popularmovies.MainActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +35,7 @@ import java.util.Scanner;
 /**
  * These utilities will be used to communicate with the network.
  */
-public class NetworkUtils {
+public class NetworkUtils  {
 
 
     final static String API_VAR = "api_key";
@@ -43,6 +48,16 @@ public class NetworkUtils {
 
     final static String TYPE_TRAILER = "trailer_list";
     final static String TYPE_REVIEWS = "review_list";
+
+
+    Context mContext;
+
+    public NetworkUtils(MainActivity mainActivity) {
+    }
+
+    public NetworkUtils(DetailsActivity detailsActivity){
+
+    }
 
     /**
      * Builds the URL
@@ -153,5 +168,30 @@ public class NetworkUtils {
             //Log.d("getResponseFromHttpUrl ", "finally");
             urlConnection.disconnect();
         }
+    }
+
+    //check for network connection
+    public boolean isNetworkAvailable(Context context) {
+        mContext = context;
+        boolean isConnected = false;
+        try {
+
+            ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+            //ConnectivityManager n = (ConnectivityManager) ge
+
+            NetworkInfo activeNetwork = null;
+            if (cm != null) {
+                activeNetwork = cm.getActiveNetworkInfo();
+            }
+            isConnected = activeNetwork != null &&
+                    activeNetwork.isConnectedOrConnecting();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return isConnected;
+
     }
 }

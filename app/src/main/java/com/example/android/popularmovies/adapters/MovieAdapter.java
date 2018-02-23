@@ -17,7 +17,7 @@ import com.example.android.popularmovies.parcelables.MovieParcelable;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.RecyclerAdapterViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder> {
 
 
     ArrayList<MovieParcelable> movieList = new ArrayList<MovieParcelable>();
@@ -34,18 +34,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.RecyclerAdap
 
 
     @Override
-    public RecyclerAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MovieAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         int layoutForMovieItem = R.layout.movie_list;
         LayoutInflater inflater = LayoutInflater.from(context);
         //boolean attachParent = false;
 
         View view = inflater.inflate(layoutForMovieItem, parent, false);
-        return new RecyclerAdapterViewHolder(view);
+        return new MovieAdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(final MovieAdapterViewHolder holder, int position) {
 
         //String imageURL= "https://image.tmdb.org/t/p/w185/"  + movieList.get(position).get("poster_path");
         String imageURL= "https://image.tmdb.org/t/p/w185/"  + movieList.get(position).getImage_poster();
@@ -71,11 +71,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.RecyclerAdap
         return movieList.size();
     }
 
-    public class RecyclerAdapterViewHolder extends RecyclerView.ViewHolder  implements OnClickListener {
+    public class MovieAdapterViewHolder extends RecyclerView.ViewHolder  implements OnClickListener {
 
         final ImageView movie_image;
 
-        public RecyclerAdapterViewHolder(View itemView) {
+        public MovieAdapterViewHolder(View itemView) {
             super(itemView);
             movie_image = (ImageView) itemView.findViewById(R.id.iv_movies);
 

@@ -13,13 +13,17 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.android.popularmovies.adapters.TrailerAdapter;
 import com.example.android.popularmovies.data.FavoritesContract;
 import com.example.android.popularmovies.parcelables.TrailerParcelable;
 import com.example.android.popularmovies.utilities.JsonUtils;
@@ -32,7 +36,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class DetailsActivity extends AppCompatActivity  {
+public class DetailsActivity extends AppCompatActivity {
 
     //TODO clean up commented code prior to submission
     //TaskLoader unique identifier
@@ -40,9 +44,12 @@ public class DetailsActivity extends AppCompatActivity  {
     private static final int FAVORITES_READ_LOADER = 22;
     private static final int FAVORITES_DELETE_LOADER = 44;
     private static final int FAVORITES_CREATE_LOADER = 66;
+    private static final int TRAILER_READ_LOADER = 77;
+    private static final int REVIEWS_READ_LOADER = 99;
 
 
-    private static final String FAVORITES_CRUD_URL_EXTRA = "crud";
+    private static final String CRUD_URL_EXTRA = "crud";
+    //private static final String FAVORITES_CRUD_URL_EXTRA = "crud";
     //private static final String FAVORITES_READ_URL_EXTRA = "query";
     //private static final String FAVORITES_DELETE_URL_EXTRA = "delete";
 
@@ -61,6 +68,15 @@ public class DetailsActivity extends AppCompatActivity  {
     ArrayList<TrailerParcelable> mTrailerData; //Array to hold parsed data from tmdb
 
 
+    private TrailerAdapter mTrailerAdapter;
+    private RecyclerView mTrailerRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
+
+
+    //TODO refactor so that you ensure this obj is destroyed after use
+    private NetworkUtils networkUtils = new NetworkUtils(this);
+
+
     /*
      * onClickAddFavorite is called when the favorites button is click
      */
@@ -68,13 +84,13 @@ public class DetailsActivity extends AppCompatActivity  {
 
         if (isFavorite) { //Re-move data from favorites
 
-            makeQuery(ContentUris.withAppendedId(
+            makeFavoritesQuery(ContentUris.withAppendedId(
                     FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, Integer.valueOf(movie_id)),
                     FAVORITES_DELETE_LOADER);
 
         } else { //Added the data to favorites
 
-            makeQuery(FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, FAVORITES_CREATE_LOADER);
+            makeFavoritesQuery(FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, FAVORITES_CREATE_LOADER);
         }
         isFavorite = !isFavorite;
 
@@ -85,7 +101,21 @@ public class DetailsActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_details);
+
+        mTrailerRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_trailers);
+        mTrailerRecyclerView.setHasFixedSize(true);
+
+        Log.d("mTrailerRecyclerView", mTrailerRecyclerView.toString());
+        mLayoutManager = new LinearLayoutManager(this);
+        Log.d("mLayoutManager", mLayoutManager.toString());
+        mTrailerRecyclerView.setLayoutManager(mLayoutManager);
+
+        // Set Adapter
+        mTrailerAdapter = new TrailerAdapter(this, new ArrayList());
+        mTrailerRecyclerView.setAdapter(mTrailerAdapter);
+
 
         Intent intent = getIntent();
 
@@ -125,49 +155,112 @@ public class DetailsActivity extends AppCompatActivity  {
 
         movie_id = intent.getStringExtra(this.getString(R.string.movie_id));
 
-        //TODO need to re-move this is a test call to validate correctness of the URL
-        URL mTrailerUrl = NetworkUtils.buildUrl("trailer_list", "254128", "1");
+        URL mTrailerUrl = NetworkUtils.buildUrl("trailer_list", movie_id, "1");
         Log.i("createTrailerURL", mTrailerUrl.toString());
 
+        if (networkUtils.isNetworkAvailable(this)) {
+            Log.i("isNetworkAvailable", "true");
+            if (savedInstanceState == null || !savedInstanceState.containsKey("trailer")) {
+                Log.i("savedInstance:isNetwork", "isNull");
+                makeMovieExtrasQuery(mTrailerUrl, TRAILER_READ_LOADER);
+            } else {
+                Log.i("isNetworkAvailable", "false");
+                mTrailerData = savedInstanceState.getParcelableArrayList("trailer");
+                //mTrailerAdapter.
+                mTrailerAdapter.setTrailList(mTrailerData);
+                mTrailerAdapter.notifyDataSetChanged();
+            }
+
+
+        } else {
+            Toast.makeText(this, "No Internet Connection",
+                    Toast.LENGTH_LONG).show();
+
+        }
+
+
+/*
         //TODO need to re-move this is a test call to validate correctness of the URL
         URL mReviewUrl = NetworkUtils.buildUrl("review_list", "254128", "1");
         Log.i("createReviewURL", mReviewUrl.toString());
+*/
 
-        //fetch data from API
-        try {
 
-            String mSearchResults = NetworkUtils.getResponseFromHttpUrl(mTrailerUrl);
-            //parse json
-            mTrailerData = JsonUtils.getTrailerDataFromJson(mSearchResults);
-            //}
-            //return mParsedData;
-        } catch (IOException | JSONException e) {
-            Log.e("LoadInBackground", "Exception");
-            e.printStackTrace();
-            //return null;
-        }
-        Log.i("Details:Trailer: ", String.valueOf(mTrailerData.size()));
 
+/*
         //Query Favorites for movie
-        makeQuery(ContentUris.withAppendedId(
+        makeFavoritesQuery(ContentUris.withAppendedId(
                 FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, Integer.valueOf(movie_id)),
                 FAVORITES_READ_LOADER);
-
-
+*/
 
 
     }
 
 
     @SuppressLint("StaticFieldLeak") //ignore Lint warning
-    private LoaderManager.LoaderCallbacks<ArrayList> movieDataExtras  = new LoaderManager.LoaderCallbacks<ArrayList>() {
+    private LoaderManager.LoaderCallbacks<ArrayList> movieDataExtras = new LoaderManager.LoaderCallbacks<ArrayList>() {
         @Override
-        public Loader<ArrayList> onCreateLoader(int id, Bundle args) {
-            return null;
+        public Loader<ArrayList> onCreateLoader(final int id, final Bundle args) {
+            return new AsyncTaskLoader<ArrayList>(getApplicationContext()) {
+
+                @Override
+                protected void onStartLoading() {
+
+                    super.onStartLoading();
+                    if (args == null) {
+                        Log.i("onStartLoading", "null args");
+
+                    } else {
+                        forceLoad();
+                    }
+                }
+
+                @Override
+                public ArrayList loadInBackground() {
+
+                    String trailerQueryUrlString = args.getString(CRUD_URL_EXTRA);
+                    Log.i("LoadInBackground", trailerQueryUrlString);
+                    if (trailerQueryUrlString == null || TextUtils.isEmpty(trailerQueryUrlString)) {
+                        return null;
+                    }
+                    String mSearchResults;
+
+                    URL mTrailerUrl = NetworkUtils.buildUrl("trailer_list", movie_id, "1");
+                    //Log.i("createTrailerURL", mTrailerUrl.toString());
+
+                    //fetch data from API
+                    try {
+                        URL searchUrl = new URL(trailerQueryUrlString);
+
+                        mSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
+                        //parse json
+                        mTrailerData = JsonUtils.getTrailerDataFromJson(mSearchResults);
+                        //}
+                        return mTrailerData;
+
+                    } catch (IOException | JSONException e) {
+                        Log.e("LoadInBackground", "Exception");
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+
+
+            };
         }
+
 
         @Override
         public void onLoadFinished(Loader<ArrayList> loader, ArrayList data) {
+
+            Log.i("onLoadFinish: arySize", String.valueOf(data.size()));
+            if (data != null && !data.equals("")) {
+                //onSaveInstanceState();
+
+                mTrailerAdapter.setTrailList(data);
+                mTrailerAdapter.notifyDataSetChanged();
+            }
 
         }
 
@@ -198,13 +291,13 @@ public class DetailsActivity extends AppCompatActivity  {
                 @Override
                 public Cursor loadInBackground() {
 
-                    String favoritesQueryUrlString = args.getString(FAVORITES_CRUD_URL_EXTRA);
+                    String favoritesQueryUrlString = args.getString(CRUD_URL_EXTRA);
                     Log.i("LoadInBackground", favoritesQueryUrlString);
                     if (favoritesQueryUrlString == null || TextUtils.isEmpty(favoritesQueryUrlString)) {
                         return null;
                     }
 
-                    switch(id) {
+                    switch (id) {
                         case FAVORITES_READ_LOADER:
                             //Query to determine if Movie is in favorites list;
                             String[] mProjection = {FavoritesContract.favoriteMovies.MOVIE_ID};
@@ -269,7 +362,6 @@ public class DetailsActivity extends AppCompatActivity  {
                 }
 
 
-
             };
         }
 
@@ -278,9 +370,9 @@ public class DetailsActivity extends AppCompatActivity  {
 
 
             ImageButton ButtonStar;
-            switch(loader.getId()) {
+            switch (loader.getId()) {
                 case FAVORITES_READ_LOADER:
-                    ButtonStar =  (ImageButton) findViewById(R.id.ib_favorite_button);
+                    ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
                     if (null == cursor) { //null == error
 
                         Log.e("onLoadFinished: ", "cursor: Error Occurred");
@@ -322,16 +414,68 @@ public class DetailsActivity extends AppCompatActivity  {
     /* This method constructs the URL
          * and Request that an AsyncTaskLoader performs the GET request.
          */
-    private void makeQuery(Uri uri, int loaderID) {
+    private void makeFavoritesQuery(Uri uri, int loaderID) {
 
-        //FAVORITES_LOADER = loaderID;
-        // created bundle movieQueryBundle to store key:value for the URL
-        Bundle favoritesBundle = new Bundle();
-        favoritesBundle.putString(FAVORITES_CRUD_URL_EXTRA, uri.toString());
+        // created bundle to store key:value for the URL
+        Bundle bundle = new Bundle();
+        bundle.putString(CRUD_URL_EXTRA, uri.toString());
 
         //get library for loadermanager
         LoaderManager loaderManager = getSupportLoaderManager();
 
+
+        //call getLoader with loader id
+        Loader<Cursor> favoritesLoader = loaderManager.getLoader(loaderID);
+
+        //If the Loader was null, initialize it otherwise restart it
+        if (favoritesLoader == null) {
+            Log.i("makeFavoritesQuery", "favoritesLoader " + "isNull");
+            loaderManager.initLoader(loaderID, bundle, favoritesData);
+        } else {
+            Log.i("makeFavoritesQuery", "favoritesLoader " + "notNull");
+            loaderManager.restartLoader(loaderID, bundle, favoritesData);
+        }
+
+
+    }
+
+    private void makeMovieExtrasQuery(URL url, int loaderID) {
+
+        // created bundle to store key:value for the URL
+        Bundle bundle = new Bundle();
+        bundle.putString(CRUD_URL_EXTRA, url.toString());
+
+        //get library for loadermanager
+        LoaderManager loaderManager = getSupportLoaderManager();
+
+        switch (loaderID) {
+            case TRAILER_READ_LOADER:
+                Loader<ArrayList> trailerLoader = loaderManager.getLoader(loaderID);
+
+                //If the Loader was null, initialize it otherwise restart it
+                if (trailerLoader == null) {
+                    Log.i("makeMovieExtrasQuery", "trailerLoader " + "isNull");
+                    loaderManager.initLoader(loaderID, bundle, movieDataExtras);
+                } else {
+                    Log.i("makeMovieExtrasQuery", "trailerLoader " + "notNull");
+                    loaderManager.restartLoader(loaderID, bundle, movieDataExtras);
+                }
+                break;
+            case REVIEWS_READ_LOADER:
+                Loader<ArrayList> reviewsLoader = loaderManager.getLoader(loaderID);
+
+                //If the Loader was null, initialize it otherwise restart it
+                if (reviewsLoader == null) {
+                    Log.i("makeWIPQuery", "reviewsLoader " + "isNull");
+                    loaderManager.initLoader(loaderID, bundle, movieDataExtras);
+                } else {
+                    Log.i("makeWIPQuery", "reviewsLoader " + "notNull");
+                    loaderManager.restartLoader(loaderID, bundle, movieDataExtras);
+                }
+                break;
+        }
+
+/*
         //call getLoader with loader id
         Loader<Cursor> favoritesLoader = loaderManager.getLoader(loaderID);
 
@@ -342,7 +486,7 @@ public class DetailsActivity extends AppCompatActivity  {
         } else {
             Log.i("makeQuery", "favoritesLoader "+"notNull");
             loaderManager.restartLoader(loaderID, favoritesBundle, favoritesData);
-        }
+        }*/
 
     }
 }
