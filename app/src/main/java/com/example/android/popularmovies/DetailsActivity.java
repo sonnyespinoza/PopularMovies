@@ -187,12 +187,10 @@ public class DetailsActivity extends AppCompatActivity {
 
 
 
-/*
         //Query Favorites for movie
         makeFavoritesQuery(ContentUris.withAppendedId(
                 FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, Integer.valueOf(movie_id)),
                 FAVORITES_READ_LOADER);
-*/
 
 
     }
