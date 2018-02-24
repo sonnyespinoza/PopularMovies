@@ -71,6 +71,7 @@ public class DetailsActivity extends AppCompatActivity {
     private TrailerAdapter mTrailerAdapter;
     private RecyclerView mTrailerRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
+    private static final String TrailerDataKey = "trailer";
 
 
     //TODO refactor so that you ensure this obj is destroyed after use
@@ -94,6 +95,25 @@ public class DetailsActivity extends AppCompatActivity {
         }
         isFavorite = !isFavorite;
 
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+
+        Log.i("onSaveInstanceState", "yes");
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putParcelableArrayList(TrailerDataKey, mTrailerData);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        Log.i("onRestoreInstanceState", "yes");
+        // Restore UI state from the savedInstanceState.
+        // This bundle has also been passed to onCreate.
+        super.onRestoreInstanceState(savedInstanceState);
+        mTrailerData = savedInstanceState.getParcelableArrayList(TrailerDataKey);
+        //mLoadingIndicator.setVisibility(View.INVISIBLE);
     }
 
 
@@ -156,16 +176,19 @@ public class DetailsActivity extends AppCompatActivity {
         movie_id = intent.getStringExtra(this.getString(R.string.movie_id));
 
         URL mTrailerUrl = NetworkUtils.buildUrl("trailer_list", movie_id, "1");
+        URL mReviewsUrl = NetworkUtils.buildUrl("review_list", movie_id, "1");
         Log.i("createTrailerURL", mTrailerUrl.toString());
+        Log.i("createReviewURL", mReviewsUrl.toString());
 
         if (networkUtils.isNetworkAvailable(this)) {
             Log.i("isNetworkAvailable", "true");
-            if (savedInstanceState == null || !savedInstanceState.containsKey("trailer")) {
+            if (savedInstanceState == null || !savedInstanceState.containsKey(TrailerDataKey)) {
                 Log.i("savedInstance:isNetwork", "isNull");
                 makeMovieExtrasQuery(mTrailerUrl, TRAILER_READ_LOADER);
+                //makeMovieExtrasQuery(mReviewsUrl, REVIEWS_READ_LOADER);
             } else {
                 Log.i("isNetworkAvailable", "false");
-                mTrailerData = savedInstanceState.getParcelableArrayList("trailer");
+                mTrailerData = savedInstanceState.getParcelableArrayList(TrailerDataKey);
                 //mTrailerAdapter.
                 mTrailerAdapter.setTrailList(mTrailerData);
                 mTrailerAdapter.notifyDataSetChanged();
@@ -184,7 +207,6 @@ public class DetailsActivity extends AppCompatActivity {
         URL mReviewUrl = NetworkUtils.buildUrl("review_list", "254128", "1");
         Log.i("createReviewURL", mReviewUrl.toString());
 */
-
 
 
         //Query Favorites for movie
@@ -206,10 +228,21 @@ public class DetailsActivity extends AppCompatActivity {
                 protected void onStartLoading() {
 
                     super.onStartLoading();
+
+
                     if (args == null) {
                         Log.i("onStartLoading", "null args");
 
+                        return;
+                    }
+
+
+                    if (mTrailerData != null) {
+                        Log.i("onStartLoading", "mTrailerData Not Null");
+                        deliverResult(mTrailerData);
+
                     } else {
+                        Log.i("onStartLoading", "mTrailerData Null");
                         forceLoad();
                     }
                 }
@@ -224,14 +257,14 @@ public class DetailsActivity extends AppCompatActivity {
                     }
                     String mSearchResults;
 
-                    URL mTrailerUrl = NetworkUtils.buildUrl("trailer_list", movie_id, "1");
+                    URL mTrailerUrl = networkUtils.buildUrl("trailer_list", movie_id, "1");
                     //Log.i("createTrailerURL", mTrailerUrl.toString());
 
                     //fetch data from API
                     try {
                         URL searchUrl = new URL(trailerQueryUrlString);
 
-                        mSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
+                        mSearchResults = networkUtils.getResponseFromHttpUrl(searchUrl);
                         //parse json
                         mTrailerData = JsonUtils.getTrailerDataFromJson(mSearchResults);
                         //}
@@ -242,6 +275,13 @@ public class DetailsActivity extends AppCompatActivity {
                         e.printStackTrace();
                         return null;
                     }
+                }
+
+                @Override
+                public void deliverResult(ArrayList data) {
+                    mTrailerData = data;
+                    Log.i("deliverResults", data.toString());
+                    super.deliverResult(data);
                 }
 
 
