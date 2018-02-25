@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.android.popularmovies.R;
@@ -24,6 +25,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     ArrayList<TrailerParcelable> trailerList = new ArrayList<TrailerParcelable>();
 
     final private Context context;
+
 
 
  /*   // Provide a suitable constructor (depends on the kind of dataset)
@@ -64,13 +66,21 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     // you provide access to all the views for a data item in a view holder
     public static class TrailerAdapterViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
+        //TODO consider delegating click listner to activity
+        //https://www.youtube.com/watch?v=iEcMJE4KK-c
+
         // each data item is just a string in this case
+        final ImageButton mImageButton;
         final TextView mTextView;
+        String trailer_id;
 
         public TrailerAdapterViewHolder(View v) {
             super(v);
+            mImageButton = (ImageButton) itemView.findViewById(R.id.ib_play_button);
             mTextView = (TextView) itemView.findViewById(R.id.tv_movie_trailer);
-            itemView.setOnClickListener(this);
+
+            mImageButton.setOnClickListener(this);
+
         }
 
 
@@ -84,6 +94,8 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
 
             int adapterPosition = getAdapterPosition();
             Log.d("TrailerAdpterViewHolder", "onClick: " + Integer.toString(adapterPosition));
+            Log.d("TrailerAdpterVariable", "onClick: " + trailer_id);
+
 
         }
     }
@@ -103,7 +115,9 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     public void onBindViewHolder(TrailerAdapterViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
+        holder.mImageButton.setImageResource(R.drawable.ic_player);
         holder.mTextView.setText(trailerList.get(position).getTrailer_name());
+        holder.trailer_id = trailerList.get(position).getTrailer_key();
 
         //movieList.get(position).getImage_poster()
 
