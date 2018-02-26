@@ -215,21 +215,26 @@ public final class JsonUtils {
                     }
                 } else {
 
+                    String testStr="Trailer";
+
 
                     for (int i = 0; i < trailerJSONArray.length(); i++) {
 
                         JSONObject trailerInfo = trailerJSONArray.getJSONObject(i);
 
-                        String trailerId = trailerInfo.getString(TRAILER_ID);
-                        Log.d("id", trailerId );
-                        String trailerKey = trailerInfo.getString(TRAILER_KEY);
-                        String trailerName = trailerInfo.getString(TRAILER_NAME);
-                        String trailerSite = trailerInfo.getString(TRAILER_SITE);
                         String trailerType = trailerInfo.getString(TRAILER_TYPE);
+                        //Log.d("trail type: ", "\"" + trailerType + "\"" );
 
 
-                        //
-                        trailerData.add(new TrailerParcelable(trailerId, trailerKey, trailerName, trailerSite, trailerType));;
+                        if(testStr.equals(trailerType)) {
+                            //Log.d("trail type match: ", "\"" + trailerType + "\"" );
+                            String trailerId = trailerInfo.getString(TRAILER_ID);
+                            String trailerKey = trailerInfo.getString(TRAILER_KEY);
+                            String trailerName = trailerInfo.getString(TRAILER_NAME);
+                            String trailerSite = trailerInfo.getString(TRAILER_SITE);
+                            trailerData.add(new TrailerParcelable(trailerId, trailerKey, trailerName, trailerSite, trailerType));;
+                        }
+
                     }
 
                 }
