@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -25,13 +24,18 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     ArrayList<TrailerParcelable> trailerList = new ArrayList<TrailerParcelable>();
 
     final private Context context;
+    private TrailAdapterClickListener mListener;
 
 
+    public interface TrailAdapterClickListener{
+        void onClickTrailItem(String trailerKey, int position); //callback
+    }
 
     //Constructor
-    public TrailerAdapter(Context context, ArrayList<TrailerParcelable> trailerlist) {
+    public TrailerAdapter(Context context, ArrayList<TrailerParcelable> trailerlist, TrailAdapterClickListener mListener) {
         this.context = context;
         this.trailerList = trailerlist;
+        this.mListener = mListener; //recieve listener from activity
     }
 
 
@@ -60,7 +64,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public static class TrailerAdapterViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
+    public static class TrailerAdapterViewHolder extends RecyclerView.ViewHolder  {
 
         //TODO consider delegating click listner to activity
         //https://www.youtube.com/watch?v=iEcMJE4KK-c
@@ -75,7 +79,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
             mImageButton = (ImageButton) itemView.findViewById(R.id.ib_play_button);
             mTextView = (TextView) itemView.findViewById(R.id.tv_movie_trailer);
 
-            mImageButton.setOnClickListener(this);
+            //mImageButton.setOnClickListener(this);
 
         }
 
@@ -84,7 +88,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
          * Called when a view has been clicked.
          *
          * @param v The view that was clicked.
-         */
+/*         *//*
         @Override
         public void onClick(View v) {
 
@@ -93,7 +97,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
             Log.d("TrailerAdpterVariable", "onClick: " + trailer_id);
 
 
-        }
+        }*/
     }
 
 
@@ -108,12 +112,19 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(TrailerAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(TrailerAdapterViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.mImageButton.setImageResource(R.drawable.ic_player);
         holder.mTextView.setText(trailerList.get(position).getTrailer_name());
         holder.trailer_id = trailerList.get(position).getTrailer_key();
+
+        holder.mImageButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                mListener.onClickTrailItem(trailerList.get(position).getTrailer_key(), position);
+            }
+        });
 
         //movieList.get(position).getImage_poster()
 

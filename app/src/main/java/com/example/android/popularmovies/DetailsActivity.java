@@ -133,7 +133,12 @@ public class DetailsActivity extends AppCompatActivity {
         mTrailerRecyclerView.setLayoutManager(mLayoutManager);
 
         // Set Adapter
-        mTrailerAdapter = new TrailerAdapter(this, new ArrayList());
+        mTrailerAdapter = new TrailerAdapter(this, new ArrayList(), new TrailerAdapter.TrailAdapterClickListener() {
+            @Override
+            public void onClickTrailItem(String trailerKey, int position) {
+                Toast.makeText(DetailsActivity.this, "clicked on " + position+ " and key " + trailerKey, Toast.LENGTH_SHORT).show();
+            }
+        });
         mTrailerRecyclerView.setAdapter(mTrailerAdapter);
 
 
