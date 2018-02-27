@@ -73,8 +73,6 @@ public class DetailsActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private static final String TrailerDataKey = "trailer";
 
-
-    //TODO refactor so that you ensure this obj is destroyed after use
     private NetworkUtils networkUtils = new NetworkUtils(this);
 
 
@@ -108,12 +106,10 @@ public class DetailsActivity extends AppCompatActivity {
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
+
         Log.i("onRestoreInstanceState", "yes");
-        // Restore UI state from the savedInstanceState.
-        // This bundle has also been passed to onCreate.
         super.onRestoreInstanceState(savedInstanceState);
         mTrailerData = savedInstanceState.getParcelableArrayList(TrailerDataKey);
-        //mLoadingIndicator.setVisibility(View.INVISIBLE);
     }
 
 
@@ -136,6 +132,7 @@ public class DetailsActivity extends AppCompatActivity {
         mTrailerAdapter = new TrailerAdapter(this, new ArrayList(), new TrailerAdapter.TrailAdapterClickListener() {
             @Override
             public void onClickTrailItem(String trailerKey, int position) {
+                //TODO call YouTube Intent
                 Toast.makeText(DetailsActivity.this, "clicked on " + position+ " and key " + trailerKey, Toast.LENGTH_SHORT).show();
             }
         });
@@ -208,7 +205,7 @@ public class DetailsActivity extends AppCompatActivity {
 
 
 /*
-        //TODO need to re-move this is a test call to validate correctness of the URL
+        //TODO need to re-move this is a test call to validate correctness of the URL after implementing reviews
         URL mReviewUrl = NetworkUtils.buildUrl("review_list", "254128", "1");
         Log.i("createReviewURL", mReviewUrl.toString());
 */
@@ -218,8 +215,6 @@ public class DetailsActivity extends AppCompatActivity {
         makeFavoritesQuery(ContentUris.withAppendedId(
                 FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, Integer.valueOf(movie_id)),
                 FAVORITES_READ_LOADER);
-
-
     }
 
 

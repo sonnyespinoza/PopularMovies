@@ -19,7 +19,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.StrictMode;
 
 import com.example.android.popularmovies.BuildConfig;
 import com.example.android.popularmovies.DetailsActivity;
@@ -144,8 +143,8 @@ public class NetworkUtils  {
 
         //REMOVE StrictMode once Trailer and reviews are moved off the main thread
         //added for testing of data retrieval on the main thread
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+ /*       StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);*/
 
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         //Log.d("getResponseFromHttpUrl:", "url: " +url.toString());

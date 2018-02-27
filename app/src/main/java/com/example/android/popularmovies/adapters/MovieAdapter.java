@@ -82,6 +82,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
             itemView.setOnClickListener(this);
         }
 
+
+        //TODO Delegate Listener to activity
+        //https://stackoverflow.com/questions/15444375/how-to-create-interface-between-fragment-and-adapter
+
         /**
          * Called when a view has been clicked.
          *

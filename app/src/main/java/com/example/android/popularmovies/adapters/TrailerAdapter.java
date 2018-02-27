@@ -35,7 +35,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     public TrailerAdapter(Context context, ArrayList<TrailerParcelable> trailerlist, TrailAdapterClickListener mListener) {
         this.context = context;
         this.trailerList = trailerlist;
-        this.mListener = mListener; //recieve listener from activity
+        this.mListener = mListener; //receive listener from activity
     }
 
 
@@ -43,13 +43,6 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     // Create new views (invoked by the layout manager)
     @Override
     public TrailerAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
- /*       // create a new view
-        TextView view = (TextView) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.movie_trailers, parent, false);
-
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
-*/
 
         Context context = parent.getContext();
         int layoutForTrailerItem = R.layout.movie_trailers;
@@ -66,9 +59,6 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     // you provide access to all the views for a data item in a view holder
     public static class TrailerAdapterViewHolder extends RecyclerView.ViewHolder  {
 
-        //TODO consider delegating click listner to activity
-        //https://www.youtube.com/watch?v=iEcMJE4KK-c
-
         // each data item is just a string in this case
         final ImageButton mImageButton;
         final TextView mTextView;
@@ -79,25 +69,8 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
             mImageButton = (ImageButton) itemView.findViewById(R.id.ib_play_button);
             mTextView = (TextView) itemView.findViewById(R.id.tv_movie_trailer);
 
-            //mImageButton.setOnClickListener(this);
-
         }
 
-
-        /**
-         * Called when a view has been clicked.
-         *
-         * @param v The view that was clicked.
-/*         *//*
-        @Override
-        public void onClick(View v) {
-
-            int adapterPosition = getAdapterPosition();
-            Log.d("TrailerAdpterViewHolder", "onClick: " + Integer.toString(adapterPosition));
-            Log.d("TrailerAdpterVariable", "onClick: " + trailer_id);
-
-
-        }*/
     }
 
 
@@ -113,8 +86,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(TrailerAdapterViewHolder holder, final int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
+
         holder.mImageButton.setImageResource(R.drawable.ic_player);
         holder.mTextView.setText(trailerList.get(position).getTrailer_name());
         holder.trailer_id = trailerList.get(position).getTrailer_key();
@@ -125,12 +97,9 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
                 mListener.onClickTrailItem(trailerList.get(position).getTrailer_key(), position);
             }
         });
-
-        //movieList.get(position).getImage_poster()
-
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+    // Return the size of the trailerList (invoked by the layout manager)
     @Override
     public int getItemCount() {return trailerList.size();}
 }
