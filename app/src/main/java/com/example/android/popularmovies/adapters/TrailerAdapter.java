@@ -28,11 +28,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
 
 
 
- /*   // Provide a suitable constructor (depends on the kind of dataset)
-    public TrailerAdapter(String[] myDataset) {
-        mDataset = myDataset;
-    }*/
-
+    //Constructor
     public TrailerAdapter(Context context, ArrayList<TrailerParcelable> trailerlist) {
         this.context = context;
         this.trailerList = trailerlist;

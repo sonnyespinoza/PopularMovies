@@ -267,6 +267,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             mMovieAdapter.setMovieList(data);
             mMovieAdapter.notifyDataSetChanged();
+
+
         }
 
 
