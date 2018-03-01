@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList> {
+public class MainActivity extends AppCompatActivity  {
 
 
     //TODO Clean up Log.i statements
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             Log.i("isNetworkAvailable", "true");
             if (savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
                 Log.i("savedInstance:isNetwork", "isNull");
-                makeSearchQuery(mSearchUrl.toString());
+                makeSearchQuery(mSearchUrl.toString(), MOVIE_QUERY_LOADER);
             } else {
                 Log.i("isNetworkAvailable", "false");
                 mParsedData = savedInstanceState.getParcelableArrayList("movies");
@@ -153,108 +153,99 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * @param args Any arguments supplied by the caller.
      * @return Return a new Loader instance that is ready to start loading.
      */
-    @SuppressLint("StaticFieldLeak")//ignore Lint warning
-    @Override
-    public Loader<ArrayList>  onCreateLoader(int id, final Bundle args) {
-        return new AsyncTaskLoader<ArrayList>(this) {
 
-            @Override
-            protected void onStartLoading() {
-                super.onStartLoading();
-                if (args == null) {
-                    Log.i("onStartLoading", "null args");
+    @SuppressLint("StaticFieldLeak") //ignore Lint warning
+    private LoaderManager.LoaderCallbacks<ArrayList> movieFavoritesData = new LoaderManager.LoaderCallbacks<ArrayList>(){
 
-                    return;
+        @Override
+        public Loader<ArrayList> onCreateLoader(final int id, final Bundle args) {
+            return new AsyncTaskLoader<ArrayList>(getApplicationContext()) {
+
+                @Override
+                protected void onStartLoading() {
+                    super.onStartLoading();
+                    if (args == null) {
+                        Log.i("onStartLoading", "null args");
+
+                        return;
+                    }
+                    Log.i("onStartLoading", "");
+
+
+
+                    if (mParsedData != null){
+                        Log.i("onStartLoading", "parsedData Not Null");
+                        //mLoadingIndicator.setVisibility(View.VISIBLE);
+                        deliverResult(mParsedData);
+
+                    } else {
+                        Log.i("onStartLoading", "parsed Data Null");
+                        mLoadingIndicator.setVisibility(View.VISIBLE);
+
+                        forceLoad();
+                    }
                 }
-                Log.i("onStartLoading", "");
 
+                @Override
+                public ArrayList loadInBackground() {
+                    String movieQueryUrlString = args.getString(MOVIE_QUERY_URL_EXTRA);
+                    Log.i("LoadInBackground", movieQueryUrlString);
+                    if (movieQueryUrlString == null || TextUtils.isEmpty(movieQueryUrlString)) {
+                        return null;
+                    }
+                    String mSearchResults;
 
+                    try {
 
-                if (mParsedData != null){
-                    Log.i("onStartLoading", "parsedData Not Null");
-                    //mLoadingIndicator.setVisibility(View.VISIBLE);
-                    deliverResult(mParsedData);
-
-                } else {
-                    Log.i("onStartLoading", "parsed Data Null");
-                    mLoadingIndicator.setVisibility(View.VISIBLE);
-
-                    forceLoad();
-                }
-            }
-
-            @Override
-            public ArrayList loadInBackground() {
-                String movieQueryUrlString = args.getString(MOVIE_QUERY_URL_EXTRA);
-                Log.i("LoadInBackground", movieQueryUrlString);
-                if (movieQueryUrlString == null || TextUtils.isEmpty(movieQueryUrlString)) {
-                    return null;
-                }
-                String mSearchResults;
-
-                try {
-
-                    URL searchUrl = new URL(movieQueryUrlString);
-                    //get search results
-                    //if (mParsedData == null) {
-                    mSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
+                        URL searchUrl = new URL(movieQueryUrlString);
+                        //get search results
+                        //if (mParsedData == null) {
+                        mSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
                         //parse json
-                    mParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
-                    //}
-                    return mParsedData;
+                        mParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
+                        //}
+                        return mParsedData;
 
 
-                } catch (IOException | JSONException e) {
-                    Log.e("LoadInBackground", "Exception");
-                    e.printStackTrace();
-                    return null;
+                    } catch (IOException | JSONException e) {
+                        Log.e("LoadInBackground", "Exception");
+                        e.printStackTrace();
+                        return null;
+                    }
                 }
+
+                @Override
+                public void deliverResult(ArrayList data) {
+                    mParsedData = data;
+                    Log.i("deliverResults", data.toString());
+                    super.deliverResult(data);
+                }
+            };
+        }
+
+
+        @Override
+        public void onLoadFinished(Loader<ArrayList> loader, ArrayList data) {
+            mLoadingIndicator.setVisibility(View.INVISIBLE);
+
+            Log.i("onLoadFinish: arySize", String.valueOf(data.size()));
+            if (data != null && !data.equals("")) {
+                //onSaveInstanceState();
+
+                mMovieAdapter.setMovieList(data);
+                mMovieAdapter.notifyDataSetChanged();
+
+
             }
-
-            @Override
-            public void deliverResult(ArrayList data) {
-                mParsedData = data;
-                Log.i("deliverResults", data.toString());
-                super.deliverResult(data);
-            }
-        };
-    }
-
-    /**
-     * Called when a previously created loader has finished its load.
-     *
-     * @param loader The Loader that has finished.
-     * @param data   The data generated by the Loader.
-     */
-    @Override
-    public void onLoadFinished(Loader<ArrayList> loader, ArrayList data) {
-
-        mLoadingIndicator.setVisibility(View.INVISIBLE);
-
-        Log.i("onLoadFinish: arySize", String.valueOf(data.size()));
-        if (data != null && !data.equals("")) {
-            //onSaveInstanceState();
-
-            mMovieAdapter.setMovieList(data);
-            mMovieAdapter.notifyDataSetChanged();
-
 
         }
 
 
-    }
+        @Override
+        public void onLoaderReset(Loader<ArrayList> loader) {
 
-    /**
-     * Called when a previously created loader is being reset, and thus
-     * making its data unavailable.  The application should at this point
-     * re-move any references it has to the Loader's data.
-     *
-     * @param loader The Loader that is being reset.
-     */
-    @Override
-    public void onLoaderReset(Loader<ArrayList> loader) {
-
-    }
+        }
+    };
 
 
     public void onGroupItemClick(MenuItem item) {
@@ -282,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 item.setChecked(true);
 
                 //Pass url to query and fires off an AsyncTaskLoader
-                makeSearchQuery(mSearchUrl.toString());
+                makeSearchQuery(mSearchUrl.toString(), MOVIE_QUERY_LOADER);
 
 
             } else {
@@ -304,7 +295,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             if (networkUtils.isNetworkAvailable(this)) {
 
                 //Pass url to query and fires off an AsyncTaskLoader
-                makeSearchQuery(mSearchUrl.toString());
+                makeSearchQuery(mSearchUrl.toString(), MOVIE_QUERY_LOADER);
 
             } else {
                 Toast.makeText(this, "No Internet Connection",
@@ -381,7 +372,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     /* This method constructs the URL
   * and Request that an AsyncTaskLoader performs the GET request.
   */
-    private void makeSearchQuery(String url) {
+    private void makeSearchQuery(String url, int loaderID) {
         // created bundle movieQueryBundle to store key:value for the URL
         Bundle movieQueryBundle = new Bundle();
         movieQueryBundle.putString(MOVIE_QUERY_URL_EXTRA, url);
@@ -395,10 +386,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         //If the Loader was null, initialize it otherwise restart it
         if (movieSearchLoader == null) {
             Log.i("movieSearchLoader", "isNull");
-            loaderManager.initLoader(MOVIE_QUERY_LOADER, movieQueryBundle, this);
+            loaderManager.initLoader(loaderID, movieQueryBundle, movieFavoritesData);
         } else {
             Log.i("movieSearchLoader", "notNull");
-            loaderManager.restartLoader(MOVIE_QUERY_LOADER, movieQueryBundle, this);
+            loaderManager.restartLoader(loaderID, movieQueryBundle, movieFavoritesData);
         }
 
     }
