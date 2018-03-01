@@ -1,31 +1,38 @@
 package com.example.android.popularmovies.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
-import com.example.android.popularmovies.DetailsActivity;
 import com.example.android.popularmovies.R;
 import com.example.android.popularmovies.parcelables.MovieParcelable;
 import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder> {
 
 
     ArrayList<MovieParcelable> movieList = new ArrayList<MovieParcelable>();
     final private Context context;
+    private movieAdapterClickListener mListener;
 
-    public MovieAdapter(Context context, ArrayList<MovieParcelable> movielist) {
+    public interface movieAdapterClickListener{
+        void onClickMovieItem(HashMap<String,String> movieDetails, int position); //callback
+    }
+
+
+
+    public MovieAdapter(Context context, ArrayList<MovieParcelable> movielist, movieAdapterClickListener mListener) {
         this.context = context;
         this.movieList = movielist;
+        this.mListener = mListener;
     }
 
     public void setMovieList ( ArrayList<MovieParcelable> movielist) {
@@ -47,8 +54,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     @Override
     public void onBindViewHolder(final MovieAdapterViewHolder holder, int position) {
 
-        //String imageURL= "https://image.tmdb.org/t/p/w185/"  + movieList.get(position).get("poster_path");
-        String imageURL= "https://image.tmdb.org/t/p/w185/"  + movieList.get(position).getImage_poster();
+        String imageURL = context.getString(R.string.image_url) + movieList.get(position).getImage_poster();
 
         Log.d("MovieAdapter", "onBindViewHolder: imageURL"+ imageURL);
 
@@ -62,8 +68,29 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
                 exception.printStackTrace();
             }
         });
+
         //Load images to image view
         builder.build().load(imageURL).into(holder.movie_image);
+
+        holder.movie_image.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+
+                HashMap<String,String> movieDetails= new HashMap<String,String>();
+
+                movieDetails.put(context.getString(R.string.title), movieList.get(holder.getAdapterPosition()).getTitle());
+                movieDetails.put(context.getString(R.string.image_poster), movieList.get(holder.getAdapterPosition()).getImage_poster());
+                movieDetails.put(context.getString(R.string.release_date), movieList.get(holder.getAdapterPosition()).getRelease_date());
+                movieDetails.put(context.getString(R.string.user_rating), movieList.get(holder.getAdapterPosition()).getUser_rating());
+                movieDetails.put(context.getString(R.string.overview), movieList.get(holder.getAdapterPosition()).getOverview());
+                movieDetails.put(context.getString(R.string.movie_id), movieList.get(holder.getAdapterPosition()).getId());
+
+                mListener.onClickMovieItem(movieDetails, holder.getAdapterPosition());
+
+            }
+        });
+
     }
 
     @Override
@@ -71,55 +98,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         return movieList.size();
     }
 
-    public class MovieAdapterViewHolder extends RecyclerView.ViewHolder  implements OnClickListener {
+    public class MovieAdapterViewHolder extends RecyclerView.ViewHolder   {
 
         final ImageView movie_image;
 
         public MovieAdapterViewHolder(View itemView) {
             super(itemView);
             movie_image = (ImageView) itemView.findViewById(R.id.iv_movies);
-
-            itemView.setOnClickListener(this);
         }
-
-
-        //TODO Delegate Listener to activity
-        //https://stackoverflow.com/questions/15444375/how-to-create-interface-between-fragment-and-adapter
-
-        /**
-         * Called when a view has been clicked.
-         *
-         * @param v The view that was clicked.
-         */
-        @Override
-        public void onClick(View v) {
-
-
-            int adapterPosition = getAdapterPosition();
-
-            Class destinationClass = DetailsActivity.class;
-            Intent intentDetailActivity = new Intent(context, destinationClass);
-
-
-            //TODO add query to check if favorite
-            movieList.get(adapterPosition).getImage_poster();
-            //intentDetailActivity.putExtra("favorite", )
-
-
-            // Pass the movie details to the DetailsActivity
-            intentDetailActivity.putExtra(context.getString(R.string.title), movieList.get(adapterPosition).getTitle());
-            intentDetailActivity.putExtra(context.getString(R.string.image_poster),  movieList.get(adapterPosition).getImage_poster());
-            //intentDetailActivity.putExtra(IMAGE_NAME, "https://image.tmdb.org/t/p/w185/"  + movieList.get(adapterPosition).get(IMAGE_NAME));
-            intentDetailActivity.putExtra(context.getString(R.string.release_date), movieList.get(adapterPosition).getRelease_date());
-            intentDetailActivity.putExtra(context.getString(R.string.user_rating), movieList.get(adapterPosition).getUser_rating());
-            intentDetailActivity.putExtra(context.getString(R.string.overview), movieList.get(adapterPosition).getOverview());
-            intentDetailActivity.putExtra(context.getString(R.string.movie_id), movieList.get(adapterPosition).getId());
-     //       intentDetailActivity.putParcelableArrayListExtra("movies", movieList);
-
-            context.startActivity(intentDetailActivity);
-
-        }
-
-
     }
 }

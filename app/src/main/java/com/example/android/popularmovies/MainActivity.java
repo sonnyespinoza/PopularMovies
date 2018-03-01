@@ -30,6 +30,8 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList> {
 
@@ -99,7 +101,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
         // Set Adapter
-        mMovieAdapter = new MovieAdapter(this, new ArrayList());
+        mMovieAdapter = new MovieAdapter(this, new ArrayList(), new MovieAdapter.movieAdapterClickListener() {
+            @Override
+            public void onClickMovieItem(HashMap<String, String> movieDetails, int position) {
+
+                Class destinationClass = DetailsActivity.class;
+                Intent intentDetailActivity = new Intent(MainActivity.this, destinationClass);
+
+                // Pass the movie details to the intent extras
+                for(Map.Entry m:movieDetails.entrySet()){
+                    System.out.println(m.getKey()+" "+m.getValue());
+                    intentDetailActivity.putExtra(m.getKey().toString(),m.getValue().toString());
+                }
+                MainActivity.this.startActivity(intentDetailActivity);
+            }
+        });
+
         mMovieImage.setAdapter(mMovieAdapter);
 
         if (networkUtils.isNetworkAvailable(this)) {

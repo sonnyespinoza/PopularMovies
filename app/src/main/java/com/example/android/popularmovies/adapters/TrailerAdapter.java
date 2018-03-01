@@ -24,15 +24,15 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     ArrayList<TrailerParcelable> trailerList = new ArrayList<TrailerParcelable>();
 
     final private Context context;
-    private TrailAdapterClickListener mListener;
+    private TrailerAdapterClickListener mListener;
 
 
-    public interface TrailAdapterClickListener{
+    public interface TrailerAdapterClickListener{
         void onClickTrailItem(String trailerKey, int position); //callback
     }
 
     //Constructor
-    public TrailerAdapter(Context context, ArrayList<TrailerParcelable> trailerlist, TrailAdapterClickListener mListener) {
+    public TrailerAdapter(Context context, ArrayList<TrailerParcelable> trailerlist, TrailerAdapterClickListener mListener) {
         this.context = context;
         this.trailerList = trailerlist;
         this.mListener = mListener; //receive listener from activity

@@ -129,7 +129,7 @@ public class DetailsActivity extends AppCompatActivity {
         mTrailerRecyclerView.setLayoutManager(mLayoutManager);
 
         // Set Adapter
-        mTrailerAdapter = new TrailerAdapter(this, new ArrayList(), new TrailerAdapter.TrailAdapterClickListener() {
+        mTrailerAdapter = new TrailerAdapter(this, new ArrayList(), new TrailerAdapter.TrailerAdapterClickListener() {
             @Override
             public void onClickTrailItem(String trailerKey, int position) {
                 //TODO call YouTube Intent
