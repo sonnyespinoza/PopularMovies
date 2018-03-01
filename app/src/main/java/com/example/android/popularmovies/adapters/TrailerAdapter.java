@@ -27,6 +27,8 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     private TrailerAdapterClickListener mListener;
 
 
+
+
     public interface TrailerAdapterClickListener{
         void onClickTrailItem(String trailerKey, int position); //callback
     }
@@ -99,4 +101,5 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     // Return the size of the trailerList (invoked by the layout manager)
     @Override
     public int getItemCount() {return trailerList.size();}
+
 }

@@ -2,7 +2,6 @@ package com.example.android.popularmovies;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -20,7 +19,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.android.popularmovies.adapters.MovieAdapter;
-import com.example.android.popularmovies.data.FavoritesContract;
 import com.example.android.popularmovies.parcelables.MovieParcelable;
 import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
@@ -110,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
                 // Pass the movie details to the intent extras
                 for(Map.Entry m:movieDetails.entrySet()){
-                    System.out.println(m.getKey()+" "+m.getValue());
+                    //System.out.println(m.getKey()+" "+m.getValue());
                     intentDetailActivity.putExtra(m.getKey().toString(),m.getValue().toString());
                 }
                 MainActivity.this.startActivity(intentDetailActivity);
@@ -168,23 +166,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
     /**
-     * This method creates the movie search URL
-     * (using {@link NetworkUtils}) for the tmDB  movie repository
-     */
-/*
-    //DONE might need to move this method into the NetworkUtils so that you can reuse with trailer and reviews
-    private URL createSearchURL(String sortby, String page) {
-
-        //Create url
-        URL movieSearchUrl = NetworkUtils.buildUrl(sortby, page);
-        Log.i("createSearchURL", movieSearchUrl.toString());
-
-        return movieSearchUrl;
-    }
-*/
-
-
-    /**
      * Instantiate and return a new Loader for the given ID.
      *
      * @param id   The ID whose loader is to be created.
@@ -216,16 +197,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 } else {
                     Log.i("onStartLoading", "parsed Data Null");
                     mLoadingIndicator.setVisibility(View.VISIBLE);
-                   /* try {
 
-                        //sleep 5 seconds
-                        Thread.sleep(10000);
-
-                        System.out.println("Sleeping...");
-
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }*/
                     forceLoad();
                 }
             }
@@ -363,26 +335,34 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             mParsedData = null;
 
-
-
-            //Remove test data
-            //TestUtil.insertFakeData(pmDB);
-            //Log.i("onGroupItemClick", " sort by favorites: insertFakeData");
-
-            //TODO integrate with content provide once built
-            Cursor cursor = getFavorites();
-            //URL mSearchUrl = createSearchURL(byFavorites, "1");
             item.setChecked(true);
-            //Log.i("menuByFavorites", mSearchUrl.toString());
 
-
-            //TODO may need to get rid of network check since its pulling db data for favorites
+            //TODO Get rid of network check since its pulling db data for favorites
             if (networkUtils.isNetworkAvailable(this)) {
 
 
                 //Pass url to query and fires off an AsyncTaskLoader
                 //REMOVE -- makeSearchQuery(mSearchUrl.toString());
                 //TODO add call to search favorites either update makeSearchQuery or create new method using content provider to db
+
+                //IN LOADER
+                //TODO integrate with content provide once built
+                //TODO provider code needed in loader
+                //Query Favorites for movie
+/*            makeFavoritesQuery(ContentUris.withAppendedId(
+                    FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, Integer.valueOf(movie_id)),
+                    FAVORITES_READ_LOADER);*/
+
+                //TODO once data is retrieved from the provide, still in loader, convert to json
+                //https://tech.sarathdr.com/convert-database-cursor-result-to-json-array-android-app-development-1b9702fc7bbb
+                //**https://www.programcreek.com/java-api-examples/index.php?api=android.util.JsonWriter
+                //***https://stackoverflow.com/questions/19277529/android-jsonwriter-can-not-write-to-a-file
+                //***http://docs.huihoo.com/android/3.0/reference/android/util/JsonWriter.html
+                //will need to add method to jsonutil to do the conversion
+
+                //TODO Then process under normal json call to process favorites data
+                // mParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
+
 
             } else {
                 Toast.makeText(this, "No Internet Connection",
@@ -394,17 +374,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
-    private Cursor getFavorites (){
-
-        return pmDB.query(FavoritesContract.favoriteMovies.TABLE_NAME,
-                null,
-                null,
-                null,
-                null,
-                null,
-                FavoritesContract.favoriteMovies.USER_RATING);
-
-    }
 
 
     @Override
@@ -425,29 +394,4 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         return super.onOptionsItemSelected(item);
     }
-
-/*    //check for network connection
-    private boolean isNetworkAvailable() {
-        boolean isConnected = false;
-        try {
-
-            ConnectivityManager cm =
-                    (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-
-            NetworkInfo activeNetwork = null;
-            if (cm != null) {
-                activeNetwork = cm.getActiveNetworkInfo();
-            }
-            isConnected = activeNetwork != null &&
-                    activeNetwork.isConnectedOrConnecting();
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-        return isConnected;
-
-    }*/
 }

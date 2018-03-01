@@ -1,6 +1,8 @@
 package com.example.android.popularmovies;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -28,6 +30,7 @@ import com.example.android.popularmovies.data.FavoritesContract;
 import com.example.android.popularmovies.parcelables.TrailerParcelable;
 import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
+import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -47,11 +50,11 @@ public class DetailsActivity extends AppCompatActivity {
     private static final int TRAILER_READ_LOADER = 77;
     private static final int REVIEWS_READ_LOADER = 99;
 
+    final static String YOUTUBE_API_KEY = BuildConfig.YOUTUBE_API_KEY;
+
 
     private static final String CRUD_URL_EXTRA = "crud";
-    //private static final String FAVORITES_CRUD_URL_EXTRA = "crud";
-    //private static final String FAVORITES_READ_URL_EXTRA = "query";
-    //private static final String FAVORITES_DELETE_URL_EXTRA = "delete";
+
 
     //private List<MovieParcelable> movie;
     private Context context;
@@ -132,8 +135,9 @@ public class DetailsActivity extends AppCompatActivity {
         mTrailerAdapter = new TrailerAdapter(this, new ArrayList(), new TrailerAdapter.TrailerAdapterClickListener() {
             @Override
             public void onClickTrailItem(String trailerKey, int position) {
-                //TODO call YouTube Intent
-                Toast.makeText(DetailsActivity.this, "clicked on " + position+ " and key " + trailerKey, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(DetailsActivity.this, "clicked on " + position + " and key " + trailerKey, Toast.LENGTH_SHORT).show();
+                watchYoutubeTrailerVideo(DetailsActivity.this, trailerKey);
+
             }
         });
         mTrailerRecyclerView.setAdapter(mTrailerAdapter);
@@ -461,7 +465,6 @@ public class DetailsActivity extends AppCompatActivity {
         //get library for loadermanager
         LoaderManager loaderManager = getSupportLoaderManager();
 
-
         //call getLoader with loader id
         Loader<Cursor> favoritesLoader = loaderManager.getLoader(loaderID);
 
@@ -513,19 +516,22 @@ public class DetailsActivity extends AppCompatActivity {
                 break;
         }
 
-/*
-        //call getLoader with loader id
-        Loader<Cursor> favoritesLoader = loaderManager.getLoader(loaderID);
+    }
 
-        //If the Loader was null, initialize it otherwise restart it
-        if (favoritesLoader == null) {
-            Log.i("makeQuery", "favoritesLoader "+ "isNull");
-            loaderManager.initLoader(loaderID, favoritesBundle, favoritesData);
-        } else {
-            Log.i("makeQuery", "favoritesLoader "+"notNull");
-            loaderManager.restartLoader(loaderID, favoritesBundle, favoritesData);
-        }*/
 
+    public static void watchYoutubeTrailerVideo(Context context, String id) {
+
+        String VIDEO_ID = id;
+
+        Intent youTubeIntent = YouTubeStandalonePlayer.createVideoIntent((Activity) context, YOUTUBE_API_KEY, VIDEO_ID, 0, true, true);
+        ;
+        Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("http://www.youtube.com/watch?v=" + id));
+        try {
+            context.startActivity(youTubeIntent);
+        } catch (ActivityNotFoundException ex) {
+            context.startActivity(webIntent);
+        }
     }
 }
 
