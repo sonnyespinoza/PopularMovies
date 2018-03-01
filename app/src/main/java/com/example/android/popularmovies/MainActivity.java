@@ -2,7 +2,9 @@ package com.example.android.popularmovies;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -19,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.android.popularmovies.adapters.MovieAdapter;
+import com.example.android.popularmovies.data.FavoritesContract;
 import com.example.android.popularmovies.parcelables.MovieParcelable;
 import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
@@ -44,7 +47,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     SQLiteDatabase pmDB;
     //TaskLoader unique identifier
+
     private static final int MOVIE_QUERY_LOADER = 22;
+    private static final int FAVORITES_READ_LOADER = 44;
     private static final String MOVIE_QUERY_URL_EXTRA = "query";
 
     private MovieAdapter mMovieAdapter;
@@ -139,30 +144,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
-    /* This method constructs the URL
-     * and Request that an AsyncTaskLoader performs the GET request.
-     */
-    private void makeSearchQuery(String url) {
-        // created bundle movieQueryBundle to store key:value for the URL
-        Bundle movieQueryBundle = new Bundle();
-        movieQueryBundle.putString(MOVIE_QUERY_URL_EXTRA, url);
-
-        //get library for loadermanager
-        LoaderManager loaderManager = getSupportLoaderManager();
-
-        //call getLoader with loader id
-        Loader<ArrayList> movieSearchLoader = loaderManager.getLoader(MOVIE_QUERY_LOADER);
-
-        //If the Loader was null, initialize it otherwise restart it
-        if (movieSearchLoader == null) {
-            Log.i("movieSearchLoader", "isNull");
-            loaderManager.initLoader(MOVIE_QUERY_LOADER, movieQueryBundle, this);
-        } else {
-            Log.i("movieSearchLoader", "notNull");
-            loaderManager.restartLoader(MOVIE_QUERY_LOADER, movieQueryBundle, this);
-        }
-
-    }
 
 
     /**
@@ -337,8 +318,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             item.setChecked(true);
 
-            //TODO Get rid of network check since its pulling db data for favorites
-            if (networkUtils.isNetworkAvailable(this)) {
+            makeFavoritesQuery(FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, FAVORITES_READ_LOADER);
+
+            //DONE Get rid of network check since its pulling db data for favorites
+            //if (networkUtils.isNetworkAvailable(this)) {
 
 
                 //Pass url to query and fires off an AsyncTaskLoader
@@ -364,11 +347,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 // mParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
 
 
-            } else {
+/*            } else {
                 Toast.makeText(this, "No Internet Connection",
                         Toast.LENGTH_LONG).show();
 
-            }
+            }*/
             //return true;
         }
 
@@ -394,4 +377,54 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         return super.onOptionsItemSelected(item);
     }
+
+    /* This method constructs the URL
+  * and Request that an AsyncTaskLoader performs the GET request.
+  */
+    private void makeSearchQuery(String url) {
+        // created bundle movieQueryBundle to store key:value for the URL
+        Bundle movieQueryBundle = new Bundle();
+        movieQueryBundle.putString(MOVIE_QUERY_URL_EXTRA, url);
+
+        //get library for loadermanager
+        LoaderManager loaderManager = getSupportLoaderManager();
+
+        //call getLoader with loader id
+        Loader<ArrayList> movieSearchLoader = loaderManager.getLoader(MOVIE_QUERY_LOADER);
+
+        //If the Loader was null, initialize it otherwise restart it
+        if (movieSearchLoader == null) {
+            Log.i("movieSearchLoader", "isNull");
+            loaderManager.initLoader(MOVIE_QUERY_LOADER, movieQueryBundle, this);
+        } else {
+            Log.i("movieSearchLoader", "notNull");
+            loaderManager.restartLoader(MOVIE_QUERY_LOADER, movieQueryBundle, this);
+        }
+
+    }
+
+    private void makeFavoritesQuery(Uri uri, int loaderID) {
+
+        // created bundle to store key:value for the URL
+        Bundle bundle = new Bundle();
+        bundle.putString(MOVIE_QUERY_URL_EXTRA, uri.toString());
+
+        //get library for loadermanager
+        LoaderManager loaderManager = getSupportLoaderManager();
+
+        //call getLoader with loader id
+        Loader<Cursor> favoritesLoader = loaderManager.getLoader(loaderID);
+
+        //If the Loader was null, initialize it otherwise restart it
+        if (favoritesLoader == null) {
+            Log.i("makeFavoritesQuery", "favoritesLoader " + "isNull");
+            //loaderManager.initLoader(loaderID, bundle, favoritesData);
+        } else {
+            Log.i("makeFavoritesQuery", "favoritesLoader " + "notNull");
+            //loaderManager.restartLoader(loaderID, bundle, favoritesData);
+        }
+
+
+    }
+
 }
