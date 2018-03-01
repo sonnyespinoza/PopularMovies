@@ -47,16 +47,13 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
         Context context = parent.getContext();
         int layoutForTrailerItem = R.layout.movie_trailers;
         LayoutInflater inflater = LayoutInflater.from(context);
-        //boolean attachParent = false;
 
         View view = inflater.inflate(layoutForTrailerItem, parent, false);
         return new TrailerAdapterViewHolder(view);
     }
 
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
+    // A reference to the views for each data item
     public static class TrailerAdapterViewHolder extends RecyclerView.ViewHolder  {
 
         // each data item is just a string in this case
