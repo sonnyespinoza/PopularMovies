@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity  {
             Log.i("isNetworkAvailable", "true");
             if (savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
                 Log.i("savedInstance:isNetwork", "isNull");
-                makeSearchQuery(mSearchUrl.toString(), MOVIE_QUERY_LOADER);
+                makeMovieQuery(mSearchUrl.toString(), MOVIE_QUERY_LOADER);
             } else {
                 Log.i("isNetworkAvailable", "false");
                 mParsedData = savedInstanceState.getParcelableArrayList("movies");
@@ -155,7 +156,7 @@ public class MainActivity extends AppCompatActivity  {
      */
 
     @SuppressLint("StaticFieldLeak") //ignore Lint warning
-    private LoaderManager.LoaderCallbacks<ArrayList> movieFavoritesData = new LoaderManager.LoaderCallbacks<ArrayList>(){
+    private LoaderManager.LoaderCallbacks<ArrayList> movieData = new LoaderManager.LoaderCallbacks<ArrayList>(){
 
         @Override
         public Loader<ArrayList> onCreateLoader(final int id, final Bundle args) {
@@ -247,6 +248,94 @@ public class MainActivity extends AppCompatActivity  {
         }
     };
 
+    @SuppressLint("StaticFieldLeak") //ignore Lint warning
+    private LoaderManager.LoaderCallbacks<ArrayList> favoritesData = new LoaderManager.LoaderCallbacks<ArrayList>() {
+        @Override
+        public Loader<ArrayList> onCreateLoader(final int id, final Bundle args) {
+            return new AsyncTaskLoader<ArrayList>(getApplicationContext()) {
+
+                @Override
+                protected void onStartLoading() {
+
+                    super.onStartLoading();
+                    if (args == null) {
+                        Log.i("onStartLoading", "null args");
+
+                    } else {
+                        forceLoad();
+                    }
+                }
+
+                @Override
+                public ArrayList loadInBackground() {
+
+                    String favoritesQueryUrlString = args.getString(MOVIE_QUERY_URL_EXTRA);
+                    Log.i("LoadInBackground", favoritesQueryUrlString);
+                    if (favoritesQueryUrlString == null || TextUtils.isEmpty(favoritesQueryUrlString)) {
+                        return null;
+                    }
+
+                    switch (id) {
+                        case FAVORITES_READ_LOADER:
+                            //Query to determine if Movie is in favorites list;
+                            String[] mProjection = {
+                                    FavoritesContract.favoriteMovies.RELEASE_DATE,
+                                    FavoritesContract.favoriteMovies.MOVIE_DESCRIPTION,
+                                    FavoritesContract.favoriteMovies.MOVIE_TITLE,
+                                    FavoritesContract.favoriteMovies.IMAGE_NAME,
+                                    FavoritesContract.favoriteMovies.IMAGE_POSTER,
+                                    FavoritesContract.favoriteMovies.USER_RATING,
+                                    FavoritesContract.favoriteMovies.MOVIE_ID};
+                            try {
+
+                                Uri favorites_uri = Uri.parse(favoritesQueryUrlString);
+                                Cursor favoriteMovies =  getContentResolver().query(favorites_uri,
+                                        mProjection,
+                                        null,
+                                        null,
+                                        null);
+
+                                favoriteMovies.moveToFirst();
+                                String test =  favoriteMovies.getString(0)
+                                        + " "+
+                                        favoriteMovies.getString(1);
+
+                                Log.d("favoritesData: ", test);
+                                //TODO integrate json tranformer
+                            } catch (Exception e) {
+                                Log.e("LoadInBackground READ ", "Exception");
+                                e.printStackTrace();
+                                return null;
+                            }
+
+                    }
+
+
+                    return null;
+                }
+
+
+            };
+        }
+
+        @Override
+        public void onLoadFinished(Loader<ArrayList> loader, ArrayList data) {
+
+
+            ImageButton ButtonStar;
+            switch (loader.getId()) {
+                case FAVORITES_READ_LOADER:
+                    break;
+
+            }
+
+        }
+
+        @Override
+        public void onLoaderReset(Loader<ArrayList> loader) {
+
+        }
+    };
 
     public void onGroupItemClick(MenuItem item) {
 
@@ -273,7 +362,7 @@ public class MainActivity extends AppCompatActivity  {
                 item.setChecked(true);
 
                 //Pass url to query and fires off an AsyncTaskLoader
-                makeSearchQuery(mSearchUrl.toString(), MOVIE_QUERY_LOADER);
+                makeMovieQuery(mSearchUrl.toString(), MOVIE_QUERY_LOADER);
 
 
             } else {
@@ -295,7 +384,7 @@ public class MainActivity extends AppCompatActivity  {
             if (networkUtils.isNetworkAvailable(this)) {
 
                 //Pass url to query and fires off an AsyncTaskLoader
-                makeSearchQuery(mSearchUrl.toString(), MOVIE_QUERY_LOADER);
+                makeMovieQuery(mSearchUrl.toString(), MOVIE_QUERY_LOADER);
 
             } else {
                 Toast.makeText(this, "No Internet Connection",
@@ -372,7 +461,7 @@ public class MainActivity extends AppCompatActivity  {
     /* This method constructs the URL
   * and Request that an AsyncTaskLoader performs the GET request.
   */
-    private void makeSearchQuery(String url, int loaderID) {
+    private void makeMovieQuery(String url, int loaderID) {
         // created bundle movieQueryBundle to store key:value for the URL
         Bundle movieQueryBundle = new Bundle();
         movieQueryBundle.putString(MOVIE_QUERY_URL_EXTRA, url);
@@ -386,10 +475,10 @@ public class MainActivity extends AppCompatActivity  {
         //If the Loader was null, initialize it otherwise restart it
         if (movieSearchLoader == null) {
             Log.i("movieSearchLoader", "isNull");
-            loaderManager.initLoader(loaderID, movieQueryBundle, movieFavoritesData);
+            loaderManager.initLoader(loaderID, movieQueryBundle, movieData);
         } else {
             Log.i("movieSearchLoader", "notNull");
-            loaderManager.restartLoader(loaderID, movieQueryBundle, movieFavoritesData);
+            loaderManager.restartLoader(loaderID, movieQueryBundle, movieData);
         }
 
     }
@@ -409,10 +498,10 @@ public class MainActivity extends AppCompatActivity  {
         //If the Loader was null, initialize it otherwise restart it
         if (favoritesLoader == null) {
             Log.i("makeFavoritesQuery", "favoritesLoader " + "isNull");
-            //loaderManager.initLoader(loaderID, bundle, favoritesData);
+            loaderManager.initLoader(loaderID, bundle, favoritesData);
         } else {
             Log.i("makeFavoritesQuery", "favoritesLoader " + "notNull");
-            //loaderManager.restartLoader(loaderID, bundle, favoritesData);
+            loaderManager.restartLoader(loaderID, bundle, favoritesData);
         }
 
 
