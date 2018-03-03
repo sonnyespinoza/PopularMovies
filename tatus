@@ -1,0 +1,773 @@
+[33mcommit ea1ed416aecbabdde7e64513447e8a46fd2f6fb4[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Mar 2 17:19:29 2018 -0700
+
+    Updated Main to include favorites cursor data to json
+    added method to jsonutils to support converting cusor data to json
+    updated parcelable to eliminate value that is unused
+
+[33mcommit b31659d89dde45095f9c4278be882aa09230e1ac[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Thu Mar 1 17:37:14 2018 -0700
+
+    Updated Main with favoritesData loader to test sql data retrieval
+
+[33mcommit 7fde9862bb7f54cfb7ce3c33fb897b6e21738066[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Thu Mar 1 16:50:44 2018 -0700
+
+    Updated MainActivity such that movie data loader implmented in mainActivity and not implements loader
+
+[33mcommit 7a34f5e5069aa766ab3a5d0918916b438063a515[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Thu Mar 1 16:28:05 2018 -0700
+
+    MainActivity Added call to groupmeniteclick to call makeFavoritesQuery
+    Added method to Main Activity makeFavoritesQuery
+
+[33mcommit fec26001dec0d0cd93b3db617b1e6adb9d872ef8[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Thu Mar 1 16:11:08 2018 -0700
+
+    misc comment and clean up
+
+[33mcommit 7983cfc036bd75cdf4271f598abb82aef1faa6c2[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Wed Feb 28 19:35:39 2018 -0700
+
+    misc comments clean up
+
+[33mcommit b065b762b8a6d7972514a0de7426c72d2a9eeb46[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Wed Feb 28 18:15:07 2018 -0700
+
+    Updated MovieAdapter and MainActivity to delegate the onclick to main activity
+    Cleaned up comments in TrailerAdapter
+    Updated imageURL base to point to String.xml
+
+[33mcommit 8cab3ee4ad3c9e326974f0750941897fef9a2a96[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Mon Feb 26 18:07:31 2018 -0700
+
+    Misc comment cleanup
+    Updated NetworkUtils to remove StricMode now that Trailers are off the main thread
+
+[33mcommit a8d53830e4d3a6fce33c37dd14ffa8c9e9d688dc[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Mon Feb 26 17:55:24 2018 -0700
+
+    Modified Adpater and DetailsActivity to delegate onClick listenter to DetailsActivity
+
+[33mcommit 9c6d77767dc50210c5bbf163e7d12066fe24df52[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Mon Feb 26 17:29:27 2018 -0700
+
+    misc changes
+
+[33mcommit 6d75714a3e54fdd402834aba5472d1c56f11cae7[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Feb 25 20:13:34 2018 -0700
+
+    updated jsonUtils to limit trailer types to Trailer only ignore all else
+
+[33mcommit 977327cc1916625338558ac19afef3b89ef3c0d4[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Feb 25 14:58:41 2018 -0700
+
+    Added player png image
+    Updated trailerAdapter to allow click on player image button
+    Update image button in movie_trailer.xml with transparent background res
+
+[33mcommit c9f58df51d8522477ac911e813ffe9917a3ed37c[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sat Feb 24 10:59:15 2018 -0700
+
+    add player image to movie_trailer
+
+[33mcommit 9bc76a419c1b1a85f3bbb8a73eedeedbf28b0c1d[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sat Feb 24 10:27:54 2018 -0700
+
+    Updated DetailsActivity with onsavedinstance and onrestore instance for trailer data
+
+[33mcommit 180ceffbc8a78cc77f2291100bb68960eb6de675[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Feb 23 15:14:59 2018 -0700
+
+    Updated movie_trailer so that linearLayout wrap_content
+
+[33mcommit 7b288dc1248dbe862f0313cc6da843826ce9eccb[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Feb 23 15:08:51 2018 -0700
+
+    added favorites call back into DetailsActivity
+
+[33mcommit 92a6dd17d90cb9847fe82ccbe81bc4b0761ca4a2[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Feb 23 15:05:21 2018 -0700
+
+    updates to DetailsActivity
+    Added static loader ids
+    Added adapter and recycler instance variables
+    added call to networkUtils to check network
+    added recycler assignment
+    added layoutmanager
+    set adapter to recyclerview
+    Cleaned up network avilablbility check
+    Moved networkUtils and JsonUtils calls for Trailer data to ArrayList Loader
+    Added setTrailList to the data in onFinishLoad
+    Split makeQuery into favoriteMakeQuery and makeMovieExtrasQuery to simplify the calls
+    Updated MainActivity
+    moved isNetworkAvailable to NetworkUtils for reuse with DetailsActivity
+    Created TrailerAdapter to support Trailer Recyclerview
+    Updated movie_trailer
+    removed the cardview and change to linearLayout
+
+[33mcommit 03f0655c2960204fb11c217a02d9c554aa439b63[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Tue Feb 20 21:23:08 2018 -0700
+
+    Removed TODO comment from JsonUtils
+
+[33mcommit c90e558ff9e13b5e55cd893d51ec9db3591f47d2[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Tue Feb 20 21:14:09 2018 -0700
+
+    create new packages for parcables and adapters
+    Renamed recyclerAdapter to MovieAdapter
+    Moved MovieAdpater to adapter package
+    Renamed ParcableUtils to MovieParcelable
+    Moved MovieParcelable to parcelables package
+    Added TrailerParcelable to support trailers movie data
+    Added method getTrailerDataFromJson to JsonUtils
+    Updated DetailsActivity to test trailer data process
+
+[33mcommit 6bb3c77a4b3ae27d26cd58c89a560897e95fb93a[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Tue Feb 20 18:13:27 2018 -0700
+
+    updated detailsactivity removed the activty implements callback and added the callback as an implementation in the activity
+
+[33mcommit c8d6a637e4936389bd9bcda57e4edf30266c65ba[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Tue Feb 20 17:46:43 2018 -0700
+
+    misc commit
+
+[33mcommit fdb7165645e6e7c49d2ea0034fd6d20be6cebb30[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Feb 18 11:49:33 2018 -0700
+
+    Debugging NetworkUtils.getResponseFromHttpUrl
+    Added debug logs to DetailsActivity
+    Added debug logs to NetworkUtils
+    Update Log statement in mainActivity from info to debug
+    ADDED StrictMode to NetworkUtils.getReponse to resolve exception
+
+[33mcommit f83cc79567c62af94581c80bcf94263c7134cd52[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Feb 18 10:15:45 2018 -0700
+
+    updated JsonUtils.getTrailerDataFromJson to process trailer data
+
+[33mcommit 469209bd442ba3dd5633211b6a2c1bf9fea927ee[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Feb 18 09:57:35 2018 -0700
+
+    updated the JsonUtils call to point to method getTrailerDataFromJson.
+
+[33mcommit 83446a8820ab5628feda8382cda059b4471620f2[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Feb 18 09:56:23 2018 -0700
+
+    Moved URL test for review and trailer from MainActivity to DetailsActivity
+    Added call to DetalsActivity to NetworkUtils.getResponseFromHttpUrl to test retrieval of trailer data from tmdb api
+    Added to DetailsActivity JsonUtils.getTrailerDataFromJson to extract the attributes from the json package for trailer data
+    Added method getTrailerDataFromJson to JsonUtils to process trailer data
+
+[33mcommit c6a2babe5aecafd65b75dfe1761b4cd000e37299[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sat Feb 17 22:56:45 2018 -0700
+
+    Update MainActivity to revmove createSearchURL method and calling NetworkUtils directly
+    Updated NetworkUtils to overload buidlUrl method to support trailers and reviews
+    Updated layout --> activity_details with rv_movie_trailers
+
+[33mcommit 288fa9663df65cad00e338776a209803472cb5f2[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sat Feb 17 19:42:23 2018 -0700
+
+    Added YouTube API libs
+    Added movie_trailer.xml res layout file
+
+[33mcommit bbb39ae5152c3928e38598d3e8bbeb82224d6286[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Thu Feb 15 20:44:52 2018 -0700
+
+    Refactored to accpect movie id through the api and the content provider for db.
+
+[33mcommit 54f70828c3f6bd5ea4c92f5f0bbcc4f23a38c574[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Wed Feb 14 18:24:00 2018 -0700
+
+    Updated jsonutils to include movie id from api query
+    Updated ParcelableUtils to include the id
+    Added comment to MainActivity TODO move createSearchURL to NetworkUtils
+
+[33mcommit 8d3f980c22a7fcc7c4dec530f0e0ff2f1cf9b1b6[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Mon Feb 12 20:30:20 2018 -0700
+
+    Update DetailsActivity with TODO comment
+
+[33mcommit 60efbd43393611eefd1d1250452599517acd43fe[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Mon Feb 12 20:29:33 2018 -0700
+
+    Updated DetailsActivity moved all Favorites CRUD to asyncTaskLoader
+
+[33mcommit 9f8b8b4636fe98f2a0411c36af38cb6fa96687cc[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Mon Feb 12 18:05:43 2018 -0700
+
+    misc commit
+
+[33mcommit cf36e21a134ede36dc5ae5d403079b7dcb38c8e7[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sat Feb 10 21:11:10 2018 -0700
+
+    ignored Lint warning
+
+[33mcommit e3a9d4ae8d6ade6c2cc8ad0bcbbb0cda7f6f8fdc[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sat Feb 10 20:55:52 2018 -0700
+
+    updated detailsActivity to query for favorites using asyncTaskLoader
+
+[33mcommit 4502d818883df8fafc10548e58a6af31c96a555f[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Wed Feb 7 19:41:41 2018 -0700
+
+    Celaned up logs and comments
+    Updated DetailsActivity to use image file name instead of id to query and delete favorites
+
+[33mcommit 28879a9949b764c9f4ed659170eea9f3acb8f0ad[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Tue Feb 6 21:49:47 2018 -0700
+
+    Updated query favorites to point to correct URI for uri matcher
+    moved base url for image to string.xml
+    Updated query in content provide
+    Removed url literal string in recycler adapter  now referencing strings.xml in detailsActivity and only passing raw image value from json
+
+[33mcommit 52511fd26d5c98708c9510b7c466cfb3ffc26c81[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Mon Feb 5 17:59:02 2018 -0700
+
+    Uncommented query code and validated it finds a record
+    in DetailsActivity
+
+[33mcommit ea047f9e4ef6ee0909d2a01d4ff784c58ed59695[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Mon Feb 5 17:49:03 2018 -0700
+
+    Updated DetailsActivity to support deleting a favorite
+    updated content provider to look for contin uri base
+    commented out query code in detailsActivity to get delete working
+
+[33mcommit bef59adbcca3120d912e2a6b55f053564439f8f0[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sat Feb 3 16:51:56 2018 -0700
+
+    Updated content provider in query case by image to accept params
+    updated detailsActivity gather params to pass to query for movie image
+
+[33mcommit 3946399a6da80810670310276588ba7a1e4eeb68[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sat Feb 3 11:46:44 2018 -0700
+
+    Updated Content Provider with additional criteria for query by string
+    added comments to DetailsActivity with research item notes
+
+[33mcommit 8126911b08dee6c55dd9403a44177b26fd20f740[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Feb 2 17:48:21 2018 -0700
+
+    Added details to query method in content provider
+    added todo to recycler adapter to support favorites
+    added todo to detailsactivity to support favorites
+
+[33mcommit 7a12aecd4162ccd909f3df00344895dd90c5e062[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Feb 2 16:11:09 2018 -0700
+
+    Updated DetailsActivity to insert favorites when star is clicked
+    added favorites column to favorites contract
+    Updated DBHelper to include new column for favorites
+    Updated ContentProvider with log statement to troubleshoot insert issue
+    Removed log statement from content provider
+
+[33mcommit d28c19a9b608274167be484a7cdb4a1290b71890[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Tue Jan 30 20:13:38 2018 -0700
+
+    added favorites button to detailActivity
+    Added onClickAddFavorites to DetailedActivity
+
+[33mcommit e27916cd500357cd36cc1150d054fe12aafa0fb1[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Jan 28 20:52:02 2018 -0700
+
+    added match uri and switch to Uri insert in PopularMoviesContentProvider
+
+[33mcommit 444a8151e27f7e9a180346a79acdf218b53a5534[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Jan 28 20:41:36 2018 -0700
+
+    Added initialization of dbhelper to content provider
+    Added getWriteable db to PopularMoviesContentProvider insert method
+
+[33mcommit 53e6c4bc0ee423c84319f20baa7e165b4c624a6d[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Jan 28 16:52:08 2018 -0700
+
+    Updated PolularMoviesContentProvider with int contants, buildUriMatcher method
+
+[33mcommit b4d7510673b708499ad850e1e9c573b53ef74159[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Jan 28 16:17:43 2018 -0700
+
+    Renamed FavoritesContentProvide to PopularMoviesContentProvider
+    Update manifest to include content provider registration
+    Renamed FavoritesContentProvider to PolularMoviesContentProvider
+    Updated FavoritesContract with PolularMoviesContentProvider constants
+
+[33mcommit b715a69663b21dfb68f1a0bd7c900842583c8e70[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Jan 28 15:03:00 2018 -0700
+
+    Added FavoritesContentProvider
+    Added FavoritesContentProviderUnitTest
+    Updated PopularMoviesDBHelper fixing error in create favroties table string - found with unit test
+
+[33mcommit 33582665d86a4e01a2f9bff82b8cc0b64a169710[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Jan 28 14:38:45 2018 -0700
+
+    Clean up PopularMoviesDBHelper
+    Added FavoritesContentProvider Shell
+
+[33mcommit 824d7ea912cf37e5a8a28d0533468ec2fc37ea7a[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Jan 28 12:30:22 2018 -0700
+
+    Added testutil to populate test data into favorites
+    added call to call to testutil in mainactivity
+    updated FavoritesContractUnitTest
+
+[33mcommit 0690f0c0ec2b4a75ececd7ae77b75d8595396171[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Jan 26 18:14:13 2018 -0700
+
+    misc add
+
+[33mcommit a94d60f5a7375947282143bbf8a487966cdbb021[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Jan 26 18:13:33 2018 -0700
+
+    added getFavorites call to onGroupItemClick to MainActivity
+
+[33mcommit e295587fb014691bbcc23ddbde51ee3d2bd540c4[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Jan 26 18:08:25 2018 -0700
+
+    Moved instantiation of db from onCreate to onGroupItemClick
+    Created Cusror method getFavorites in MainActivity
+
+[33mcommit 4c14c4bb228ae98209421a088289de2c1cf53b9a[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Jan 26 17:45:52 2018 -0700
+
+    update favorite contract name
+    added PopularMovieDBHelper
+    Instantiated the DB Helper in onCreate
+
+[33mcommit 61e9ab1a1f20658407d90912b38ffd1e63aa11f7[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Mon Jan 22 20:19:30 2018 -0700
+
+    added unit test for favorites contract
+
+[33mcommit ddf2c31aab4412bd99c8a23033cea563615f9a85[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Mon Jan 22 18:36:54 2018 -0700
+
+    added favorites contract with base columns for favorites table
+
+[33mcommit 2bea38b470f0cc9983ffb7a937765f0c87babdc5[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sat Jan 20 15:42:32 2018 -0700
+
+    Misc change no code changes
+
+[33mcommit 657f975c7321689b2dcccdc0ac764610c6e4938b[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sat Jan 20 15:33:28 2018 -0700
+
+    Fixed progress bar
+    added if statement in onStartLoading to check for parsed data
+    added deliverResults to skip load when parsed data exists
+    moved progressbar.visible in onStartLoader to onl be visable when loading new data
+
+[33mcommit 8549302efbdc027969d17aadc8f268fe618ae7c7[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sat Jan 20 13:08:36 2018 -0700
+
+    added log.i entries to troubleshoot progressbar issue
+
+[33mcommit 23d49e572bff9bda905d8dfe28d69a0999eb8996[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Tue Jan 16 20:45:00 2018 -0700
+
+    added group menu for sort
+    moved code to execute loader with new query params
+
+[33mcommit 54b8221a934bbfc7dd9f3adead9caa871168fa8c[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Jan 14 21:27:16 2018 -0700
+
+    added preference fragement for settings
+
+[33mcommit 91daab72e4d42fe36f1e46f28e55cdc3bd746ea2[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Jan 14 21:03:58 2018 -0700
+
+    updated menu to use setting with setting activity
+    commented out code for sorting(to be moved to fragment
+
+[33mcommit 924ade763cfbfd19cb2e2ee881250f4b38e096af[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Jan 14 19:00:35 2018 -0700
+
+    updated menu with showasaction=never
+
+[33mcommit 34557734ce4342cce222ed58eb74f7e73862c161[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sat Jan 13 12:03:00 2018 -0700
+
+    Added favorites menu item
+    misc work on unit tests
+
+[33mcommit a2d2fcac97ed9b31530228229c836ed16f2d37a2[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Jan 12 16:34:58 2018 -0700
+
+    Clean up code
+    Removed code that was commented out from MainActivity
+
+[33mcommit 686bf43423faefbf8ae5fa47ced74dcbb62c778d[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Jan 12 16:19:51 2018 -0700
+
+    Fixed Loader issue
+    added forceload to onStartLoading
+
+[33mcommit c24ea6575d25d43d8fbe457f9da65ca37b3d0937[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Thu Jan 11 19:06:28 2018 -0700
+
+    created querySearch method and initialized loader oncreate
+
+[33mcommit 768d4a6238a17608cab2d5cbd70c3748af97f91d[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Thu Jan 11 18:20:38 2018 -0700
+
+    added a check to see If the Loader was null, if yes then initialize it
+
+[33mcommit 621583bb4192006948e1dfaac0b3c9ee957b8cf9[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Thu Jan 11 18:17:30 2018 -0700
+
+    Updated imports
+    for  LoadManager
+    for AsyncTaskLoader
+    for Loader
+    Call getSupportLoaderManager and store it in a LoaderManager variable
+    Get loader by calling getLoader and pass id
+
+[33mcommit f5b7b2b4a355993d655a0ed52b9f2de1d62d6058[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Thu Jan 11 17:54:41 2018 -0700
+
+    updated Loader mothod onLoadFinished
+    check for data
+    set list
+    send notification
+
+[33mcommit 4a4e0d28b7e21c7898bd5443e9b2ceb27f814db0[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Thu Jan 11 17:46:35 2018 -0700
+
+    update Loader method LoadInBackground
+    get url from moviequerybundle
+    check for url
+    call networkutils
+    return parseddata
+
+[33mcommit 6432b3c69d37ac4f9cc1b92f0023614b145011d8[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Thu Jan 11 17:18:34 2018 -0700
+
+    updated Loader Method
+    Added return
+    Override of onStartLoading
+    Moved AsyncTask code for onPreExecute to onStartLoader
+
+[33mcommit 82503561b505b0bcdedec70c296a67a326beca7a[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Thu Jan 11 17:05:44 2018 -0700
+
+    created bundle movieQueryBundle to store key:value for the URL
+
+[33mcommit 5bb68291d40a0f73834c982b2eabaed7e47018d5[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Thu Jan 11 16:27:11 2018 -0700
+
+    added MainActivity implements LoaderCallback
+    Added methods for onCreateLoader
+    Added method for onLoadFinished
+    Added method for onLoaderReset
+    commented out all calls to MovieQueryTask().execute()
+
+[33mcommit 554f6b94cf364dd95cea828e4304f26ab6012f79[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Sep 15 17:30:09 2017 -0600
+
+    Added singleTop to the manifest and did some general clean up of debug code.
+
+[33mcommit 73738815cb661a9c024d4f110c8fa2120d1408e4[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Wed Sep 13 00:00:31 2017 -0600
+
+    POC with Parcelable is plumbed in and working.  Missing logic to check for saved instance
+
+[33mcommit ba38ec3d5b756750fd62a6c0215e5142a1c4e634[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Sep 10 21:49:05 2017 -0600
+
+    add ParcableUtils
+
+[33mcommit a69dec596a3877d8eef9f0f5a362c1d459ef61f5[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Sep 10 21:21:58 2017 -0600
+
+    moved scrollview to just the movie description in activity details
+
+[33mcommit 699a6200a91169af523f8bfc0fbc2f1b95e44970[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Sep 8 15:38:50 2017 -0600
+
+    Updated activity_details to support scrollview
+
+[33mcommit cf393d8f835b25aa7aed931e9bb2f0f23965e59f[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Sep 8 14:47:13 2017 -0600
+
+    updated NetworkUtils so that the base url is using  /movie/popular and /movie/top_rated as per rubic requirements
+
+[33mcommit e42fa9b2ee7e167698ac74ca832d1f1611d862b1[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Sep 8 14:25:27 2017 -0600
+
+    Implement a buildConfig property
+
+[33mcommit 670ac860692d304f7df3a118f71a07cab749f8ea[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Sep 8 10:04:52 2017 -0600
+
+    final commit after clean and key removal
+
+[33mcommit ee2122a65744a99ca2e51299955868e7aebf6029[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Sep 8 09:49:10 2017 -0600
+
+    final commit for LINT clean up
+
+[33mcommit d82ef75400378735b78493295b344dd8d5f3245a[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Sep 8 09:42:19 2017 -0600
+
+    interm commit #3 while doing LINT clean up
+
+[33mcommit 943ead2367a22f789214368ce90040f36bd4d4b9[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Sep 8 09:31:35 2017 -0600
+
+    interm commit #2 while doing LINT clean up
+
+[33mcommit 179605fdfa0323fa39c8efb14219ae1fb31fcf8f[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Sep 8 09:21:46 2017 -0600
+
+    interm commit while doing LINT clean up
+
+[33mcommit b76d07974dab5bdea8ab4cd29bb8c4351773eebd[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Sep 8 08:38:55 2017 -0600
+
+    Added R.string.details_max_user_rating to details activity
+
+[33mcommit 21bd4e4e7443b2be8d202233c94a5af3a968d550[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Sep 8 01:26:08 2017 -0600
+
+    added user rating to details
+
+[33mcommit 0bdb2725079b4dda423f80d728ee50a94927e18a[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Fri Sep 8 00:52:49 2017 -0600
+
+    updated java: general clean up before submission
+
+[33mcommit f2309fefef8612f12b7e3195e0eaf018e7be0845[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Thu Sep 7 23:20:21 2017 -0600
+
+    updated activity details by formatting display
+
+[33mcommit 08f552249376a03af1d0713b06004bc931d193fa[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Thu Sep 7 22:14:18 2017 -0600
+
+    updated DetailActivity with movie data and passed to text and image views
+
+[33mcommit 976e3d4486bcfe94e78419244123b69b9eca86f5[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Thu Sep 7 17:00:09 2017 -0600
+
+    Added text views and button to detail_activity xml
+
+[33mcommit 27903feb037827d7c3e7ce177030c4b6517e5352[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Thu Sep 7 00:01:23 2017 -0600
+
+    Added Cardview to detailActivity as a POC
+
+[33mcommit 96853804b64ab0701b94edbb0f24693009c541cf[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Wed Sep 6 22:02:47 2017 -0600
+
+    Added manifest label entry for sub activity titleadded details activty  title to string.xml
+
+[33mcommit 19355b79ccca4cb814b73152fc3c1963252f4e43[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Wed Sep 6 21:37:26 2017 -0600
+
+    added intent for sub activity to recycler adpater including sample put extra to pass the movie data
+
+[33mcommit 41a3e9abab1462e7cd03b81b2fd278597a6db043[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Wed Sep 6 21:29:44 2017 -0600
+
+    Added onclick support to RecyclerAdapter
+
+[33mcommit 057f6537cdd93e72006196ccc7a95b458c92e529[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Mon Sep 4 15:10:45 2017 -0600
+
+    Update menu search criteria to shows poster images based on selection
+
+[33mcommit 33043c5e95a6048848c2155fd1f5f94c38d44993[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Mon Sep 4 13:53:59 2017 -0600
+
+    work POC with API to JSON to Array to image view
+
+[33mcommit 871e4c21637fbe0fe373e25894468653721bf4d1[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Sep 3 21:42:49 2017 -0600
+
+    commit for checkpoint - total reset of recyclerAdapter
+
+[33mcommit 51839a31f6fdd6d434d99fb391c0bc70f58ded5a[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Sep 3 17:33:00 2017 -0600
+
+    added jsonUtils
+
+[33mcommit 458a5a656ac3298f3ea2b97b5fc5cd4faf8004d2[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Mon Aug 28 18:11:56 2017 -0600
+
+    Added JSONUtil
+    
+    Updated MainActivity change MvoieQueryTask to accept String[]
+
+[33mcommit 3544c0287c967bf970e252720bd3bffbad393033[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Aug 27 18:35:55 2017 -0600
+
+    removed the recycleradpater from activity in manifest
+
+[33mcommit 23e5c22d996ee02533412bc4a2315ca66c5ff479[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Aug 27 18:25:57 2017 -0600
+
+    typo fix in recyclerAdapter
+
+[33mcommit 94e6af092c39859cfed21a6a210d68fc69364899[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Aug 27 18:24:59 2017 -0600
+
+    Added NetworkUtil ( restrieve tmDB query results Async)
+    Updated MainAcitivty (Added movie Search to run NetowrkUtil)
+    Updated RecyclerAdapter (Updated override for ImageViewHolder and onBindViewHolder) This is a WIP item
+    Update layout main_activity (changed from grid to relative layout for now)
+    Updated movie_list (Changed from relative layout to linear layout for now)
+    Added menu --> main.xml (items for sorting)
+    Updated String.xml (added strings for menu popular and rating)
+
+[33mcommit b31814e92f4aadec006cd013b1f017a77bc805e2[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sun Aug 27 11:44:01 2017 -0600
+
+    Added Activity .Recycleradapter
+    Added movie_list.xml as relativelayout with imageView grid_movie_image
+    Added RecyclerAdpater
+    Updated MainActivity: mMovieGrid and reference for recyclerview
+
+[33mcommit b0dc01f2afab163fe849d666933a900deeb36b8e[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sat Aug 26 18:53:01 2017 -0600
+
+    Update Gradle dependency with RecyclerView; Update main_activity.xml with recyclerView and ProgressBar
+
+[33mcommit 3f612493be8a88061303a7af1cb5c2a49bde31a6[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sat Aug 26 17:10:56 2017 -0600
+
+    updated manifest with uses permissions (INTERNET and NETWORK STATE)
+
+[33mcommit d27be33731b9c15837cfa569f90b4eab7b578850[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sat Aug 26 17:02:11 2017 -0600
+
+    Previous commit stated manifest, actually update was made to gradle (module:app)
+
+[33mcommit 8c10fb42773d307a6d1e4eae34791d7474e46dc3[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sat Aug 26 16:53:50 2017 -0600
+
+    Added Picasso dependency to manifest
+
+[33mcommit b611755b165373295b11eb2fd0a4e69d13851de7[m
+Author: Sonny <sonny@sonnyespinoza.com>
+Date:   Sat Aug 26 16:34:25 2017 -0600
+
+    initial commit
+
+[33mcommit 4fdd83ea9294e1a11e657c53d6651b3e8691acc8[m
+Author: sonnyespinoza <sonnyespinoza@yahoo.com>
+Date:   Sat Aug 26 16:20:13 2017 -0600
+
+    Initial commit

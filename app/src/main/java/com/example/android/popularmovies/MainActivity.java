@@ -155,102 +155,9 @@ public class MainActivity extends AppCompatActivity  {
      * @return Return a new Loader instance that is ready to start loading.
      */
 
-    @SuppressLint("StaticFieldLeak") //ignore Lint warning
-    private LoaderManager.LoaderCallbacks<ArrayList> movieData = new LoaderManager.LoaderCallbacks<ArrayList>(){
-
-        @Override
-        public Loader<ArrayList> onCreateLoader(final int id, final Bundle args) {
-            return new AsyncTaskLoader<ArrayList>(getApplicationContext()) {
-
-                @Override
-                protected void onStartLoading() {
-                    super.onStartLoading();
-                    if (args == null) {
-                        Log.i("onStartLoading", "null args");
-
-                        return;
-                    }
-                    Log.i("onStartLoading", "");
-
-
-
-                    if (mParsedData != null){
-                        Log.i("onStartLoading", "parsedData Not Null");
-                        //mLoadingIndicator.setVisibility(View.VISIBLE);
-                        deliverResult(mParsedData);
-
-                    } else {
-                        Log.i("onStartLoading", "parsed Data Null");
-                        mLoadingIndicator.setVisibility(View.VISIBLE);
-
-                        forceLoad();
-                    }
-                }
-
-                @Override
-                public ArrayList loadInBackground() {
-                    String movieQueryUrlString = args.getString(MOVIE_QUERY_URL_EXTRA);
-                    Log.i("LoadInBackground", movieQueryUrlString);
-                    if (movieQueryUrlString == null || TextUtils.isEmpty(movieQueryUrlString)) {
-                        return null;
-                    }
-                    String mSearchResults;
-
-                    try {
-
-                        URL searchUrl = new URL(movieQueryUrlString);
-                        //get search results
-                        //if (mParsedData == null) {
-                        mSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
-                        Log.i("SearchResults: ", mSearchResults);
-                        //parse json
-                        mParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
-                        //}
-                        return mParsedData;
-
-
-                    } catch (IOException | JSONException e) {
-                        Log.e("LoadInBackground", "Exception");
-                        e.printStackTrace();
-                        return null;
-                    }
-                }
-
-                @Override
-                public void deliverResult(ArrayList data) {
-                    mParsedData = data;
-                    Log.i("deliverResults", data.toString());
-                    super.deliverResult(data);
-                }
-            };
-        }
-
-
-        @Override
-        public void onLoadFinished(Loader<ArrayList> loader, ArrayList data) {
-            mLoadingIndicator.setVisibility(View.INVISIBLE);
-
-            Log.i("onLoadFinish: arySize", String.valueOf(data.size()));
-            if (data != null && !data.equals("")) {
-                //onSaveInstanceState();
-
-                mMovieAdapter.setMovieList(data);
-                mMovieAdapter.notifyDataSetChanged();
-
-
-            }
-
-        }
-
-
-        @Override
-        public void onLoaderReset(Loader<ArrayList> loader) {
-
-        }
-    };
 
     @SuppressLint("StaticFieldLeak") //ignore Lint warning
-    private LoaderManager.LoaderCallbacks<ArrayList> favoritesData = new LoaderManager.LoaderCallbacks<ArrayList>() {
+    private LoaderManager.LoaderCallbacks<ArrayList> movieData = new LoaderManager.LoaderCallbacks<ArrayList>() {
         @Override
         public Loader<ArrayList> onCreateLoader(final int id, final Bundle args) {
             return new AsyncTaskLoader<ArrayList>(getApplicationContext()) {
@@ -283,9 +190,9 @@ public class MainActivity extends AppCompatActivity  {
                 @Override
                 public ArrayList loadInBackground() {
 
-                    String favoritesQueryUrlString = args.getString(MOVIE_QUERY_URL_EXTRA);
-                    Log.i("LoadInBackground", favoritesQueryUrlString);
-                    if (favoritesQueryUrlString == null || TextUtils.isEmpty(favoritesQueryUrlString)) {
+                    String QueryUrlString = args.getString(MOVIE_QUERY_URL_EXTRA);
+                    Log.i("LoadInBackground", QueryUrlString);
+                    if (QueryUrlString == null || TextUtils.isEmpty(QueryUrlString)) {
                         return null;
                     }
 
@@ -302,7 +209,7 @@ public class MainActivity extends AppCompatActivity  {
                                     FavoritesContract.favoriteMovies.MOVIE_ID};
                             try {
 
-                                Uri favorites_uri = Uri.parse(favoritesQueryUrlString);
+                                Uri favorites_uri = Uri.parse(QueryUrlString);
                                 Cursor favoriteMovies =  getContentResolver().query(favorites_uri,
                                         mProjection,
                                         null,
@@ -314,6 +221,8 @@ public class MainActivity extends AppCompatActivity  {
                                 Log.i("favorite2Json: "," {\"page\":1,\"total_results\":"+ favoriteMovies.getCount() + ",\"total_pages\":1,\"results\":"
                                         + favorite2Json.toString()
                                         + "}");
+
+                                //TODO need to add if favoriteMovies.getCount() > 0 to ensure you only process when there are records
 
                                 String a = " {\"page\":1,\"total_results\":"+ favoriteMovies.getCount() + ",\"total_pages\":1,\"results\":"
                                         + favorite2Json.toString()
@@ -327,6 +236,28 @@ public class MainActivity extends AppCompatActivity  {
                                 e.printStackTrace();
                                 return null;
                             }
+                        case MOVIE_QUERY_LOADER:
+                            String mSearchResults;
+
+                            try {
+
+                                URL searchUrl = new URL(QueryUrlString);
+                                //get search results
+                                //if (mParsedData == null) {
+                                mSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
+                                Log.i("SearchResults: ", mSearchResults);
+                                //parse json
+                                mParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
+                                //}
+                                return mParsedData;
+
+
+                            } catch (IOException | JSONException e) {
+                                Log.e("LoadInBackground", "Exception");
+                                e.printStackTrace();
+                                return null;
+                            }
+
 
                     }
 
@@ -428,40 +359,6 @@ public class MainActivity extends AppCompatActivity  {
             item.setChecked(true);
 
             makeFavoritesQuery(FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, FAVORITES_READ_LOADER);
-
-            //DONE Get rid of network check since its pulling db data for favorites
-            //if (networkUtils.isNetworkAvailable(this)) {
-
-
-                //Pass url to query and fires off an AsyncTaskLoader
-                //REMOVE -- makeSearchQuery(mSearchUrl.toString());
-                //TODO add call to search favorites either update makeSearchQuery or create new method using content provider to db
-
-                //IN LOADER
-                //TODO integrate with content provide once built
-                //TODO provider code needed in loader
-                //Query Favorites for movie
-/*            makeFavoritesQuery(ContentUris.withAppendedId(
-                    FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, Integer.valueOf(movie_id)),
-                    FAVORITES_READ_LOADER);*/
-
-                //TODO once data is retrieved from the provide, still in loader, convert to json
-                //https://tech.sarathdr.com/convert-database-cursor-result-to-json-array-android-app-development-1b9702fc7bbb
-                //**https://www.programcreek.com/java-api-examples/index.php?api=android.util.JsonWriter
-                //***https://stackoverflow.com/questions/19277529/android-jsonwriter-can-not-write-to-a-file
-                //***http://docs.huihoo.com/android/3.0/reference/android/util/JsonWriter.html
-                //will need to add method to jsonutil to do the conversion
-
-                //TODO Then process under normal json call to process favorites data
-                // mParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
-
-
-/*            } else {
-                Toast.makeText(this, "No Internet Connection",
-                        Toast.LENGTH_LONG).show();
-
-            }*/
-            //return true;
         }
 
     }
@@ -504,9 +401,11 @@ public class MainActivity extends AppCompatActivity  {
         //If the Loader was null, initialize it otherwise restart it
         if (movieSearchLoader == null) {
             Log.i("movieSearchLoader", "isNull");
+            //loaderManager.initLoader(loaderID, movieQueryBundle, movieData);
             loaderManager.initLoader(loaderID, movieQueryBundle, movieData);
         } else {
             Log.i("movieSearchLoader", "notNull");
+            //loaderManager.restartLoader(loaderID, movieQueryBundle, movieData);
             loaderManager.restartLoader(loaderID, movieQueryBundle, movieData);
         }
 
@@ -527,10 +426,10 @@ public class MainActivity extends AppCompatActivity  {
         //If the Loader was null, initialize it otherwise restart it
         if (favoritesLoader == null) {
             Log.i("makeFavoritesQuery", "favoritesLoader " + "isNull");
-            loaderManager.initLoader(loaderID, bundle, favoritesData);
+            loaderManager.initLoader(loaderID, bundle, movieData);
         } else {
             Log.i("makeFavoritesQuery", "favoritesLoader " + "notNull");
-            loaderManager.restartLoader(loaderID, bundle, favoritesData);
+            loaderManager.restartLoader(loaderID, bundle, movieData);
         }
 
 

@@ -197,7 +197,6 @@ public final class JsonUtils {
                 //JSON Array node
                 JSONArray trailerJSONArray = trailerJson.getJSONArray(RESULTS);
 
-
                 /* Is there an error? */
                 if (trailerJson.has(TRAILER_STATUS_CODE)) {
 
@@ -250,6 +249,8 @@ public final class JsonUtils {
         //return trailer array data
         return trailerData;
     }
+
+    //convert cursor data to json format
     public static JSONArray favoritesJSON(Cursor cursor) {
 
         JSONArray resultSet = new JSONArray();
@@ -273,15 +274,6 @@ public final class JsonUtils {
 
         cursor.close();
         return resultSet;
-
-/*        FavoritesContract.favoriteMovies.RELEASE_DATE,
-                FavoritesContract.favoriteMovies.MOVIE_DESCRIPTION,
-                FavoritesContract.favoriteMovies.MOVIE_TITLE,
-                FavoritesContract.favoriteMovies.IMAGE_NAME,
-                FavoritesContract.favoriteMovies.IMAGE_POSTER,
-                FavoritesContract.favoriteMovies.USER_RATING,
-                FavoritesContract.favoriteMovies.MOVIE_ID};*/
-
     }
 
 }
