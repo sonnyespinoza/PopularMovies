@@ -15,6 +15,7 @@
  */
 package com.example.android.popularmovies.utilities;
 
+import android.database.Cursor;
 import android.util.Log;
 
 import com.example.android.popularmovies.parcelables.MovieParcelable;
@@ -47,7 +48,7 @@ public final class JsonUtils {
         final String RESULTS = "results";
 
         /* Name of the image file */
-        final String IMAGE_NAME = "backdrop_path";
+        //final String IMAGE_NAME = "backdrop_path";
         final String IMAGE_POSTER= "poster_path";
 
         /* Date the movie was released */
@@ -107,7 +108,7 @@ public final class JsonUtils {
 
                         JSONObject movieInfo = movieJSONArray.getJSONObject(i);
 
-                        String image = movieInfo.getString(IMAGE_NAME);
+                        //String image = movieInfo.getString(IMAGE_NAME);
                         //Log.i("backdrop_path", image );
                         String imagePoster = movieInfo.getString(IMAGE_POSTER);
                         String title = movieInfo.getString(MOVIE_TITLE);
@@ -131,7 +132,8 @@ public final class JsonUtils {
 */
 
 
-                        movieData.add(new MovieParcelable(releaseDate, description, title, image, imagePoster, userRating, id));;
+                        //movieData.add(new MovieParcelable(releaseDate, description, title, image, imagePoster, userRating, id));
+                        movieData.add(new MovieParcelable(releaseDate, description, title, imagePoster, userRating, id));
 
                         //add movie info to movie data array
                         //movieData.add(mInfo);
@@ -248,4 +250,38 @@ public final class JsonUtils {
         //return trailer array data
         return trailerData;
     }
+    public static JSONArray favoritesJSON(Cursor cursor) {
+
+        JSONArray resultSet = new JSONArray();
+        cursor.moveToFirst();
+        while (cursor.isAfterLast() == false) {
+            int totalColumn = cursor.getColumnCount();
+            JSONObject rowObject = new JSONObject();
+            for (int i = 0; i < totalColumn; i++) {
+                if (cursor.getColumnName(i) != null) {
+                    try {
+                        rowObject.put(cursor.getColumnName(i),
+                                cursor.getString(i));
+                    } catch (Exception e) {
+                        Log.e("favoritesJSON", e.getMessage());
+                    }
+                }
+            }
+            resultSet.put(rowObject);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        return resultSet;
+
+/*        FavoritesContract.favoriteMovies.RELEASE_DATE,
+                FavoritesContract.favoriteMovies.MOVIE_DESCRIPTION,
+                FavoritesContract.favoriteMovies.MOVIE_TITLE,
+                FavoritesContract.favoriteMovies.IMAGE_NAME,
+                FavoritesContract.favoriteMovies.IMAGE_POSTER,
+                FavoritesContract.favoriteMovies.USER_RATING,
+                FavoritesContract.favoriteMovies.MOVIE_ID};*/
+
+    }
+
 }

@@ -17,7 +17,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -27,6 +26,7 @@ import com.example.android.popularmovies.parcelables.MovieParcelable;
 import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -202,6 +202,7 @@ public class MainActivity extends AppCompatActivity  {
                         //get search results
                         //if (mParsedData == null) {
                         mSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
+                        Log.i("SearchResults: ", mSearchResults);
                         //parse json
                         mParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
                         //}
@@ -256,12 +257,25 @@ public class MainActivity extends AppCompatActivity  {
 
                 @Override
                 protected void onStartLoading() {
-
                     super.onStartLoading();
                     if (args == null) {
                         Log.i("onStartLoading", "null args");
 
+                        return;
+                    }
+                    Log.i("onStartLoading", "");
+
+
+
+                    if (mParsedData != null){
+                        Log.i("onStartLoading", "parsedData Not Null");
+                        //mLoadingIndicator.setVisibility(View.VISIBLE);
+                        deliverResult(mParsedData);
+
                     } else {
+                        Log.i("onStartLoading", "parsed Data Null");
+                        mLoadingIndicator.setVisibility(View.VISIBLE);
+
                         forceLoad();
                     }
                 }
@@ -295,13 +309,19 @@ public class MainActivity extends AppCompatActivity  {
                                         null,
                                         null);
 
-                                favoriteMovies.moveToFirst();
-                                String test =  favoriteMovies.getString(0)
-                                        + " "+
-                                        favoriteMovies.getString(1);
 
-                                Log.d("favoritesData: ", test);
-                                //TODO integrate json tranformer
+                                JSONArray favorite2Json = JsonUtils.favoritesJSON(favoriteMovies);
+                                Log.i("favorite2Json: "," {\"page\":1,\"total_results\":"+ favoriteMovies.getCount() + ",\"total_pages\":1,\"results\":"
+                                        + favorite2Json.toString()
+                                        + "}");
+
+                                String a = " {\"page\":1,\"total_results\":"+ favoriteMovies.getCount() + ",\"total_pages\":1,\"results\":"
+                                        + favorite2Json.toString()
+                                        + "}";
+
+                                mParsedData = JsonUtils.getMovieDataFromJson(a);
+                                return mParsedData;
+
                             } catch (Exception e) {
                                 Log.e("LoadInBackground READ ", "Exception");
                                 e.printStackTrace();
@@ -313,6 +333,12 @@ public class MainActivity extends AppCompatActivity  {
 
                     return null;
                 }
+                @Override
+                public void deliverResult(ArrayList data) {
+                    mParsedData = data;
+                    Log.i("deliverResults", data.toString());
+                    super.deliverResult(data);
+                }
 
 
             };
@@ -320,12 +346,16 @@ public class MainActivity extends AppCompatActivity  {
 
         @Override
         public void onLoadFinished(Loader<ArrayList> loader, ArrayList data) {
+            mLoadingIndicator.setVisibility(View.INVISIBLE);
+
+            Log.i("onLoadFinish: arySize", String.valueOf(data.size()));
+            if (data != null && !data.equals("")) {
+                //onSaveInstanceState();
+
+                mMovieAdapter.setMovieList(data);
+                mMovieAdapter.notifyDataSetChanged();
 
 
-            ImageButton ButtonStar;
-            switch (loader.getId()) {
-                case FAVORITES_READ_LOADER:
-                    break;
 
             }
 
@@ -340,7 +370,6 @@ public class MainActivity extends AppCompatActivity  {
     public void onGroupItemClick(MenuItem item) {
 
         final String byTopRated = "top_rated";
-        final String byFavorites = "favorites";
 
 
 
