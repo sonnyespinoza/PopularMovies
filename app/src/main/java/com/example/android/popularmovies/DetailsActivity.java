@@ -155,10 +155,10 @@ public class DetailsActivity extends AppCompatActivity {
 
 
         user_rating = intent.getStringExtra(this.getString(R.string.user_rating));
-        user_rating = user_rating + this.getString(R.string.details_max_user_rating);
+        //user_rating = user_rating ;
 
         TextView tv_user_rating = (TextView) findViewById(R.id.tv_user_rating);
-        tv_user_rating.setText(user_rating);
+        tv_user_rating.setText(user_rating+ this.getString(R.string.details_max_user_rating));
 
 
         //Picasso:Listen for loading errors

@@ -108,8 +108,6 @@ public final class JsonUtils {
 
                         JSONObject movieInfo = movieJSONArray.getJSONObject(i);
 
-                        //String image = movieInfo.getString(IMAGE_NAME);
-                        //Log.i("backdrop_path", image );
                         String imagePoster = movieInfo.getString(IMAGE_POSTER);
                         String title = movieInfo.getString(MOVIE_TITLE);
                         String description = movieInfo.getString(MOVIE_DESCRIPTION);
@@ -117,31 +115,7 @@ public final class JsonUtils {
                         String userRating = movieInfo.getString(USER_RATING);
                         String id = movieInfo.getString(MOVIE_ID);
 
-
-                        //hash map for pre load of movie info
-/*
-                        HashMap<String, String> mInfo = new HashMap<>();
-
-                        //Load movie info into hash map
-                        mInfo.put(IMAGE_NAME, image);
-                        mInfo.put(IMAGE_POSTER, image_poster);
-                        mInfo.put(MOVIE_TITLE, title);
-                        mInfo.put(MOVIE_DESCRIPTION, description);
-                        mInfo.put(RELEASE_DATE, releaseDate);
-                        mInfo.put(USER_RATING, userRating);
-*/
-
-
-                        //movieData.add(new MovieParcelable(releaseDate, description, title, image, imagePoster, userRating, id));
                         movieData.add(new MovieParcelable(releaseDate, description, title, imagePoster, userRating, id));
-
-                        //add movie info to movie data array
-                        //movieData.add(mInfo);
-
-
-
-
-
                     }
 
                 }
