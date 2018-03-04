@@ -41,9 +41,6 @@ import java.util.ArrayList;
 
 public class DetailsActivity extends AppCompatActivity {
 
-    //TODO clean up commented code prior to submission
-    //TaskLoader unique identifier
-    //private int FAVORITES_LOADER;
     private static final int FAVORITES_READ_LOADER = 22;
     private static final int FAVORITES_DELETE_LOADER = 44;
     private static final int FAVORITES_CREATE_LOADER = 66;
@@ -52,13 +49,10 @@ public class DetailsActivity extends AppCompatActivity {
 
     final static String YOUTUBE_API_KEY = BuildConfig.YOUTUBE_API_KEY;
 
-
     private static final String CRUD_URL_EXTRA = "crud";
 
-
-    //private List<MovieParcelable> movie;
     private Context context;
-    //Uri uri;
+
     boolean isFavorite = false;
     String title;
     String release_date;
@@ -158,7 +152,7 @@ public class DetailsActivity extends AppCompatActivity {
         //user_rating = user_rating ;
 
         TextView tv_user_rating = (TextView) findViewById(R.id.tv_user_rating);
-        tv_user_rating.setText(user_rating+ this.getString(R.string.details_max_user_rating));
+        tv_user_rating.setText(user_rating + this.getString(R.string.details_max_user_rating));
 
 
         //Picasso:Listen for loading errors
@@ -215,7 +209,7 @@ public class DetailsActivity extends AppCompatActivity {
 */
 
 
-        //Query Favorites for movie
+        //Query to check if movie is Favorites
         makeFavoritesQuery(ContentUris.withAppendedId(
                 FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, Integer.valueOf(movie_id)),
                 FAVORITES_READ_LOADER);
@@ -261,7 +255,7 @@ public class DetailsActivity extends AppCompatActivity {
                     }
                     String mSearchResults;
 
-                    URL mTrailerUrl = networkUtils.buildUrl("trailer_list", movie_id, "1");
+                    //URL mTrailerUrl = networkUtils.buildUrl("trailer_list", movie_id, "1");
                     //Log.i("createTrailerURL", mTrailerUrl.toString());
 
                     //fetch data from API
@@ -369,7 +363,7 @@ public class DetailsActivity extends AppCompatActivity {
                                 Log.i("LoadInBackground", "FAVORITES_DELETE_LOADER");
                             } catch (Exception e) {
 
-                                Log.e("LoadInBackground", "Exception");
+                                Log.e("LoadInBackground DELETE", "Exception");
                                 e.printStackTrace();
                             }
 
@@ -392,7 +386,7 @@ public class DetailsActivity extends AppCompatActivity {
 
                             } catch (Exception e) {
 
-                                Log.e("LoadInBackground", "Exception");
+                                Log.e("LoadInBackground CREATE", "Exception");
                                 e.printStackTrace();
                             }
 
@@ -412,9 +406,13 @@ public class DetailsActivity extends AppCompatActivity {
 
 
             ImageButton ButtonStar;
+            TextView FavortiesText;
+            ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
+            FavortiesText = (TextView) findViewById(R.id.tv_add_favorites);
             switch (loader.getId()) {
                 case FAVORITES_READ_LOADER:
-                    ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
+
+
                     if (null == cursor) { //null == error
 
                         Log.e("onLoadFinished: ", "cursor: Error Occurred");
@@ -423,25 +421,25 @@ public class DetailsActivity extends AppCompatActivity {
 
                         Log.i("onLoadFinished ", "FAVORITES_READ_LOADER: No Record Found");
                         ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star));
+                        FavortiesText.setText("Add to favorites");
 
                     } else { //Record found
-
                         Log.i("onLoadFinished: ", "FAVORITES_READ_LOADER: Record Found");
                         ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star_big_on));
+                        FavortiesText.setText("Favorites");
                         isFavorite = !isFavorite; //found true
                     }
 
                     break;
 
                 case FAVORITES_DELETE_LOADER:
-
-                    ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
                     ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star));
+                    FavortiesText.setText("Add to favorites");
                     break;
 
                 case FAVORITES_CREATE_LOADER:
-                    ButtonStar = (ImageButton) findViewById(R.id.ib_favorite_button);
                     ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star_big_on));
+                    FavortiesText.setText("Favorites");
                     break;
             }
 
@@ -524,7 +522,7 @@ public class DetailsActivity extends AppCompatActivity {
         String VIDEO_ID = id;
 
         Intent youTubeIntent = YouTubeStandalonePlayer.createVideoIntent((Activity) context, YOUTUBE_API_KEY, VIDEO_ID, 0, true, true);
-        ;
+
         Intent webIntent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse("http://www.youtube.com/watch?v=" + id));
         try {

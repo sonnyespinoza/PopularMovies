@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity  {
 
     private final String byMostPopular = "popular";
 
-    //ArrayList<HashMap<String, String>> mParsedData; //Array to hold parsed data from tmdb
     ArrayList<MovieParcelable> mParsedData; //Array to hold parsed data from tmdb
 
     SQLiteDatabase pmDB;
@@ -73,10 +72,8 @@ public class MainActivity extends AppCompatActivity  {
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         Log.i("onRestoreInstanceState", "yes");
         // Restore UI state from the savedInstanceState.
-        // This bundle has also been passed to onCreate.
         super.onRestoreInstanceState(savedInstanceState);
         mParsedData = savedInstanceState.getParcelableArrayList("movies");
-        //mLoadingIndicator.setVisibility(View.INVISIBLE);
 
     }
 
@@ -114,7 +111,6 @@ public class MainActivity extends AppCompatActivity  {
 
                 // Pass the movie details to the intent extras
                 for(Map.Entry m:movieDetails.entrySet()){
-                    //System.out.println(m.getKey()+" "+m.getValue());
                     intentDetailActivity.putExtra(m.getKey().toString(),m.getValue().toString());
                 }
                 MainActivity.this.startActivity(intentDetailActivity);
@@ -134,15 +130,10 @@ public class MainActivity extends AppCompatActivity  {
                 mMovieAdapter.setMovieList(mParsedData);
                 mMovieAdapter.notifyDataSetChanged();
             }
-
-
         } else {
             Toast.makeText(this, "No Internet Connection",
                     Toast.LENGTH_LONG).show();
-
         }
-
-
     }
 
 
@@ -154,8 +145,6 @@ public class MainActivity extends AppCompatActivity  {
      * @param args Any arguments supplied by the caller.
      * @return Return a new Loader instance that is ready to start loading.
      */
-
-
     @SuppressLint("StaticFieldLeak") //ignore Lint warning
     private LoaderManager.LoaderCallbacks<ArrayList> movieData = new LoaderManager.LoaderCallbacks<ArrayList>() {
         @Override
@@ -198,7 +187,6 @@ public class MainActivity extends AppCompatActivity  {
 
                     switch (id) {
                         case FAVORITES_READ_LOADER:
-                            //Query to determine if Movie is in favorites list;
                             String[] mProjection = {
                                     FavoritesContract.favoriteMovies.RELEASE_DATE,
                                     FavoritesContract.favoriteMovies.MOVIE_DESCRIPTION,
@@ -218,18 +206,23 @@ public class MainActivity extends AppCompatActivity  {
 
 
                                 JSONArray favorite2Json = JsonUtils.favoritesJSON(favoriteMovies);
-                                Log.i("favorite2Json: "," {\"page\":1,\"total_results\":"+ favoriteMovies.getCount() + ",\"total_pages\":1,\"results\":"
-                                        + favorite2Json.toString()
-                                        + "}");
 
-                                //TODO need to add if favoriteMovies.getCount() > 0 to ensure you only process when there are records
+                                if(favoriteMovies.getCount() > 0){
+                                    String favs = " {\"page\":1,\"total_results\":"+ favoriteMovies.getCount() + ",\"total_pages\":1,\"results\":"
+                                            + favorite2Json.toString()
+                                            + "}";
+                                    mParsedData = JsonUtils.getMovieDataFromJson(favs);
+                                    return mParsedData;
+                                } else{
 
-                                String a = " {\"page\":1,\"total_results\":"+ favoriteMovies.getCount() + ",\"total_pages\":1,\"results\":"
-                                        + favorite2Json.toString()
-                                        + "}";
+                                    Toast.makeText(getApplicationContext(),
+                                            "No Favorites to display",
+                                            Toast.LENGTH_SHORT).show();
 
-                                mParsedData = JsonUtils.getMovieDataFromJson(a);
-                                return mParsedData;
+
+                                }
+
+
 
                             } catch (Exception e) {
                                 Log.e("LoadInBackground READ ", "Exception");

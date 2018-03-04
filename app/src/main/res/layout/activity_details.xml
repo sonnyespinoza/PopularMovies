@@ -82,11 +82,10 @@
                 android:id="@+id/tv_add_favorites"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
                 android:layout_below="@+id/tv_user_rating"
                 android:layout_marginLeft="32dp"
                 android:layout_toRightOf="@+id/ib_favorite_button"
-                android:textSize="16sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/tv_detail_movie_description"
