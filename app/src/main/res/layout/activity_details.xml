@@ -8,18 +8,17 @@
     android:fillViewport="true">
 
 <android.support.constraint.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="8dp"
+    android:layout_marginStart="8dp">
 
 
     <TextView
         android:id="@+id/tv_detail_movie_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
-        android:text="Movie Title"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,8 +29,6 @@
         android:id="@+id/iv_details_poster"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:contentDescription="movie poster image used in details"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_detail_movie_title" />
@@ -54,8 +51,6 @@
         android:id="@+id/tv_user_rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:layout_toRightOf="@+id/iv_details_poster"
@@ -69,10 +64,7 @@
         android:id="@+id/ib_favorite_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:layout_toEndOf="@+id/iv_details_poster"
         android:layout_toRightOf="@+id/iv_details_poster"
         android:background="#00ffffff"
         android:onClick="onClickAddFavorite"
@@ -84,8 +76,8 @@
         android:id="@+id/tv_add_favorites"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
         android:textSize="12sp"
         android:onClick="onClickAddFavorite"
         app:layout_constraintBottom_toBottomOf="@+id/ib_favorite_button"
@@ -95,8 +87,7 @@
         android:id="@+id/tv_reviews"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+
         android:layout_marginTop="16dp"
         android:text="@string/reviews"
         android:textStyle="bold"
@@ -113,7 +104,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/iv_details_poster"
         app:layout_constraintTop_toBottomOf="@+id/iv_details_poster" />
 
     <android.support.v7.widget.RecyclerView

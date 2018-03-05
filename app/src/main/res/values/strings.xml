@@ -8,7 +8,7 @@
     <string name="sortbyrating">Rating</string>
     <string name="sortbyfavorites">Favorites</string>
 
-    <string name="detail_activity_title">Movie Detail</string>
+    <string name="detail_activity_title">Movie Details</string>
 
     <string name="release_date">release_date</string>
     <string name="overview">overview</string>
@@ -28,6 +28,10 @@
     <string name="title_notifications">Notifications</string>
 
     <string name="reviews"> <u>Reviews</u></string>
+
+    <string name="add_favorite">Add To Favorites</string>
+    <string name="is_favorite">Favorite</string>
+
 
 
 </resources>

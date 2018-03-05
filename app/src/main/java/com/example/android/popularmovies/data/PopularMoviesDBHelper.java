@@ -33,22 +33,6 @@ public class PopularMoviesDBHelper extends SQLiteOpenHelper {
 
             " UNIQUE (" + favoriteMovies._ID + ") ON CONFLICT REPLACE);";
 
-    //Alter Favorites Table SQL String
-    //TODO WIP
-    //rename
-    private static final String RENAME_FAVORITES_TABLE = "ALTER TABLE " + favoriteMovies.TABLE_NAME + "TO HOLD_FAVORITES";
-
-    //restore favorites TODO WIP
-    private static final String INSERT_SAVED_FAVORITES =
-            "INSERT INTO " + favoriteMovies.TABLE_NAME +
-            " (col1, col2) "+
-                    "SELECT col1, col2, col2 " +
-                    "FROM   sourceTable";
-
-    //Alter table cols
-    //TODO validate if this is actually needed most likely it is not
-    private static final String ALTER_FAVORITES_TABLE = "ALTER TABLE " + favoriteMovies.TABLE_NAME + " ADD COLUMN ";
-
 
     PopularMoviesDBHelper(Context context) {
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
@@ -71,11 +55,6 @@ public class PopularMoviesDBHelper extends SQLiteOpenHelper {
             // TEMP solution drop all old table and recreate
             db.execSQL("DROP TABLE IF EXISTS " + favoriteMovies.TABLE_NAME);
             onCreate(db);
-
-            //TODO update existing schema and retain data WIP
-            //db.execSQL(RENAME_FAVORITES_TABLE);
-            //onCreate(db);
-            //db.execSQL(INSERT_SAVED_FAVORITES);
         }
 
     }

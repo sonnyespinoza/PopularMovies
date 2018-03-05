@@ -203,9 +203,13 @@ public class DetailsActivity extends AppCompatActivity {
 
 
 /*
-        //TODO need to re-move this is a test call to validate correctness of the URL after implementing reviews
-        URL mReviewUrl = NetworkUtils.buildUrl("review_list", "254128", "1");
-        Log.i("createReviewURL", mReviewUrl.toString());
+        TODO Remaining Work:
+         Need to review and implement responsive design with <includes>
+         Need to add Review activity using contraint layout
+         Need to review polish UI videos and clean up UI
+         Need to re-move this is a test call to validate correctness of the URL after implementing reviews
+            URL mReviewUrl = NetworkUtils.buildUrl("review_list", "254128", "1");
+            Log.i("createReviewURL", mReviewUrl.toString());
 */
 
 
@@ -421,12 +425,12 @@ public class DetailsActivity extends AppCompatActivity {
 
                         Log.i("onLoadFinished ", "FAVORITES_READ_LOADER: No Record Found");
                         ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star));
-                        FavortiesText.setText("Add to favorites");
+                        FavortiesText.setText(getString(R.string.add_favorite));
 
                     } else { //Record found
                         Log.i("onLoadFinished: ", "FAVORITES_READ_LOADER: Record Found");
                         ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star_big_on));
-                        FavortiesText.setText("Favorites");
+                        FavortiesText.setText(getString(R.string.is_favorite));
                         isFavorite = !isFavorite; //found true
                     }
 
@@ -434,12 +438,12 @@ public class DetailsActivity extends AppCompatActivity {
 
                 case FAVORITES_DELETE_LOADER:
                     ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star));
-                    FavortiesText.setText("Add to favorites");
+                    FavortiesText.setText(getString(R.string.add_favorite));
                     break;
 
                 case FAVORITES_CREATE_LOADER:
                     ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star_big_on));
-                    FavortiesText.setText("Favorites");
+                    FavortiesText.setText(getString(R.string.is_favorite));
                     break;
             }
 
@@ -519,9 +523,9 @@ public class DetailsActivity extends AppCompatActivity {
 
     public static void watchYoutubeTrailerVideo(Context context, String id) {
 
-        String VIDEO_ID = id;
+        //String VIDEO_ID = id;
 
-        Intent youTubeIntent = YouTubeStandalonePlayer.createVideoIntent((Activity) context, YOUTUBE_API_KEY, VIDEO_ID, 0, true, true);
+        Intent youTubeIntent = YouTubeStandalonePlayer.createVideoIntent((Activity) context, YOUTUBE_API_KEY, id, 0, true, true);
 
         Intent webIntent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse("http://www.youtube.com/watch?v=" + id));

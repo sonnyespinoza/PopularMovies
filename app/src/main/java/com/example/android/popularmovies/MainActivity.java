@@ -37,8 +37,6 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity  {
 
-
-    //TODO Clean up Log.i statements
     private ProgressBar mLoadingIndicator;
 
     private final String byMostPopular = "popular";
@@ -306,7 +304,6 @@ public class MainActivity extends AppCompatActivity  {
 
             mParsedData = null;
             URL mSearchUrl = NetworkUtils.buildUrl(byMostPopular, "1");
-
             Log.i("menuByPopular", mSearchUrl.toString());
 
 

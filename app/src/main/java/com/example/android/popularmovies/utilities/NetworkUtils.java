@@ -141,7 +141,6 @@ public class NetworkUtils  {
      */
     public static String getResponseFromHttpUrl(URL url) throws IOException {
 
-        //REMOVE StrictMode once Trailer and reviews are moved off the main thread
         //added for testing of data retrieval on the main thread
  /*       StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);*/
