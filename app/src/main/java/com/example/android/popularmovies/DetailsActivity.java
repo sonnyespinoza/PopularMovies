@@ -92,6 +92,14 @@ public class DetailsActivity extends AppCompatActivity {
 
     }
 
+    public void onClickReviews(View view){
+        Class destinationClass = ReviewsActivity.class;
+        Intent intentReviewsActivity = new Intent(DetailsActivity.this, destinationClass);
+
+        intentReviewsActivity.putExtra(context.getString(R.string.movie_id),movie_id);
+
+        DetailsActivity.this.startActivity(intentReviewsActivity);
+    }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -204,8 +212,9 @@ public class DetailsActivity extends AppCompatActivity {
 
 /*
         TODO Remaining Work:
-         Need to review and implement responsive design with <includes>
-         Need to add Review activity using contraint layout
+         xxNeed to review and implement responsive design with <includes>
+         xxNeed to add Review activity using contraint layout
+         Need to add movie data to savedinstance so that the back button on reviews does not error out
          Need to review polish UI videos and clean up UI
          Need to re-move this is a test call to validate correctness of the URL after implementing reviews
             URL mReviewUrl = NetworkUtils.buildUrl("review_list", "254128", "1");

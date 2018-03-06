@@ -23,6 +23,7 @@ import android.net.Uri;
 import com.example.android.popularmovies.BuildConfig;
 import com.example.android.popularmovies.DetailsActivity;
 import com.example.android.popularmovies.MainActivity;
+import com.example.android.popularmovies.ReviewsActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,6 +56,9 @@ public class NetworkUtils  {
     }
 
     public NetworkUtils(DetailsActivity detailsActivity){
+
+    }
+    public NetworkUtils(ReviewsActivity reviewsActivity){
 
     }
 

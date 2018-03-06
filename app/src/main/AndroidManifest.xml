@@ -23,11 +23,20 @@
         </activity>
         <activity
             android:name=".DetailsActivity"
+            android:launchMode="singleTop"
             android:label="@string/detail_activity_title"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".ReviewsActivity"
+            android:label="@string/title_activity_reviews"
+            android:parentActivityName=".DetailsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DetailsActivity" />
         </activity>
         <activity
             android:name=".SettingsActivity"
@@ -43,7 +52,6 @@
             android:authorities="com.example.android.popularmovies"
             android:exported="false" />
 
-        <activity android:name=".ReviewsActivity"></activity>
     </application>
 
 </manifest>
