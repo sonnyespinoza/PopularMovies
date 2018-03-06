@@ -9,6 +9,7 @@
     <string name="sortbyfavorites">Favorites</string>
 
     <string name="detail_activity_title">Movie Details</string>
+    <string name="title_activity_reviews">Movie Reviews</string>
 
     <string name="release_date">release_date</string>
     <string name="overview">overview</string>

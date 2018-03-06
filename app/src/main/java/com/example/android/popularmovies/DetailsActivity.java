@@ -425,12 +425,12 @@ public class DetailsActivity extends AppCompatActivity {
 
                         Log.i("onLoadFinished ", "FAVORITES_READ_LOADER: No Record Found");
                         ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star));
-                        FavortiesText.setText(getString(R.string.add_favorite));
+                        //FavortiesText.setText(getString(R.string.add_favorite));
 
                     } else { //Record found
                         Log.i("onLoadFinished: ", "FAVORITES_READ_LOADER: Record Found");
                         ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star_big_on));
-                        FavortiesText.setText(getString(R.string.is_favorite));
+                        //FavortiesText.setText(getString(R.string.is_favorite));
                         isFavorite = !isFavorite; //found true
                     }
 
@@ -438,12 +438,12 @@ public class DetailsActivity extends AppCompatActivity {
 
                 case FAVORITES_DELETE_LOADER:
                     ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star));
-                    FavortiesText.setText(getString(R.string.add_favorite));
+                    //FavortiesText.setText(getString(R.string.add_favorite));
                     break;
 
                 case FAVORITES_CREATE_LOADER:
                     ButtonStar.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star_big_on));
-                    FavortiesText.setText(getString(R.string.is_favorite));
+                    //FavortiesText.setText(getString(R.string.is_favorite));
                     break;
             }
 

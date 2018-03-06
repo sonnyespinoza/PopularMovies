@@ -43,7 +43,7 @@
             android:authorities="com.example.android.popularmovies"
             android:exported="false" />
 
-
+        <activity android:name=".ReviewsActivity"></activity>
     </application>
 
 </manifest>
