@@ -19,6 +19,7 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.example.android.popularmovies.parcelables.MovieParcelable;
+import com.example.android.popularmovies.parcelables.ReviewsParcelable;
 import com.example.android.popularmovies.parcelables.TrailerParcelable;
 
 import org.json.JSONArray;
@@ -223,6 +224,90 @@ public final class JsonUtils {
         //return trailer array data
         return trailerData;
     }
+
+    public static ArrayList<ReviewsParcelable> getReviewDataFromJson(String reviewJsonStr)
+            throws JSONException {
+
+        /* The "list" array of review results*/
+        final String RESULTS = "results";
+
+        /* author and content  */
+        final String REVIEW_AUTHOR = "author";
+        final String REVIEW_CONTENT= "content";
+
+        /* review url */
+        final String REVIEW_URL = "url";
+
+
+        //review id
+        final String REVIEW_ID = "id";
+
+        //return status code
+        final String TRAILER_STATUS_CODE = "status_code";
+
+
+
+        // INITIALIZE NEW ARRAYLIST AND POPULATE
+        ArrayList<ReviewsParcelable> reviewData = new ArrayList<ReviewsParcelable>();
+
+
+        if (reviewJsonStr != null) {
+
+            try {
+
+
+                JSONObject trailerJson = new JSONObject(reviewJsonStr);
+
+                //JSON Array node
+                JSONArray trailerJSONArray = trailerJson.getJSONArray(RESULTS);
+
+                /* Is there an error? */
+                if (trailerJson.has(TRAILER_STATUS_CODE)) {
+
+                    int errorCode = trailerJson.getInt(TRAILER_STATUS_CODE);
+
+                    Log.e("JSONUtil:Status Code", String.valueOf(TRAILER_STATUS_CODE) );
+                    Log.e("JSONUtil:Message", trailerJson.get("status_message").toString());
+                    switch (errorCode) {
+                        case 1:
+                            break;
+                        case 2:
+                    /* Location invalid */
+                            return null;
+                        default:
+                    /* Server probably down */
+                            return null;
+                    }
+                } else {
+
+
+
+                    for (int i = 0; i < trailerJSONArray.length(); i++) {
+
+                        JSONObject reviewInfo = trailerJSONArray.getJSONObject(i);
+
+                            //Log.d("trail type match: ", "\"" + trailerType + "\"" );
+                            String reviewId = reviewInfo.getString(REVIEW_ID);
+                            String reviewAuthor = reviewInfo.getString(REVIEW_AUTHOR);
+                            String reviewContent = reviewInfo.getString(REVIEW_CONTENT);
+
+                        reviewData.add(new ReviewsParcelable(reviewId, reviewAuthor, reviewContent));;
+
+
+                    }
+
+                }
+            } catch (final JSONException e) {
+                e.printStackTrace();
+
+            }
+        }
+        Log.d("JsonUtils", "getReviewDataFromJson: " + reviewData.size());
+
+        //return trailer array data
+        return reviewData;
+    }
+
 
     //convert cursor data to json format
     public static JSONArray favoritesJSON(Cursor cursor) {

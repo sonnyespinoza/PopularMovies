@@ -45,7 +45,7 @@ public class DetailsActivity extends AppCompatActivity {
     private static final int FAVORITES_DELETE_LOADER = 44;
     private static final int FAVORITES_CREATE_LOADER = 66;
     private static final int TRAILER_READ_LOADER = 77;
-    private static final int REVIEWS_READ_LOADER = 99;
+
 
     final static String YOUTUBE_API_KEY = BuildConfig.YOUTUBE_API_KEY;
 
@@ -184,9 +184,8 @@ public class DetailsActivity extends AppCompatActivity {
         movie_id = intent.getStringExtra(this.getString(R.string.movie_id));
 
         URL mTrailerUrl = NetworkUtils.buildUrl("trailer_list", movie_id, "1");
-        URL mReviewsUrl = NetworkUtils.buildUrl("review_list", movie_id, "1");
         Log.i("createTrailerURL", mTrailerUrl.toString());
-        Log.i("createReviewURL", mReviewsUrl.toString());
+
 
         if (networkUtils.isNetworkAvailable(this)) {
             Log.i("isNetworkAvailable", "true");
@@ -513,18 +512,7 @@ public class DetailsActivity extends AppCompatActivity {
                     loaderManager.restartLoader(loaderID, bundle, movieDataExtras);
                 }
                 break;
-            case REVIEWS_READ_LOADER:
-                Loader<ArrayList> reviewsLoader = loaderManager.getLoader(loaderID);
 
-                //If the Loader was null, initialize it otherwise restart it
-                if (reviewsLoader == null) {
-                    Log.i("makeWIPQuery", "reviewsLoader " + "isNull");
-                    loaderManager.initLoader(loaderID, bundle, movieDataExtras);
-                } else {
-                    Log.i("makeWIPQuery", "reviewsLoader " + "notNull");
-                    loaderManager.restartLoader(loaderID, bundle, movieDataExtras);
-                }
-                break;
         }
 
     }
