@@ -3,13 +3,11 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/matchStyle"
     >
 
 <android.support.constraint.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/matchStyle"
     android:layout_marginEnd="8dp"
     android:layout_marginStart="8dp">
 
@@ -27,16 +25,14 @@
 
     <ImageView
         android:id="@+id/iv_details_poster"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/wrapStyle"
         android:contentDescription="movie poster image used in details"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_detail_movie_title" />
 
     <TextView
         android:id="@+id/tv_release_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/wrapStyle"
         android:layout_alignParentTop="true"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -49,8 +45,7 @@
 
     <TextView
         android:id="@+id/tv_user_rating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/wrapStyle"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:layout_toRightOf="@+id/iv_details_poster"
@@ -62,8 +57,7 @@
 
     <ImageButton
         android:id="@+id/ib_favorite_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/wrapStyle"
         android:layout_marginTop="8dp"
         android:layout_toRightOf="@+id/iv_details_poster"
         android:background="#00ffffff"
@@ -74,8 +68,7 @@
 
     <TextView
         android:id="@+id/tv_add_favorites"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/wrapStyle"
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:textSize="12sp"
@@ -86,8 +79,7 @@
 
     <TextView
         android:id="@+id/tv_reviews"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/wrapStyle"
         android:onClick="onClickReviews"
         android:layout_marginTop="16dp"
         android:text="@string/reviews"
@@ -98,8 +90,7 @@
 
     <TextView
         android:id="@+id/tv_detail_movie_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/wrapStyle"
         android:layout_below="@+id/iv_details_poster"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -110,8 +101,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_movie_trailers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/wrapStyle"
         android:layout_below="@+id/tv_detail_movie_description"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"

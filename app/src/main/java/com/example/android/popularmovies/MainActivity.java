@@ -60,9 +60,10 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         Log.i("onSaveInstanceState", "yes");
+        savedInstanceState.putParcelableArrayList("movies", mParsedData);
         super.onSaveInstanceState(savedInstanceState);
         //TODO  add save instance state for sort menu selected see bookmark
-        savedInstanceState.putParcelableArrayList("movies", mParsedData);
+
 
     }
 
@@ -71,7 +72,10 @@ public class MainActivity extends AppCompatActivity  {
         Log.i("onRestoreInstanceState", "yes");
         // Restore UI state from the savedInstanceState.
         super.onRestoreInstanceState(savedInstanceState);
-        mParsedData = savedInstanceState.getParcelableArrayList("movies");
+        mParsedData = savedInstanceState.getParcelableArrayList("movies") ;
+
+
+
 
     }
 
@@ -119,16 +123,19 @@ public class MainActivity extends AppCompatActivity  {
 
         if (networkUtils.isNetworkAvailable(this)) {
             Log.i("isNetworkAvailable", "true");
+
             if (savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
                 Log.i("savedInstance:isNetwork", "isNull");
                 makeMovieQuery(mSearchUrl.toString(), MOVIE_QUERY_LOADER);
             } else {
-                Log.i("isNetworkAvailable", "false");
+
+                Log.i("savedInstance:isNetwork", "Not Null");
                 mParsedData = savedInstanceState.getParcelableArrayList("movies");
                 mMovieAdapter.setMovieList(mParsedData);
                 mMovieAdapter.notifyDataSetChanged();
             }
         } else {
+            Log.i("isNetworkAvailable", "false");
             Toast.makeText(this, "No Internet Connection",
                     Toast.LENGTH_LONG).show();
         }
