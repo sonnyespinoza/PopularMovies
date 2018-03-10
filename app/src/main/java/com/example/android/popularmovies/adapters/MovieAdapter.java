@@ -3,7 +3,6 @@ package com.example.android.popularmovies.adapters;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +55,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
         String imageURL = context.getString(R.string.image_url) + movieList.get(position).getImage_poster();
 
-        Log.d("MovieAdapter", "onBindViewHolder: imageURL"+ imageURL);
+        //Log.d("MovieAdapter", "onBindViewHolder: imageURL"+ imageURL);
 
         //Picasso:Listen for loading errors
         Picasso.Builder builder = new Picasso.Builder(context);
@@ -65,6 +64,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
             @Override
             public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception)
             {
+                //Log.d("onImageLoadFailed", String.valueOf(exception));
                 exception.printStackTrace();
             }
         });
