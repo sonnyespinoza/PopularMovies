@@ -73,7 +73,7 @@ public class NetworkUtils  {
         Uri builtUri = Uri.parse(BASE_URL + sortBy).buildUpon()
                 .appendQueryParameter(API_VAR, API_KEY)
                 .appendQueryParameter(LANGUAGE_VAR, LANGUAGE)
-                //.appendQueryParameter(PAGE, page)
+                .appendQueryParameter(PAGE, page)
                 .build();
 
         //https://api.themoviedb.org/3/movie/popular?api_key=27870a6246d2191e0a996bb1e04e2cea&language=en-US

@@ -68,6 +68,8 @@ public final class JsonUtils {
         //movie id
         final String MOVIE_ID = "id";
 
+        //final String TOTAL_PAGES = "total_pages";
+
 
 
         // INITIALIZE NEW ARRAYLIST AND POPULATE
@@ -115,6 +117,7 @@ public final class JsonUtils {
                         String releaseDate = movieInfo.getString(RELEASE_DATE);
                         String userRating = movieInfo.getString(USER_RATING);
                         String id = movieInfo.getString(MOVIE_ID);
+
 
                         movieData.add(new MovieParcelable(releaseDate, description, title, imagePoster, userRating, id));
                     }

@@ -38,6 +38,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         this.movieList = movielist;
     }
 
+    public void addToMovieList(ArrayList<MovieParcelable> movieImage) {
+
+        movieList.addAll(movieImage);
+    }
+
 
     @Override
     public MovieAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -107,4 +112,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
             movie_image = (ImageView) itemView.findViewById(R.id.iv_movies);
         }
     }
+
+
 }

@@ -3,7 +3,6 @@ package com.example.android.popularmovies;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -38,13 +37,23 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity  {
 
     private ProgressBar mLoadingIndicator;
-
     private final String byMostPopular = "popular";
+    final String byTopRated = "top_rated";
+    private String SEARCH_TYPE = byMostPopular;
+
+    private int page = 1;
+    int currentPage = page;
+    private boolean isLoading = true;
+    private int pastVisibleItems, visiableItemCount, totalItemCount, previousTotal = 0;
+    private int viewThreshold = 15;
+
 
     ArrayList<MovieParcelable> mParsedData; //Array to hold parsed data from tmdb
 
-    SQLiteDatabase pmDB;
+    //SQLiteDatabase pmDB;
     //TaskLoader unique identifier
+
+
 
     private static final int MOVIE_QUERY_LOADER = 22;
     private static final int FAVORITES_READ_LOADER = 44;
@@ -96,12 +105,6 @@ public class MainActivity extends AppCompatActivity  {
         layoutManager = new GridLayoutManager(this, 2);
         mMovieImage.setLayoutManager(layoutManager);
 
-        URL mSearchUrl = NetworkUtils.buildUrl(byMostPopular, "1");
-        Log.i("createSearchURL", mSearchUrl.toString());
-
-
-
-
 
         // Set Adapter
         mMovieAdapter = new MovieAdapter(this, new ArrayList(), new MovieAdapter.movieAdapterClickListener() {
@@ -121,10 +124,39 @@ public class MainActivity extends AppCompatActivity  {
 
         mMovieImage.setAdapter(mMovieAdapter);
 
+        mMovieImage.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                visiableItemCount = layoutManager.getChildCount();
+                totalItemCount = layoutManager.getItemCount();
+                pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
+
+                if (dy > 0) {
+                    if (isLoading) {
+                        if(totalItemCount>previousTotal){
+                            isLoading = false;
+                            previousTotal = totalItemCount;
+                        }
+                    }
+                    if(!isLoading && (totalItemCount-visiableItemCount)<=(pastVisibleItems+viewThreshold)){
+                        page++;
+                        pageMovieImages(page);
+                        isLoading = true;
+                    }
+                }
+            }
+        });
+
         if (networkUtils.isNetworkAvailable(this)) {
             Log.i("isNetworkAvailable", "true");
 
             if (savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
+                URL mSearchUrl = NetworkUtils.buildUrl(SEARCH_TYPE, String.valueOf(page));
+                Log.i("createSearchURL", mSearchUrl.toString());
+
                 Log.i("savedInstance:isNetwork", "isNull");
                 makeMovieQuery(mSearchUrl.toString(), MOVIE_QUERY_LOADER);
             } else {
@@ -171,12 +203,17 @@ public class MainActivity extends AppCompatActivity  {
                     if (mParsedData != null){
                         Log.i("onStartLoading", "parsedData Not Null");
                         //mLoadingIndicator.setVisibility(View.VISIBLE);
-                        deliverResult(mParsedData);
+                        if (currentPage==page){
+                            deliverResult(mParsedData);
+                        } else {
+                            mLoadingIndicator.setVisibility(View.VISIBLE);
+                            forceLoad();
+                        }
 
                     } else {
                         Log.i("onStartLoading", "parsed Data Null");
                         mLoadingIndicator.setVisibility(View.VISIBLE);
-
+                        //currentPage=page;
                         forceLoad();
                     }
                 }
@@ -245,9 +282,9 @@ public class MainActivity extends AppCompatActivity  {
                                 mSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
                                 Log.i("SearchResults: ", mSearchResults);
                                 //parse json
-                                mParsedData = JsonUtils.getMovieDataFromJson(mSearchResults);
+                                return  JsonUtils.getMovieDataFromJson(mSearchResults);
                                 //}
-                                return mParsedData;
+                                //return mParsedData;
 
 
                             } catch (IOException | JSONException e) {
@@ -255,8 +292,6 @@ public class MainActivity extends AppCompatActivity  {
                                 e.printStackTrace();
                                 return null;
                             }
-
-
                     }
 
 
@@ -278,10 +313,19 @@ public class MainActivity extends AppCompatActivity  {
             mLoadingIndicator.setVisibility(View.INVISIBLE);
 
             Log.i("onLoadFinish: arySize", String.valueOf(data.size()));
+            Log.i("onLoadFinish: Size", String.valueOf(mParsedData.size()));
             if (data != null && !data.equals("")) {
                 //onSaveInstanceState();
 
-                mMovieAdapter.setMovieList(data);
+                if(currentPage<page){
+                    mMovieAdapter.addToMovieList(data);
+                    currentPage = page;
+                    Toast.makeText(getApplicationContext(),
+                            "Added new page",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    mMovieAdapter.setMovieList(data);
+                }
                 mMovieAdapter.notifyDataSetChanged();
 
 
@@ -298,7 +342,7 @@ public class MainActivity extends AppCompatActivity  {
 
     public void onGroupItemClick(MenuItem item) {
 
-        final String byTopRated = "top_rated";
+
 
 
 
@@ -310,7 +354,9 @@ public class MainActivity extends AppCompatActivity  {
             //createSearchURL(byMostPopular, "1");
 
             mParsedData = null;
-            URL mSearchUrl = NetworkUtils.buildUrl(byMostPopular, "1");
+            SEARCH_TYPE = byMostPopular;
+            page  = 1;
+            URL mSearchUrl = NetworkUtils.buildUrl(SEARCH_TYPE, String.valueOf(page));
             Log.i("menuByPopular", mSearchUrl.toString());
 
 
@@ -333,7 +379,9 @@ public class MainActivity extends AppCompatActivity  {
         } else if (groupMenuItemClicked == R.id.action_sortby_rating) {
 
             mParsedData = null;
-            URL mSearchUrl = NetworkUtils.buildUrl(byTopRated, "1");
+            SEARCH_TYPE = byTopRated;
+            page = 1;
+            URL mSearchUrl = NetworkUtils.buildUrl(SEARCH_TYPE, String.valueOf(page));
 
             item.setChecked(true);
             Log.i("menuByRating", mSearchUrl.toString());
@@ -429,6 +477,24 @@ public class MainActivity extends AppCompatActivity  {
             loaderManager.restartLoader(loaderID, bundle, movieData);
         }
 
+
+    }
+
+    private void pageMovieImages(Integer page ){
+
+        //SEARCH_TYPE = searchType;
+        //this.page = page;
+
+        URL mSearchUrl = NetworkUtils.buildUrl(SEARCH_TYPE, String.valueOf(page));
+
+        if (networkUtils.isNetworkAvailable(this)) {
+            Log.i("isNetworkAvailable", "true");
+            makeMovieQuery(mSearchUrl.toString(), MOVIE_QUERY_LOADER);
+        } else {
+            Log.i("isNetworkAvailable", "false");
+            Toast.makeText(this, "No Internet Connection",
+                    Toast.LENGTH_LONG).show();
+        }
 
     }
 
