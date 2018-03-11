@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="spanCol">2</integer>
-    <integer name="spanColw600">3</integer>
-    <integer name="spanColw7200">4</integer>
+    <integer name="min">2</integer>
+    <integer name="med">3</integer>
+    <integer name="max">4</integer>
 </resources>
