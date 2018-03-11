@@ -36,6 +36,7 @@
         </menu>
     </item>
 
+<!--
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="200"
@@ -43,6 +44,7 @@
         app:showAsAction="never" />
 
 
+-->
 
     <!--    <item
             android:id="@+id/action_sortby_popular"

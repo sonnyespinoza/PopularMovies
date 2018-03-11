@@ -24,6 +24,7 @@ import com.example.android.popularmovies.data.FavoritesContract;
 import com.example.android.popularmovies.parcelables.MovieParcelable;
 import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
+import com.example.android.popularmovies.utilities.SpanColumns;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,6 +66,8 @@ public class MainActivity extends AppCompatActivity  {
 
     private NetworkUtils networkUtils = new NetworkUtils(this);
 
+    private SpanColumns spanColumns = new SpanColumns();
+
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -72,8 +75,6 @@ public class MainActivity extends AppCompatActivity  {
         savedInstanceState.putParcelableArrayList("movies", mParsedData);
         super.onSaveInstanceState(savedInstanceState);
         //TODO  add save instance state for sort menu selected see bookmark
-
-
     }
 
     @Override
@@ -102,7 +103,9 @@ public class MainActivity extends AppCompatActivity  {
         mMovieImage = (RecyclerView) findViewById(R.id.rv_movies);
         mMovieImage.setHasFixedSize(true);
 
-        layoutManager = new GridLayoutManager(this, 2);
+        int mNoOfColumns = spanColumns.calculateNoOfColumns(getApplicationContext());
+
+        layoutManager = new GridLayoutManager(this, mNoOfColumns);
         mMovieImage.setLayoutManager(layoutManager);
 
 
@@ -310,7 +313,7 @@ public class MainActivity extends AppCompatActivity  {
 
         @Override
         public void onLoadFinished(Loader<ArrayList> loader, ArrayList data) {
-            mLoadingIndicator.setVisibility(View.INVISIBLE);
+
 
             Log.i("onLoadFinish: arySize", String.valueOf(data.size()));
             Log.i("onLoadFinish: Size", String.valueOf(mParsedData.size()));
@@ -320,12 +323,13 @@ public class MainActivity extends AppCompatActivity  {
                 if(currentPage<page){
                     mMovieAdapter.addToMovieList(data);
                     currentPage = page;
-                    Toast.makeText(getApplicationContext(),
+/*                    Toast.makeText(getApplicationContext(),
                             "Added new page",
-                            Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_SHORT).show();*/
                 } else {
                     mMovieAdapter.setMovieList(data);
                 }
+                mLoadingIndicator.setVisibility(View.INVISIBLE);
                 mMovieAdapter.notifyDataSetChanged();
 
 
@@ -416,7 +420,7 @@ public class MainActivity extends AppCompatActivity  {
         return true;
     }
 
-    @Override
+/*    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int menuItemClicked = item.getItemId();
@@ -427,7 +431,7 @@ public class MainActivity extends AppCompatActivity  {
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     /* This method constructs the URL
   * and Request that an AsyncTaskLoader performs the GET request.

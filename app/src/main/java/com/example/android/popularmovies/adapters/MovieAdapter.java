@@ -1,7 +1,6 @@
 package com.example.android.popularmovies.adapters;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,7 +62,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         //Log.d("MovieAdapter", "onBindViewHolder: imageURL"+ imageURL);
 
         //Picasso:Listen for loading errors
-        Picasso.Builder builder = new Picasso.Builder(context);
+/*        Picasso.Builder builder = new Picasso.Builder(context);
         builder.listener(new Picasso.Listener()
         {
             @Override
@@ -72,10 +71,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
                 //Log.d("onImageLoadFailed", String.valueOf(exception));
                 exception.printStackTrace();
             }
-        });
+        });*/
 
         //Load images to image view
-        builder.build().load(imageURL).into(holder.movie_image);
+        //builder.build().load(imageURL).into(holder.movie_image);
+        Picasso.with(context).load(imageURL).into(holder.movie_image);
 
         holder.movie_image.setOnClickListener(new View.OnClickListener(){
 
