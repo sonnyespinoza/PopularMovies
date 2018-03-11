@@ -21,4 +21,17 @@
 
     </style>
 
+    <style name="ActionBar.Solid.Movie.WithTitle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="displayOptions">useLogo|showHome|showTitle</item>
+        <item name="logo">@drawable/ic_movie_icon</item>
+        <item name="android:icon">@drawable/ic_movie_icon</item>
+
+
+    </style>
+
+    <style name="AppTheme.Movie" parent="@style/AppTheme">
+        <item name="actionBarStyle">@style/ActionBar.Solid.Movie.WithTitle</item>
+    </style>
+
+
 </resources>
