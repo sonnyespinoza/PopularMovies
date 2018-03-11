@@ -92,11 +92,11 @@ public class DetailsActivity extends AppCompatActivity {
 
     }
 
-    public void onClickReviews(View view){
+    public void onClickReviews(View view) {
         Class destinationClass = ReviewsActivity.class;
         Intent intentReviewsActivity = new Intent(DetailsActivity.this, destinationClass);
 
-        intentReviewsActivity.putExtra(context.getString(R.string.movie_id),movie_id);
+        intentReviewsActivity.putExtra(context.getString(R.string.movie_id), movie_id);
 
         DetailsActivity.this.startActivity(intentReviewsActivity);
     }
@@ -209,18 +209,6 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
 
-/*
-        TODO Remaining Work:
-         xxNeed to review and implement responsive design with <includes>
-         xxNeed to add Review activity using contraint layout
-         Need to add movie data to savedinstance so that the back button on reviews does not error out
-         Need to review polish UI videos and clean up UI
-         Need to re-move this is a test call to validate correctness of the URL after implementing reviews
-            URL mReviewUrl = NetworkUtils.buildUrl("review_list", "254128", "1");
-            Log.i("createReviewURL", mReviewUrl.toString());
-*/
-
-
         //Query to check if movie is Favorites
         makeFavoritesQuery(ContentUris.withAppendedId(
                 FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, Integer.valueOf(movie_id)),
@@ -266,9 +254,6 @@ public class DetailsActivity extends AppCompatActivity {
                         return null;
                     }
                     String mSearchResults;
-
-                    //URL mTrailerUrl = networkUtils.buildUrl("trailer_list", movie_id, "1");
-                    //Log.i("createTrailerURL", mTrailerUrl.toString());
 
                     //fetch data from API
                     try {

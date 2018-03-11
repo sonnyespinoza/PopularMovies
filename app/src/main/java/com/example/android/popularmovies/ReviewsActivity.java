@@ -78,7 +78,6 @@ public class ReviewsActivity extends AppCompatActivity {
             if (savedInstanceState == null || !savedInstanceState.containsKey(ReviewDataKey)) {
                 Log.i("savedInstance:isNetwork", "isNull");
                 makeMovieReviewsQuery(mReviewsUrl, REVIEWS_READ_LOADER);
-                //makeMovieExtrasQuery(mReviewsUrl, REVIEWS_READ_LOADER);
             } else {
                 Log.i("isNetworkAvailable", "false");
                 mReviewsData = savedInstanceState.getParcelableArrayList(ReviewDataKey);
@@ -91,11 +90,7 @@ public class ReviewsActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "No Internet Connection",
                     Toast.LENGTH_LONG).show();
-
         }
-
-
-
     }
 
 

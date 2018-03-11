@@ -13,14 +13,10 @@ public class ReviewsParcelable implements Parcelable{
     private String review_author;
     private String review_content;
 
-
-
-
     public ReviewsParcelable(String mReviewId, String mReviewAuthor, String mReviewContent){
         this.review_id = mReviewId;
         this.review_author=mReviewAuthor;
         this.review_content=mReviewContent;
-
     }
 
     public ReviewsParcelable(Parcel parcel) {

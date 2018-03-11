@@ -68,10 +68,6 @@ public final class JsonUtils {
         //movie id
         final String MOVIE_ID = "id";
 
-        //final String TOTAL_PAGES = "total_pages";
-
-
-
         // INITIALIZE NEW ARRAYLIST AND POPULATE
         ArrayList<MovieParcelable> movieData = new ArrayList<MovieParcelable>();
 
@@ -239,14 +235,14 @@ public final class JsonUtils {
         final String REVIEW_CONTENT= "content";
 
         /* review url */
-        final String REVIEW_URL = "url";
+        //final String REVIEW_URL = "url";
 
 
         //review id
         final String REVIEW_ID = "id";
 
         //return status code
-        final String TRAILER_STATUS_CODE = "status_code";
+        final String REVIEW_STATUS_CODE = "status_code";
 
 
 
@@ -259,18 +255,18 @@ public final class JsonUtils {
             try {
 
 
-                JSONObject trailerJson = new JSONObject(reviewJsonStr);
+                JSONObject reviewJson = new JSONObject(reviewJsonStr);
 
                 //JSON Array node
-                JSONArray trailerJSONArray = trailerJson.getJSONArray(RESULTS);
+                JSONArray reviewsJSONArray = reviewJson.getJSONArray(RESULTS);
 
                 /* Is there an error? */
-                if (trailerJson.has(TRAILER_STATUS_CODE)) {
+                if (reviewJson.has(REVIEW_STATUS_CODE)) {
 
-                    int errorCode = trailerJson.getInt(TRAILER_STATUS_CODE);
+                    int errorCode = reviewJson.getInt(REVIEW_STATUS_CODE);
 
-                    Log.e("JSONUtil:Status Code", String.valueOf(TRAILER_STATUS_CODE) );
-                    Log.e("JSONUtil:Message", trailerJson.get("status_message").toString());
+                    Log.e("JSONUtil:Status Code", String.valueOf(REVIEW_STATUS_CODE) );
+                    Log.e("JSONUtil:Message", reviewJson.get("status_message").toString());
                     switch (errorCode) {
                         case 1:
                             break;
@@ -285,11 +281,10 @@ public final class JsonUtils {
 
 
 
-                    for (int i = 0; i < trailerJSONArray.length(); i++) {
+                    for (int i = 0; i < reviewsJSONArray.length(); i++) {
 
-                        JSONObject reviewInfo = trailerJSONArray.getJSONObject(i);
+                        JSONObject reviewInfo = reviewsJSONArray.getJSONObject(i);
 
-                            //Log.d("trail type match: ", "\"" + trailerType + "\"" );
                             String reviewId = reviewInfo.getString(REVIEW_ID);
                             String reviewAuthor = reviewInfo.getString(REVIEW_AUTHOR);
                             String reviewContent = reviewInfo.getString(REVIEW_CONTENT);
@@ -307,7 +302,7 @@ public final class JsonUtils {
         }
         Log.d("JsonUtils", "getReviewDataFromJson: " + reviewData.size());
 
-        //return trailer array data
+        //return review array data
         return reviewData;
     }
 

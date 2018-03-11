@@ -76,7 +76,7 @@ public class NetworkUtils  {
                 .appendQueryParameter(PAGE, page)
                 .build();
 
-        //https://api.themoviedb.org/3/movie/popular?api_key=27870a6246d2191e0a996bb1e04e2cea&language=en-US
+        //https://api.themoviedb.org/3/movie/popular?api_key=27870a6246d2191e0a996bb1e04e2cea&language=en-US&page=1
 
         URL url = null;
         try {

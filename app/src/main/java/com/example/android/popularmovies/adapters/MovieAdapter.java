@@ -21,10 +21,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     final private Context context;
     private movieAdapterClickListener mListener;
 
-    public interface movieAdapterClickListener{
-        void onClickMovieItem(HashMap<String,String> movieDetails, int position); //callback
+    public interface movieAdapterClickListener {
+        void onClickMovieItem(HashMap<String, String> movieDetails, int position); //callback
     }
-
 
 
     public MovieAdapter(Context context, ArrayList<MovieParcelable> movielist, movieAdapterClickListener mListener) {
@@ -33,7 +32,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         this.mListener = mListener;
     }
 
-    public void setMovieList ( ArrayList<MovieParcelable> movielist) {
+    public void setMovieList(ArrayList<MovieParcelable> movielist) {
         this.movieList = movielist;
     }
 
@@ -77,12 +76,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         //builder.build().load(imageURL).into(holder.movie_image);
         Picasso.with(context).load(imageURL).into(holder.movie_image);
 
-        holder.movie_image.setOnClickListener(new View.OnClickListener(){
+        holder.movie_image.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
-                HashMap<String,String> movieDetails= new HashMap<String,String>();
+                HashMap<String, String> movieDetails = new HashMap<String, String>();
 
                 movieDetails.put(context.getString(R.string.title), movieList.get(holder.getAdapterPosition()).getTitle());
                 movieDetails.put(context.getString(R.string.image_poster), movieList.get(holder.getAdapterPosition()).getImage_poster());
@@ -103,7 +102,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         return movieList.size();
     }
 
-    public class MovieAdapterViewHolder extends RecyclerView.ViewHolder   {
+    public class MovieAdapterViewHolder extends RecyclerView.ViewHolder {
 
         final ImageView movie_image;
 

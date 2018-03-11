@@ -123,23 +123,6 @@ public class PopularMoviesContentProvider extends ContentProvider {
                         null,
                         sortOrder);
                 break;
-
-/*            case FAVORITES_WITH_IMAGE_POSTER:
-                mSelection = FavoritesContract.favoriteMovies.IMAGE_POSTER+"=?";
-                mSelectionArgs = new String[]{selectionArgs[0]};
-
-
-                rCursor = db.query(FavoritesContract.favoriteMovies.TABLE_NAME,
-                        projection,
-                        mSelection,
-                        mSelectionArgs,
-                        null,
-                        null,
-                        sortOrder);
-                break;*/
-
-
-
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -162,13 +145,6 @@ public class PopularMoviesContentProvider extends ContentProvider {
                 String id = uri.getPathSegments().get(1);
                 favoritesDeleted = db.delete(FavoritesContract.favoriteMovies.TABLE_NAME, "id=?",new String[]{id});
                 break;
-
-/*            case FAVORITES_WITH_IMAGE_POSTER:
-                String movie_image = selectionArgs[0];
-                favoritesDeleted = db.delete(FavoritesContract.favoriteMovies.TABLE_NAME,
-                        FavoritesContract.favoriteMovies.IMAGE_POSTER+"=?",new String[]{movie_image});
-                break;*/
-
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

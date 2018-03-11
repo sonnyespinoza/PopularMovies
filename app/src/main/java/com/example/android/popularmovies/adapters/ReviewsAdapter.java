@@ -2,7 +2,6 @@ package com.example.android.popularmovies.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,22 +22,13 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
     ArrayList<ReviewsParcelable> reviewList = new ArrayList<ReviewsParcelable>();
 
     final private Context context;
-    //private ReviewsAdapterClickListener mListener;
 
-
-
-/*
-    public interface ReviewsAdapterClickListener{
-        void onClickTrailItem(String trailerKey, int position); //callback
-    }*/
 
     //Constructor
     public ReviewsAdapter(Context context, ArrayList<ReviewsParcelable> reviewlist) {
         this.context = context;
         this.reviewList = reviewlist;
-        //this.mListener = mListener; //receive listener from activity
     }
-
 
 
     // Create new views (invoked by the layout manager)
@@ -55,7 +45,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
 
 
     // A reference to the views for each data item
-    public static class ReviewsAdapterViewHolder extends RecyclerView.ViewHolder  {
+    public static class ReviewsAdapterViewHolder extends RecyclerView.ViewHolder {
 
         // each data item is just a string in this case
         final TextView mTextView;
@@ -70,12 +60,8 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
     }
 
 
-    public void setTrailList ( ArrayList<ReviewsParcelable> reviewlist) {
+    public void setTrailList(ArrayList<ReviewsParcelable> reviewlist) {
         this.reviewList = reviewlist;
-    }
-
-    public void testMethod ( String str) {
-        Log.i("test", "tst");
     }
 
 
@@ -84,17 +70,12 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
     public void onBindViewHolder(ReviewsAdapterViewHolder holder, final int position) {
 
         holder.mTextView.setText(reviewList.get(position).getReview_content());
-
-/*        holder.mImageButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                mListener.onClickTrailItem(reviewList.get(position).getTrailer_key(), position);
-            }
-        });*/
     }
 
-    // Return the size of the trailerList (invoked by the layout manager)
+    // Return the size of the reviewList (invoked by the layout manager)
     @Override
-    public int getItemCount() {return reviewList.size();}
+    public int getItemCount() {
+        return reviewList.size();
+    }
 
 }
