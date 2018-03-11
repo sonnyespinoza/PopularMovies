@@ -256,14 +256,10 @@ public class MainActivity extends AppCompatActivity  {
                                     String favs = " {\"page\":1,\"total_results\":"+ favoriteMovies.getCount() + ",\"total_pages\":1,\"results\":"
                                             + favorite2Json.toString()
                                             + "}";
-                                    mParsedData = JsonUtils.getMovieDataFromJson(favs);
-                                    return mParsedData;
+                                    return JsonUtils.getMovieDataFromJson(favs);
+                                    //return mParsedData;
                                 } else{
-
-                                    Toast.makeText(getApplicationContext(),
-                                            "No Favorites to display",
-                                            Toast.LENGTH_SHORT).show();
-
+                                    return null;
 
                                 }
 
@@ -302,8 +298,11 @@ public class MainActivity extends AppCompatActivity  {
                 }
                 @Override
                 public void deliverResult(ArrayList data) {
-                    mParsedData = data;
-                    Log.i("deliverResults", data.toString());
+                    if (data != null && !data.equals("")){
+                        mParsedData = data;
+                        Log.i("deliverResults", data.toString());
+                    }
+
                     super.deliverResult(data);
                 }
 
@@ -315,11 +314,10 @@ public class MainActivity extends AppCompatActivity  {
         public void onLoadFinished(Loader<ArrayList> loader, ArrayList data) {
 
 
-            Log.i("onLoadFinish: arySize", String.valueOf(data.size()));
-            Log.i("onLoadFinish: Size", String.valueOf(mParsedData.size()));
-            if (data != null && !data.equals("")) {
-                //onSaveInstanceState();
 
+            if (data != null && !data.equals("")) {
+                Log.i("onLoadFinish: arySize", String.valueOf(data.size()));
+                Log.i("onLoadFinish: Size", String.valueOf(mParsedData.size()));
                 if(currentPage<page){
                     mMovieAdapter.addToMovieList(data);
                     currentPage = page;
@@ -331,9 +329,11 @@ public class MainActivity extends AppCompatActivity  {
                 }
                 mLoadingIndicator.setVisibility(View.INVISIBLE);
                 mMovieAdapter.notifyDataSetChanged();
-
-
-
+            } else {
+                Toast.makeText(getApplicationContext(),
+                        "Nothing To Display",
+                        Toast.LENGTH_SHORT).show();
+                mLoadingIndicator.setVisibility(View.INVISIBLE);
             }
 
         }
@@ -404,7 +404,7 @@ public class MainActivity extends AppCompatActivity  {
         } else if (groupMenuItemClicked == R.id.action_sortby_favorites) {
 
             mParsedData = null;
-
+            page = 1;
             item.setChecked(true);
 
             makeFavoritesQuery(FavoritesContract.favoriteMovies.CONTENT_FAVORITES_URI, FAVORITES_READ_LOADER);

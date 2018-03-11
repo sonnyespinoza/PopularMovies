@@ -81,6 +81,7 @@
         android:id="@+id/tv_reviews"
         style="@style/wrapStyle"
         android:onClick="onClickReviews"
+        android:background="@drawable/reviews_selector"
         android:layout_marginTop="16dp"
         android:text="@string/reviews"
         android:textStyle="bold"
@@ -106,6 +107,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:scrollbars="vertical"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.023"
         app:layout_constraintStart_toStartOf="parent"
