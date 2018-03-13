@@ -49,6 +49,6 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
     //compile 'com.google.apis:google-api-services-youtube:v3-rev181-1.22.0'
-    compile 'com.google.apis:google-api-services-youtube:v3-rev192-1.23.0'
+    //compile 'com.google.apis:google-api-services-youtube:v3-rev192-1.23.0'
     compile files('libs/YouTubeAndroidPlayerApi.jar')
 }
